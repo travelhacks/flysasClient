@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+
 namespace FlysasClient
 {
+    public class ParserException : Exception
+    {
+        public ParserException(string s) : base(s) { }
+    }
+
     public class Parser
     {
         Regex airportExp = new Regex("[a-zA-Z]+");
         public SASQuery Parse(string input)
         {
             var splitChars = new[] { ' ', ',', '-' };
-            var parts = input.Split( splitChars, StringSplitOptions.RemoveEmptyEntries);
+            var parts = input.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
             var stack = new Stack<string>(parts.Reverse());
             SASQuery request = null;
             if (parts.Length > 2)
@@ -26,8 +32,11 @@ namespace FlysasClient
                         request.ReturnFrom = stack.Pop().ToUpper();
                         if (airportExp.IsMatch(stack.Peek()))
                         {
+
                             //req.ReturnTo = stack.Pop().ToUpper();
-                            stack.Pop();
+                            var tmp = stack.Pop().ToUpper();
+                            if (tmp != request.From)
+                                throw new ParserException("Must return to origin");
                         }
                     }
                 }
@@ -38,7 +47,7 @@ namespace FlysasClient
                 }
             }
             else
-                throw new Exception("Parser error");
+                throw new ParserException("To few arguments");
             return request;
         }
 
@@ -54,12 +63,12 @@ namespace FlysasClient
                 {
                     string unit = "d";
                     int val = int.Parse(res.Groups[1].Captures[0].Value);
-                    if (res.Groups.Count>2)                    
+                    if (res.Groups.Count > 2)
                         unit = res.Groups[2].Captures[0].Value.ToLower();
                     if (unit == "m")
                         return relativeTo.Value.AddMonths(val);
-                    if (unit=="w")                    
-                        val *= 7;                                        
+                    if (unit == "w")
+                        val *= 7;
                     return relativeTo.Value.AddDays(val);
                 }
             }
@@ -75,7 +84,10 @@ namespace FlysasClient
                         date = date.AddYears(1);
                     return date;
                 }
-                catch { }
+                catch
+                {
+                    throw new ParserException("Invalid date format");
+                }
             }
             return DateTime.Parse(s);
         }
