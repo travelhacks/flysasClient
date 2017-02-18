@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SAS
+namespace FlysasClient
 {
     public class ConsoleClient
     {

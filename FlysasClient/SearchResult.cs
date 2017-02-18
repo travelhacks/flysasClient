@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 /* Response classes generated with http://json2csharp.com/ and then manually edited */
 
-namespace SAS
+namespace FlysasClient
 {
 
     public class FlightProduct
