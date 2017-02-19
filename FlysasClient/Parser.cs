@@ -54,11 +54,11 @@ namespace FlysasClient
 
         DateTime parseDate(string s, DateTime? relativeTo)
         {
-            if (s != null && s.ToLower() == "=")
+            if ("=" == s)
                 return DateTime.Now.Date;
             if (relativeTo.HasValue)
             {
-                var regex = new System.Text.RegularExpressions.Regex("\\+(\\d+)(.?)");
+                var regex = new System.Text.RegularExpressions.Regex("\\+(\\d+)(.?)", RegexOptions.IgnoreCase);
                 var res = regex.Match(s);
                 if (res.Success)
                 {
@@ -75,22 +75,25 @@ namespace FlysasClient
             }
             uint d, m;
             var parts = s.Split('/');
+            DateTime dt;
             if (parts.Length == 2 && uint.TryParse(parts[0], out d) && uint.TryParse(parts[1], out m))
             {
 
                 try
                 {
-                    var date = new DateTime(DateTime.Now.Year, (int)m, (int)d);
-                    if (date.Date < DateTime.Now.Date)
-                        date = date.AddYears(1);
-                    return date;
+                    dt = new DateTime(DateTime.Now.Year, (int)m, (int)d);
                 }
                 catch
                 {
                     throw new ParserException("Invalid date format");
                 }
+                if (dt.Date < DateTime.Now.Date)
+                    dt = dt.AddYears(1);
             }
-            return DateTime.Parse(s);
+            else
+                if (!DateTime.TryParse(s, out dt))
+                throw new ParserException("Invalid date format");
+            return dt;
         }
     }
 }
