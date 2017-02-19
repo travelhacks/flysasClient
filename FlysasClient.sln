@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlysasClient", "FlysasClient\FlysasClient.csproj", "{AF614C6E-1008-4CB3-B9A2-BCA11A1C73A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlysasLib", "FlysasLib\FlysasLib.csproj", "{DC485D37-1B1E-47E4-8991-7692386FE01C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{AF614C6E-1008-4CB3-B9A2-BCA11A1C73A4}.Release|x64.Build.0 = Release|x64
 		{AF614C6E-1008-4CB3-B9A2-BCA11A1C73A4}.Release|x86.ActiveCfg = Release|x86
 		{AF614C6E-1008-4CB3-B9A2-BCA11A1C73A4}.Release|x86.Build.0 = Release|x86
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Debug|x64.ActiveCfg = Debug|x64
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Debug|x64.Build.0 = Debug|x64
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Debug|x86.ActiveCfg = Debug|x86
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Debug|x86.Build.0 = Debug|x86
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Release|x64.ActiveCfg = Release|x64
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Release|x64.Build.0 = Release|x64
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Release|x86.ActiveCfg = Release|x86
+		{DC485D37-1B1E-47E4-8991-7692386FE01C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

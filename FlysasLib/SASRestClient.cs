@@ -2,7 +2,7 @@
 using System.Net.Http;
 
 
-namespace FlysasClient
+namespace FlysasLib
 {
     public class SASRestClient
     {

@@ -1,12 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
+﻿using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
+using FlysasLib;
 
 namespace FlysasClient
 {
