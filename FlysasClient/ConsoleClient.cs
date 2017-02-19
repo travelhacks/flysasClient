@@ -70,9 +70,14 @@ namespace FlysasClient
             headers.Add(first.destination.code);
             if(options.OutputEquipment)
                 headers.Add("Equip");
-            headers.AddRange(codes.Select(c => c + (options.OutputBookingClass ? tab : string.Empty)));
-            var header = string.Join(tab,headers);
-            Console.WriteLine(header);
+            foreach(var c in codes)
+            {
+                headers.Add(c);
+                if (options.OutputBookingClass)
+                    headers.Add("");
+            }
+            Table table = new Table();
+            table.Rows.Add(headers);            
             foreach (var r in flights)
             {
                 var values = new List<string>();
@@ -83,7 +88,7 @@ namespace FlysasClient
                 if (options.OutputEquipment)
                 {
                     var s = string.Join(slash, simplify(r.segments.Select(seg => seg.airCraft.code)));
-                    values.Add(limit(s));
+                    values.Add(s);
                 }
                 foreach (var c in codes)
                 {
@@ -99,16 +104,45 @@ namespace FlysasClient
                         else
                         {
                             sClasses = string.Join("/", classes);
-                            if (sClasses.Length >= tabLen)
-                                sClasses = string.Join("/", p.fares.Select(f => f.bookingClass));
+                            //if (sClasses.Length >= tabLen)
+                            //    sClasses = string.Join("/", p.fares.Select(f => f.bookingClass));
                         }
                         sPrice = p.price.formattedTotalPrice;
                     }
                     values.Add(sPrice);
                     if (options.OutputBookingClass)
                         values.Add(sClasses);                    
-                }                
-                Console.WriteLine(string.Join(tab,values));
+                }
+                table.Rows.Add(values);                
+            }
+            table.Print();
+        }
+
+        public class Table
+        {
+            public List<List<string>> Rows { get; private set; } = new List<List<string>>();            
+            public void Print()
+            {
+                string tab = "\t";                
+                int tabLen = 8;
+                var dict = new Dictionary<int, int>();
+                if (Rows.Any())
+                    for (int i = 0; i < Rows.First().Count; i++)
+                        dict[i] = Rows.Select(r => r[i]).Select(s => s == null ? 0 : s.Length).Max();
+                foreach(var r in Rows)
+                {
+                    for(int i = 0; i < r.Count;i++)
+                    {
+                        var s = r[i] ?? string.Empty;
+                        var len = dict[i] + tabLen - dict[i] % tabLen;                        
+                        var pad = (len - s.Length-1)/tabLen;
+                        Console.Write(s);
+                        for (int j = 0; j <= pad; j++)
+                            Console.Write(tab);
+                    }
+                    Console.Write(Environment.NewLine);
+                }
+                
             }
         }
 
