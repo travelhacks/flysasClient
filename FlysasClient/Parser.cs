@@ -44,7 +44,7 @@ namespace FlysasClient
                 request.OutDate = parseDate(stack.Pop(), DateTime.Now.Date);
                 if (stack.Any())
                 {
-                    request.InDate = parseDate(stack.Pop(), request.OutDate);
+                    request.InDate = parseDate(stack.Pop(), request.OutDate.Value);
                 }
             }
             else
@@ -52,27 +52,25 @@ namespace FlysasClient
             return request;
         }
 
-        DateTime parseDate(string s, DateTime? relativeTo)
+        DateTime parseDate(string s, DateTime relativeTo)
         {
-            if ("=" == s)
-                return DateTime.Now.Date;
-            if (relativeTo.HasValue)
+            if (s=="=")
+                return relativeTo;
+            var regex = new System.Text.RegularExpressions.Regex("\\+(\\d+)(.?)", RegexOptions.IgnoreCase);
+            var res = regex.Match(s);
+            if (res.Success)
             {
-                var regex = new System.Text.RegularExpressions.Regex("\\+(\\d+)(.?)", RegexOptions.IgnoreCase);
-                var res = regex.Match(s);
-                if (res.Success)
-                {
-                    string unit = "d";
-                    int val = int.Parse(res.Groups[1].Captures[0].Value);
-                    if (res.Groups.Count > 2)
-                        unit = res.Groups[2].Captures[0].Value.ToLower();
-                    if (unit == "m")
-                        return relativeTo.Value.AddMonths(val);
-                    if (unit == "w")
-                        val *= 7;
-                    return relativeTo.Value.AddDays(val);
-                }
+                string unit = "d";
+                int val = int.Parse(res.Groups[1].Captures[0].Value);
+                if (res.Groups.Count > 2)
+                    unit = res.Groups[2].Captures[0].Value.ToLower();
+                if (unit == "m")
+                    return relativeTo.AddMonths(val);
+                if (unit == "w")
+                    val *= 7;
+                return relativeTo.AddDays(val);
             }
+            
             uint d, m;
             var parts = s.Split('/');
             DateTime dt;
