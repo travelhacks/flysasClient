@@ -59,9 +59,7 @@ namespace FlysasClient
         }
         void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
         {         
-            string tab = "\t";
-            string slash = "/";
-            int tabLen = 8;         
+            string slash = "/";            
             string format = "HH:mm";
             var codes = products.Select(p => p.productCode).Distinct().ToArray();
             var first = flights.First();

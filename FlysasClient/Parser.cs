@@ -54,7 +54,7 @@ namespace FlysasClient
 
         DateTime parseDate(string s, DateTime relativeTo)
         {
-            if (s=="=")
+            if (s == "=")
                 return relativeTo;
             var regex = new System.Text.RegularExpressions.Regex("\\+(\\d+)(.?)", RegexOptions.IgnoreCase);
             var res = regex.Match(s);
@@ -70,7 +70,7 @@ namespace FlysasClient
                     val *= 7;
                 return relativeTo.AddDays(val);
             }
-            
+
             uint d, m;
             var parts = s.Split('/');
             DateTime dt;
@@ -78,19 +78,21 @@ namespace FlysasClient
             {
 
                 try
-                {
+                {                    
                     dt = new DateTime(DateTime.Now.Year, (int)m, (int)d);
                 }
                 catch
                 {
-                    throw new ParserException("Invalid date format");
+                    throw new ParserException("Invalid date format " + s);
                 }
                 if (dt.Date < DateTime.Now.Date)
                     dt = dt.AddYears(1);
             }
             else
+            {
                 if (!DateTime.TryParse(s, out dt))
-                throw new ParserException("Invalid date format");
+                    throw new ParserException("Invalid date format " + s);
+            }
             return dt;
         }
     }
