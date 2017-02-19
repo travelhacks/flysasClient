@@ -40,7 +40,7 @@ namespace FlysasClient
                         }
                     }
                 }
-                request.OutDate = parseDate(stack.Pop(), null);
+                request.OutDate = parseDate(stack.Pop(), DateTime.Now.Date);
                 if (stack.Any())
                 {
                     request.InDate = parseDate(stack.Pop(), request.OutDate);
