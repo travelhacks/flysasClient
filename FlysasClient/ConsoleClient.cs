@@ -115,20 +115,28 @@ namespace FlysasClient
                 }
                 table.Rows.Add(values);                
             }
-            table.Print();
+            if (options.Table)
+                table.PrintTable();
+            else
+                table.Print();
         }
 
         public class Table
         {
-            public List<List<string>> Rows { get; private set; } = new List<List<string>>();            
-            public void Print()
+            public List<List<string>> Rows { get; private set; } = new List<List<string>>();
+            string tab = "\t";
+            int tabLen = 8;
+            Dictionary<int,int> dict = new Dictionary<int, int>();
+            void calc()
             {
-                string tab = "\t";                
-                int tabLen = 8;
-                var dict = new Dictionary<int, int>();
                 if (Rows.Any())
                     for (int i = 0; i < Rows.First().Count; i++)
                         dict[i] = Rows.Select(r => r[i]).Select(s => s == null ? 0 : s.Length).Max();
+            }
+
+            public void Print()
+            {
+                calc();
                 foreach(var r in Rows)
                 {
                     for(int i = 0; i < r.Count;i++)
@@ -141,8 +149,29 @@ namespace FlysasClient
                             Console.Write(tab);
                     }
                     Console.Write(Environment.NewLine);
+                }                
+            }
+            public void PrintTable()
+            {
+                var pad = 2;
+                calc();
+                foreach (var r in Rows)
+                {
+                    for (int i = 0; i < r.Count; i++)
+                    {
+                        var s = r[i] ?? string.Empty;
+                        var len = dict[i] + pad-1;                        
+                        Console.Write(s);
+                        for (int j = s.Length; j < len; j++)
+                            Console.Write(" ");
+                        Console.Write("|");                        
+                    }
+                    Console.Write(Environment.NewLine);
+                    foreach (int i in dict.Values)
+                        for(int j=0;j<i+pad;j++)
+                            Console.Write("-");
+                    Console.Write(Environment.NewLine);
                 }
-                
             }
         }
 
