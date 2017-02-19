@@ -52,10 +52,10 @@ namespace FlysasClient
     }
 
     public class Price : Price2
-    {       
+    {
         public List<PricePerPassengerType> pricePerPassengerType { get; set; }
     }
-   
+
     public class Fare
     {
         public string segmentId { get; set; }
@@ -71,6 +71,11 @@ namespace FlysasClient
         public int flightId { get; set; }
     }
 
+    public class Error
+    {
+        public string errorCode;
+        public string errorMessage;
+    }
     public class FlightProductBaseClass
     {
         public string id { get; set; }
@@ -90,7 +95,7 @@ namespace FlysasClient
 
 
 
-  
+
 
 
     public class Via : KVP
@@ -98,7 +103,7 @@ namespace FlysasClient
         public string haltDuration { get; set; }
     }
 
-    
+
     public class Segment
     {
         public int id { get; set; }
@@ -121,7 +126,7 @@ namespace FlysasClient
         public int numberOfStops { get; set; }
         public string departureTerminal { get; set; }
     }
-    
+
     public class FlightBaseClass
     {
         public int id { get; set; }
@@ -137,8 +142,8 @@ namespace FlysasClient
         public List<Segment> segments { get; set; }
     }
 
-    
-    
+
+
 
     public class KVP
     {
@@ -220,6 +225,7 @@ namespace FlysasClient
         public List<Link> links { get; set; }
         public string regionName { get; set; }
         public string offerId { get; set; }
+        public List<Error> errors { get; set; }
     }
     public class AuthResponse
     {
