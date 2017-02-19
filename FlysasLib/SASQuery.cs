@@ -16,6 +16,7 @@ namespace FlysasLib
         public string BookingFlow { get; set; } = "REVENUE";
         public string Lng { get; set; } = "GB";
         //public string Pos { get; set; } = "se";
+        //displayType:CALENDAR
         public string Channel { get; set; } = "web";
         public DateTime? OutDate { get; set; }
         public DateTime? InDate { get; set; }
