@@ -6,7 +6,9 @@ namespace FlysasClient
 {
     public class Options
     {
-        public bool OutputBookingClass { get; private set; }
+        public bool OutputBookingClass { get; private set; } = false;
+        public bool OutputEquipment { get; private set; } = false;
+
 
         public bool Parse(string s)
         {
@@ -20,6 +22,7 @@ namespace FlysasClient
                     switch (option)
                     {
                         case "bookingclass": OutputBookingClass = myBool(sVal); break;
+                        case "equipment": OutputEquipment = myBool(sVal); break;
                     }
                 }
                 return true;

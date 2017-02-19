@@ -38,12 +38,17 @@ namespace FlysasClient
                         if (req != null)
                         {
                             var res = client.Search(req);
-                            Console.WriteLine("*********Outbound*******");
-                            PrintFlights(res.outboundFlights, res.outboundFlightProducts, options);
-                            if (req.InDate.HasValue)
+                            if (res.errors != null && res.errors.Any())
+                                Console.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
+                            else
                             {
-                                Console.WriteLine("*********Inbound*******");
-                                PrintFlights(res.inboundFlights, res.inboundFlightProducts, options);
+                                Console.WriteLine("*********Outbound*******");
+                                PrintFlights(res.outboundFlights, res.outboundFlightProducts, options);
+                                if (req.InDate.HasValue)
+                                {
+                                    Console.WriteLine("*********Inbound*******");
+                                    PrintFlights(res.inboundFlights, res.inboundFlightProducts, options);
+                                }
                             }
                         }
                         Console.Write(Environment.NewLine + Environment.NewLine);
@@ -52,25 +57,29 @@ namespace FlysasClient
 
         }
         void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
-        {
-            bool printClasses = options.OutputBookingClass;
+        {         
             string tab = "\t";
-            int tabLen = 8;
-            if (flights == null)
-            {
-                Console.WriteLine("No flights found");
-                return;
-            }
+            int tabLen = 8;         
             string format = "HH:mm";
             var codes = products.Select(p => p.productCode).Distinct().ToArray();
             var first = flights.First();
-            var header = $"{first.origin.code}{tab}{first.destination.code}{tab}" + string.Join(tab + (printClasses ? tab : ""), codes);
+            var headers = new List<string>();
+            headers.Add(first.origin.code);
+            headers.Add(first.destination.code);
+            if(options.OutputEquipment)
+                headers.Add("Equip");
+            headers.AddRange(codes.Select(c => c + (options.OutputBookingClass ? tab : string.Empty)));
+            var header = string.Join(tab,headers);
             Console.WriteLine(header);
             foreach (var r in flights)
             {
+                var values = new List<string>();
                 var prices = products.Where(p => p.id.EndsWith("_" + r.id.ToString())).ToArray();
                 var dateDiff = (r.endTimeInLocal.Date - r.startTimeInGmt.Date).Days;
-                Console.Write($"{r.startTimeInLocal.ToString(format)}{tab}{r.endTimeInLocal.ToString(format)}" + (dateDiff > 0 ? "+" + dateDiff : ""));
+                values.Add(r.startTimeInLocal.ToString(format));
+                values.Add(r.endTimeInLocal.ToString(format)+ (dateDiff > 0 ? "+" + dateDiff : ""));                
+                if (options.OutputEquipment)
+                    values.Add(r.segments.First().airCraft.code);
                 foreach (var c in codes)
                 {
                     string sClasses = "";
@@ -90,11 +99,11 @@ namespace FlysasClient
                         }
                         sPrice = p.price.formattedTotalPrice;
                     }
-                    Console.Write(tab + sPrice);
-                    if (printClasses)
-                        Console.Write(tab + sClasses);
-                }
-                Console.Write(Environment.NewLine);
+                    values.Add(sPrice);
+                    if (options.OutputBookingClass)
+                        values.Add(sClasses);                    
+                }                
+                Console.WriteLine(string.Join(tab,values));
             }
         }
     }
