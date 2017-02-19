@@ -71,11 +71,6 @@ namespace FlysasClient
         public int flightId { get; set; }
     }
 
-    public class Error
-    {
-        public string errorCode;
-        public string errorMessage;
-    }    
     public class FlightProductBaseClass
     {
         public string id { get; set; }
@@ -89,7 +84,7 @@ namespace FlysasClient
         public List<Fare> fares { get; set; }
         public string fareKey { get; set; }
         public List<Connection> connections { get; set; }
-        public bool flyingToOrOverRussia { get; set; }        
+        public bool flyingToOrOverRussia { get; set; }
     }
 
 
@@ -225,7 +220,6 @@ namespace FlysasClient
         public List<Link> links { get; set; }
         public string regionName { get; set; }
         public string offerId { get; set; }
-        public List<Error> errors { get; set; }
     }
     public class AuthResponse
     {
