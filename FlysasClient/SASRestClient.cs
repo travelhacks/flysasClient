@@ -45,16 +45,32 @@ namespace FlysasClient
 
         public SearchResult Search(SASQuery query)
         {
+            
+            try
+            {
+              return search(query);
+            }
+            catch(Exception ex)
+            {
+                accessToken = null;
+                return search(query);
+            }
+        }
+        private SearchResult search(SASQuery query)
+        {
             SearchResult root = null;
             var req = new HttpRequestMessage()
             {
                 RequestUri = query.GetUrl()
-            };            
-            req.Headers.Add("Authorization", AccessToken);            
+            };
+            req.Headers.Add("Authorization", AccessToken);
             var task = client.SendAsync(req).ContinueWith(t =>
-            {                
-                var stringTask = t.Result.Content.ReadAsStringAsync();
-                stringTask.Wait();                
+            {
+                HttpResponseMessage response = t.Result;
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    throw new Exception("Bad request");
+                var stringTask = response.Content.ReadAsStringAsync();                
+                stringTask.Wait();
                 root = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchResult>(stringTask.Result);
             });
             task.Wait();            
