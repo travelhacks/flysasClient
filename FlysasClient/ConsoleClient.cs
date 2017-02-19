@@ -59,6 +59,7 @@ namespace FlysasClient
         void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
         {         
             string tab = "\t";
+            string slash = "/";
             int tabLen = 8;         
             string format = "HH:mm";
             var codes = products.Select(p => p.productCode).Distinct().ToArray();
@@ -77,9 +78,12 @@ namespace FlysasClient
                 var prices = products.Where(p => p.id.EndsWith("_" + r.id.ToString())).ToArray();
                 var dateDiff = (r.endTimeInLocal.Date - r.startTimeInGmt.Date).Days;
                 values.Add(r.startTimeInLocal.ToString(format));
-                values.Add(r.endTimeInLocal.ToString(format)+ (dateDiff > 0 ? "+" + dateDiff : ""));                
+                values.Add(r.endTimeInLocal.ToString(format)+ (dateDiff > 0 ? "+" + dateDiff : ""));
                 if (options.OutputEquipment)
-                    values.Add(r.segments.First().airCraft.code);
+                {
+                    var s = string.Join(slash, simplify(r.segments.Select(seg => seg.airCraft.code)));
+                    values.Add(limit(s));
+                }
                 foreach (var c in codes)
                 {
                     string sClasses = "";
@@ -105,6 +109,21 @@ namespace FlysasClient
                 }                
                 Console.WriteLine(string.Join(tab,values));
             }
+        }
+
+        private IEnumerable<string> simplify(IEnumerable<string> list)
+        {
+            if (list.Distinct().Count() == 1)
+                yield return list.First();
+            else
+                foreach (string s in list)
+                    yield return s;
+        }
+        private string limit(string s)
+        {
+            if (s != null && s.Length < 8)
+                return s;
+            return string.Empty;
         }
     }
 }
