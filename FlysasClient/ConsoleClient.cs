@@ -20,40 +20,45 @@ namespace FlysasClient
                 Console.WriteLine("Syntax: Origin-Destination outDate [inDate]");
                 Console.Write(">>");
                 input = Console.ReadLine();
-                if (!options.Parse(input))
-                    foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        SASQuery req = null;
-                        try
+                if (input == "help")
+                    Console.Write(options.Help()+Environment.NewLine);
+                else
+                {
+                    if (!options.Parse(input))
+                        foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                         {
-                            req = parser.Parse(query);
-                        }
-                        catch (ParserException ex)
-                        {
-                            Console.Write("Syntax error:" + ex.Message);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Write("Syntax error:");
-                        }
-                        if (req != null)
-                        {
-                            var res = client.Search(req);
-                            if (res.errors != null && res.errors.Any())
-                                Console.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
-                            else
+                            SASQuery req = null;
+                            try
                             {
-                                Console.WriteLine("*********Outbound*******");
-                                PrintFlights(res.outboundFlights, res.outboundFlightProducts, options);
-                                if (req.InDate.HasValue)
+                                req = parser.Parse(query);
+                            }
+                            catch (ParserException ex)
+                            {
+                                Console.Write("Syntax error:" + ex.Message);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.Write("Syntax error:");
+                            }
+                            if (req != null)
+                            {
+                                var res = client.Search(req);
+                                if (res.errors != null && res.errors.Any())
+                                    Console.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
+                                else
                                 {
-                                    Console.WriteLine("*********Inbound*******");
-                                    PrintFlights(res.inboundFlights, res.inboundFlightProducts, options);
+                                    Console.WriteLine("*********Outbound*******");
+                                    PrintFlights(res.outboundFlights, res.outboundFlightProducts, options);
+                                    if (req.InDate.HasValue)
+                                    {
+                                        Console.WriteLine("*********Inbound*******");
+                                        PrintFlights(res.inboundFlights, res.inboundFlightProducts, options);
+                                    }
                                 }
                             }
+                            Console.Write(Environment.NewLine + Environment.NewLine);
                         }
-                        Console.Write(Environment.NewLine + Environment.NewLine);
-                    }
+                }
             }
 
         }
