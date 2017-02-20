@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 
 
@@ -9,12 +10,7 @@ namespace FlysasLib
         string accessToken;
         HttpClient client = new HttpClient();        
         object padLock = new object();
-
-        public SASRestClient()
-        {
-            //client.DefaultRequestHeaders.Add("Connection", "close");
-        }
-
+       
         string AccessToken
         {
             get
@@ -37,8 +33,7 @@ namespace FlysasLib
                         });
                         task.Wait();
                     }
-                }
-                
+                }                
                 return accessToken;
             }
         }
@@ -59,11 +54,14 @@ namespace FlysasLib
         private SearchResult search(SASQuery query)
         {
             SearchResult root = null;
-            var req = new HttpRequestMessage()
-            {
-                RequestUri = query.GetUrl()
-            };
-            req.Headers.Add("Authorization", AccessToken);
+            var req = new HttpRequestMessage(){ RequestUri = query.GetUrl()};                        
+            req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(AccessToken);
+            req.Headers.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            req.Headers.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+            req.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
+            req.Headers.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
+            req.Headers.Connection.Add("keep-alive");
+
             var task = client.SendAsync(req).ContinueWith(t =>
             {
                 HttpResponseMessage response = t.Result;
