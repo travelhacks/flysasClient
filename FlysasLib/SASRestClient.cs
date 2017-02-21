@@ -53,8 +53,10 @@ namespace FlysasLib
             req.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
             req.Headers.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
             req.Headers.Connection.Add("keep-alive");
-            var jSon = downLoad(req);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<SearchResult>(jSon);            
+            var jSon = downLoad(req);            
+            var res =  Newtonsoft.Json.JsonConvert.DeserializeObject<SearchResult>(jSon);
+            res.json = jSon;
+            return res;
         }
 
         private string downLoad(HttpRequestMessage request)
