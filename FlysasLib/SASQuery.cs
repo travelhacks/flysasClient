@@ -11,13 +11,13 @@ namespace FlysasLib
         public string To { get; set; }
         public string From { get; set; }
         public string ReturnFrom { get; set; }
-        public string ReturnTo { get; set; }
+       // public string ReturnTo { get; set; }
         public int Adt { get; set; } = 1;
         public string BookingFlow { get; set; } = "REVENUE";
         public string Lng { get; set; } = "GB";
-        //public string Pos { get; set; } = "se";
-        //displayType:CALENDAR
-        public string Channel { get; set; } = "web";
+        public string Pos { get; set; } = "se";
+        public string DisplayType { get; set; } //displayType:CALENDAR
+        public string Channel { get; set; }// = "web";
         public DateTime? OutDate { get; set; }
         public DateTime? InDate { get; set; }
 
