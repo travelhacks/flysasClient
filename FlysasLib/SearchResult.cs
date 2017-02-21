@@ -30,7 +30,7 @@ namespace FlysasLib
         public AssociatedProducts associatedProducts { get; set; }
     }
 
-    public class Price2
+    public class Price
     {
         public string currency { get; set; }
         public double basePrice { get; set; }
@@ -48,10 +48,10 @@ namespace FlysasLib
         public int id { get; set; }
         public string type { get; set; }
         public int numberCount { get; set; }
-        public Price2 price { get; set; }
+        public Price price { get; set; }
     }
 
-    public class Price : Price2
+    public class PriceList : Price
     {
         public List<PricePerPassengerType> pricePerPassengerType { get; set; }
     }
@@ -85,11 +85,13 @@ namespace FlysasLib
         public bool lowestFare { get; set; }
         public int recoId { get; set; }
         public int recoFlightId { get; set; }
-        public Price price { get; set; }
+        public PriceList price { get; set; }
         public List<Fare> fares { get; set; }
         public string fareKey { get; set; }
         public List<Connection> connections { get; set; }
         public bool flyingToOrOverRussia { get; set; }
+        public bool flyingToOrOverUs { get; set; }
+        
     }
 
 
