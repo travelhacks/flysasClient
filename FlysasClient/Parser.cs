@@ -48,7 +48,7 @@ namespace FlysasClient
                 }
             }
             else
-                throw new ParserException("To few arguments");
+                throw new ParserException("Too few arguments");
             return request;
         }
 
