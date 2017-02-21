@@ -228,6 +228,7 @@ namespace FlysasLib
         public string regionName { get; set; }
         public string offerId { get; set; }
         public List<Error> errors { get; set; }
+        public string json;
     }
     public class AuthResponse
     {
