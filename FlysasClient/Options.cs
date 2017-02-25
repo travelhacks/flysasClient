@@ -45,7 +45,10 @@ namespace FlysasClient
                         var attr = prop.GetCustomAttribute(typeof(OptionParserAttribute)) as OptionParserAttribute;
                         if (attr != null && attr.OptionName == option)
                         {
-                            prop.SetValue(this, myBool(sVal));
+                            if(prop.PropertyType == typeof(bool))
+                                prop.SetValue(this, myBool(sVal));
+                            if (prop.PropertyType == typeof(string))
+                                prop.SetValue(this, sVal);
                         }
                     }
                 }
@@ -57,7 +60,11 @@ namespace FlysasClient
         {
             return s == "on" || s == "true" || s == "1" || s == "yes";
         }
+
+        
     }
+
+    
 
 
     public class Options : OptionsParser
@@ -67,6 +74,10 @@ namespace FlysasClient
         [OptionParser("equipment")]
         public bool OutputEquipment { get; private set; } = false;
         [OptionParser("table")]
-        public bool Table { get; private set; } = false;        
+        public bool Table { get; private set; } = false;
+        [OptionParser("username")]
+        public string UserName { get; set; }
+        [OptionParser("pwd")]
+        public string Password { get; set; }
     }
 }
