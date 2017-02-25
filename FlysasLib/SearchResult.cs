@@ -237,6 +237,44 @@ namespace FlysasLib
         public int expires_in { get; set; }
         public string scope { get; set; }
         public string jti { get; set; }
+        public List<Error> errors { get; set; }
+        //for logins
+        public string refresh_token;
+        public string customerSessionId;
+        public string sessionId;
+
     }
 
+    public class Transaction
+    {
+        public string id { get; set; }
+        public DateTime datePerformed { get; set; }
+        public string description { get; set; }
+        public int availablePointsAfterTransaction { get; set; }
+        public string basicPointsAfterTransaction { get; set; }
+        public string typeOfTransaction { get; set; }
+    }
+
+    public class TransactionHistory
+    {
+        public int totalNumberOfPages { get; set; }
+        public List<Transaction> transaction { get; set; }
+    }
+    public class EuroBonus
+    {
+      public string euroBonusId { get; set; }
+      public string nameOnCard { get; set; }
+      public DateTime dateRegistered { get; set; }
+      public DateTime qualifyingPeriodStartDate { get; set; }
+      public DateTime qualifyingPeriodEndDate { get; set; }
+      public int pointsAvailable { get; set; }
+      public int totalPointsForUse { get; set; }
+      public string currentTierCode { get; set; }
+      public TransactionHistory transactionHistory { get; set; }      
+    }
+    public class TransactionRoot
+    {
+        public EuroBonus eurobonus { get; set; }
+        public List<Error> errors { get; set; }
+    }
 }
