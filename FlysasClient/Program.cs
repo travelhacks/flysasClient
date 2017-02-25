@@ -1,21 +1,33 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using FlysasLib;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+
+
+
 
 namespace FlysasClient
 {
     class Program
     {
-        static void Main(string[] args)
+        
+        public static void Main(string[] args = null)
         {
+            var builder = new ConfigurationBuilder()
+                 .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            Options o = new Options();
+            o.UserName = config["userName"];
+            o.Password = config["passWord"];
 
             //bench();
             //////benchJson();
             //Console.ReadKey();
             ////return;
 
-            var c = new ConsoleClient();
+            var c = new ConsoleClient(o);
             c.InputLoop();
 
 

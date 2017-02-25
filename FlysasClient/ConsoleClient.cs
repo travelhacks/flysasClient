@@ -7,12 +7,25 @@ namespace FlysasClient
 {
     public class ConsoleClient
     {
+        SASRestClient client = new SASRestClient();
+        Options options = new FlysasClient.Options();
+
+        public ConsoleClient()
+        {
+
+        }
+
+        public ConsoleClient(Options options) 
+        {
+            this.options = options;
+        }
+
         public void InputLoop()
         {
-            var client = new SASRestClient();
+            
             string input = null;
             var parser = new Parser();
-            var options = new FlysasClient.Options();
+            
 
 
             while (input != "q")
@@ -24,7 +37,7 @@ namespace FlysasClient
                     Console.Write(options.Help()+Environment.NewLine);
                 else
                 {
-                    if (!options.Parse(input))
+                    if (!options.Parse(input) && !Command(input))
                         foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                         {
                             SASQuery req = null;
@@ -60,7 +73,62 @@ namespace FlysasClient
                         }
                 }
             }
+        }
+        bool Command(string input)
+        {
+            var cmd = input.Trim().ToLower();
+            if(input=="login")
+            {
+                Console.WriteLine(client.Login(options.UserName, options.Password));
+                return true;
+            }
+            if(input.StartsWith("history"))
+            {
+                var parts = input.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                int n = 1;
+                int pages = 1;
+                bool fetchAll = true;
+                if (parts.Length > 1)
+                {
+                    int.TryParse(parts.Last(), out n);
+                    fetchAll = false;
+                }
+                List<Transaction> all = new List<Transaction>();
+                Table t = new Table();
+                Console.WriteLine("");
+                do
+                {
+                    Console.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
+                    var res = client.History(n);
+                    n++;
+                    if (fetchAll)
+                        pages = res.eurobonus.transactionHistory.totalNumberOfPages;
+                    if (res.eurobonus.transactionHistory.transaction != null && !res.errors.Any())
+                    {
+                        all.AddRange(res.eurobonus.transactionHistory.transaction);
 
+                        foreach (var r in res.eurobonus.transactionHistory.transaction)
+                        {
+                            //Console.WriteLine(r.datePerformed.ToString("yyyy-MM-dd") + "\t" + r.typeOfTransaction + "\t" + r.basicPointsAfterTransaction +  "\t" + r.availablePointsAfterTransaction + "\t"+ r.description + "\t");
+                            var values = new List<string>();
+                            values.Add(r.datePerformed.ToString("yyyy-MM-dd"));
+                            values.Add(r.typeOfTransaction);
+                            values.Add(r.basicPointsAfterTransaction);
+                            values.Add(r.availablePointsAfterTransaction.ToString());
+                            values.Add(r.description);
+                            t.Rows.Add(values);
+                        }
+                    }
+                } while (n <= pages);
+                Console.SetCursorPosition(0, Console.CursorTop);
+                t.Print();
+                if(fetchAll)
+                    foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
+                        Console.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));
+
+            }
+            
+            return false;
         }
         void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
         {         
