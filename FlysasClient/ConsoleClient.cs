@@ -103,7 +103,7 @@ namespace FlysasClient
                     n++;
                     if (fetchAll)
                         pages = res.eurobonus.transactionHistory.totalNumberOfPages;
-                    if (res.eurobonus.transactionHistory.transaction != null && !res.errors.Any())
+                    if (res.errors == null && res.eurobonus.transactionHistory.transaction != null)
                     {
                         all.AddRange(res.eurobonus.transactionHistory.transaction);
 
