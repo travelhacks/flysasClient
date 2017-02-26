@@ -89,11 +89,11 @@ namespace FlysasLib
             {
               return search(query);
             }
-            catch(Exception ex)
-            {
+            catch(HttpRequestException ex)
+            {                
                 auth = null;
                 return search(query);
-            }
+            }            
         }
       
         private SearchResult search(SASQuery query)
@@ -129,12 +129,13 @@ namespace FlysasLib
             string res = null;
             var task = client.SendAsync(request).ContinueWith(t =>
             {
-                HttpResponseMessage response = t.Result;
-                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                    throw new Exception("Bad request");
+                HttpResponseMessage response = t.Result;                       
                 var readTask = response.Content.ReadAsStringAsync();
                 readTask.Wait();
-                res = readTask.Result;
+                res = readTask.Result;                
+                response.Content.Dispose();
+                if (!response.IsSuccessStatusCode)
+                    throw new MyHttpException(response.StatusCode, res);
             });
             task.Wait();
             return res;

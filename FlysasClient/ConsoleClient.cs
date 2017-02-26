@@ -76,63 +76,72 @@ namespace FlysasClient
         }
         bool Command(string input)
         {
+            string loginMessage = "This feature requires login";
             var cmd = input.Trim().ToLower();
             if(input=="login")
             {
-                Console.WriteLine(client.Login(options.UserName, options.Password));
+                Console.WriteLine("Login : " + (client.Login(options.UserName, options.Password) ? " success" : "failed"));
                 return true;
             }
             if(cmd.StartsWith("history"))
             {
-                var parts = input.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                int n = 1;
-                int pages = 1;
-                bool fetchAll = true;
-                if (parts.Length > 1)
+                if (!client.LoggedIn)
                 {
-                    int.TryParse(parts.Last(), out n);
-                    fetchAll = false;
+                    Console.WriteLine(loginMessage);
                 }
-                List<Transaction> all = new List<Transaction>();
-                TransactionRoot res=null;
-                Table t = new Table();
-                Console.WriteLine("");
-                do
+                else
                 {
-                    Console.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
-                    try
+                    var parts = input.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    int n = 1;
+                    int pages = 1;
+                    bool fetchAll = true;
+                    if (parts.Length > 1)
                     {
-                        res = client.History(n);
+                        int.TryParse(parts.Last(), out n);
+                        fetchAll = false;
                     }
-                    catch(Exception ex)
+                    List<Transaction> all = new List<Transaction>();
+                    TransactionRoot res = null;
+                    Table t = new Table();
+                    Console.WriteLine("");
+                    do
                     {
-                        Console.WriteLine("Error getting page " + n);
-                    }
-                    n++;
-                    if (fetchAll)
-                        pages = res.eurobonus.transactionHistory.totalNumberOfPages;
-                    if (res !=null && res.errors == null && res.eurobonus.transactionHistory.transaction != null)
-                    {
-                        all.AddRange(res.eurobonus.transactionHistory.transaction);
-
-                        foreach (var r in res.eurobonus.transactionHistory.transaction)
+                        Console.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
+                        try
                         {
-                            //Console.WriteLine(r.datePerformed.ToString("yyyy-MM-dd") + "\t" + r.typeOfTransaction + "\t" + r.basicPointsAfterTransaction +  "\t" + r.availablePointsAfterTransaction + "\t"+ r.description + "\t");
-                            var values = new List<string>();
-                            values.Add(r.datePerformed.ToString("yyyy-MM-dd"));
-                            values.Add(r.typeOfTransaction);
-                            values.Add(r.basicPointsAfterTransaction);
-                            values.Add(r.availablePointsAfterTransaction.ToString());
-                            values.Add(r.description);
-                            t.Rows.Add(values);
+                            res = client.History(n);
                         }
-                    }
-                } while (n <= pages);
-                Console.SetCursorPosition(0, Console.CursorTop);
-                t.Print();
-                if(fetchAll)
-                    foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
-                        Console.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));
+                        catch (MyHttpException ex)
+                        {                            
+                            Console.WriteLine("Error getting page " + n);
+                            Console.WriteLine(ex.Message);
+                        }
+                        n++;
+                        if (fetchAll)
+                            pages = res.eurobonus.transactionHistory.totalNumberOfPages;
+                        if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)
+                        {
+                            all.AddRange(res.eurobonus.transactionHistory.transaction);
+
+                            foreach (var r in res.eurobonus.transactionHistory.transaction)
+                            {
+                                //Console.WriteLine(r.datePerformed.ToString("yyyy-MM-dd") + "\t" + r.typeOfTransaction + "\t" + r.basicPointsAfterTransaction +  "\t" + r.availablePointsAfterTransaction + "\t"+ r.description + "\t");
+                                var values = new List<string>();
+                                values.Add(r.datePerformed.ToString("yyyy-MM-dd"));
+                                values.Add(r.typeOfTransaction);
+                                values.Add(r.basicPointsAfterTransaction);
+                                values.Add(r.availablePointsAfterTransaction.ToString());
+                                values.Add(r.description);
+                                t.Rows.Add(values);
+                            }
+                        }
+                    } while (n <= pages);
+                    Console.SetCursorPosition(0, Console.CursorTop);
+                    t.Print();
+                    if (fetchAll)
+                        foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
+                            Console.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));                    
+                }
                 return true;
             }
             if (cmd == "logout")
@@ -142,20 +151,33 @@ namespace FlysasClient
             }
             if (cmd == "points")
             {
-                try
+                if (!client.LoggedIn)
                 {
-                    var res = client.History(1);
-                    Console.WriteLine("Points: " + res.eurobonus.pointsAvailable + "\tfor use " + res.eurobonus.totalPointsForUse);
+                    Console.WriteLine(loginMessage);
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine("Error getting info");
+                    try
+                    {
+                        var res = client.History(1);
+                        Console.WriteLine("Status: " + res.eurobonus.currentTierCode);
+                        Console.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
+                        Console.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");                     
+                    }
+                    catch (System.Net.Http.HttpRequestException ex)
+                    {
+                        Console.WriteLine("Error getting info");
+                        Console.WriteLine(ex.Message);
+
+                    }                    
                 }
                 return true;
             }
             
             return false;
         }
+
+
         void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
         {         
             string slash = "/";            
