@@ -82,7 +82,7 @@ namespace FlysasClient
                 Console.WriteLine(client.Login(options.UserName, options.Password));
                 return true;
             }
-            if(input.StartsWith("history"))
+            if(cmd.StartsWith("history"))
             {
                 var parts = input.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 int n = 1;
@@ -94,16 +94,24 @@ namespace FlysasClient
                     fetchAll = false;
                 }
                 List<Transaction> all = new List<Transaction>();
+                TransactionRoot res=null;
                 Table t = new Table();
                 Console.WriteLine("");
                 do
                 {
                     Console.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
-                    var res = client.History(n);
+                    try
+                    {
+                        res = client.History(n);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("Error getting page " + n);
+                    }
                     n++;
                     if (fetchAll)
                         pages = res.eurobonus.transactionHistory.totalNumberOfPages;
-                    if (res.errors == null && res.eurobonus.transactionHistory.transaction != null)
+                    if (res !=null && res.errors == null && res.eurobonus.transactionHistory.transaction != null)
                     {
                         all.AddRange(res.eurobonus.transactionHistory.transaction);
 
@@ -125,7 +133,25 @@ namespace FlysasClient
                 if(fetchAll)
                     foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
                         Console.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));
-
+                return true;
+            }
+            if (cmd == "logout")
+            {
+                client.Logout();
+                return true;
+            }
+            if (cmd == "points")
+            {
+                try
+                {
+                    var res = client.History(1);
+                    Console.WriteLine("Points: " + res.eurobonus.pointsAvailable + "\tfor use " + res.eurobonus.totalPointsForUse);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error getting info");
+                }
+                return true;
             }
             
             return false;

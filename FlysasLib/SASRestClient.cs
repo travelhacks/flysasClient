@@ -18,14 +18,17 @@ namespace FlysasLib
                 {
                     lock (padLock)
                     {
-                        var request = new HttpRequestMessage()
+                        if (auth == null)
                         {
-                            RequestUri = new Uri("https://www.sas.se/bin/sas/d360/getOauthToken"),
-                            Method = HttpMethod.Post
-                        };
-                        var jSon = downLoad(request);
-                        var response = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(jSon);
-                        auth = response;
+                            var request = new HttpRequestMessage()
+                            {
+                                RequestUri = new Uri("https://www.sas.se/bin/sas/d360/getOauthToken"),
+                                Method = HttpMethod.Post
+                            };
+                            var jSon = downLoad(request);
+                            var response = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(jSon);
+                            auth = response;
+                        }
                     }
                 }
                 return auth;
@@ -38,24 +41,46 @@ namespace FlysasLib
             return Auth != null;
         }
 
-        public void Logout()
-        {
-
-        }
-
+      
         public bool Login(string userName, string pwd)
         {
-            var request = new HttpRequestMessage {
+            var request = new HttpRequestMessage
+            {
                 RequestUri = new Uri("https://api.flysas.com/authorize/oauth/token"),
-                Method = HttpMethod.Post                
+                Method = HttpMethod.Post
             };
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic","U0FTLVVJOg==");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "U0FTLVVJOg==");
             var dict = new Dictionary<string, string> { { "username", userName }, { "password", pwd }, { "grant_type", "password" } };
             request.Content = new FormUrlEncodedContent(dict);
             var jSon = downLoad(request);
             var response = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(jSon);
-            auth =response;
-            return true;
+            auth = response;
+            return response.errors == null;
+        }
+
+        public bool LoggedIn
+        {
+            get {
+                return auth != null && !string.IsNullOrEmpty(Auth.customerSessionId);
+            }
+        }
+
+        public void Logout()
+        {
+            if (LoggedIn)
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("https://api.flysas.com/customer/signout"),
+                    Method = HttpMethod.Post
+                };
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);
+                string cont = "{ \"customerSessionId\" : \"" + Auth.customerSessionId + "\"}";
+                request.Content =  new StringContent(cont, System.Text.Encoding.UTF8, "application/json");                                
+                var jSon = downLoad(request);                
+                auth = null;
+            }
+            
         }
 
         public SearchResult Search(SASQuery query)
