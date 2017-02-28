@@ -10,6 +10,36 @@ namespace FlysasLib
         HttpClient client = new HttpClient();
         object padLock = new object();
 
+        public SASRestClient()
+        {
+          
+            client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
+            client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
+            client.DefaultRequestHeaders.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
+            client.DefaultRequestHeaders.Connection.Add("keep-alive");
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"));
+            client.DefaultRequestHeaders.Host = "api.flysas.com";
+            client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Mozilla/5.0 (compatible)"));
+            //client.DefaultRequestHeaders.Add("Origin", "https://www.sas.se");
+            //client.DefaultRequestHeaders.Referrer  = new Uri("https://www.sas.se");
+
+
+            //Headers from chrome
+            //Accept: */*
+            //Accept-Encoding:gzip, deflate, sdch, br
+            //Accept-Language:sv-SE,sv;q=0.8,en-US;q=0.6,en;q=0.4
+            //Access-Control-Request-Headers:authorization
+            //Access-Control-Request-Method:GET
+            //Cache-Control:no-cache
+            //Connection:keep-alive
+            //Host:api.flysas.com
+            //Origin:https://www.sas.se
+            //Pragma:no-cache
+            //Referer:https://www.sas.se/
+            //User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+        }
+
         AuthResponse Auth
         {
             get
@@ -99,12 +129,7 @@ namespace FlysasLib
         private SearchResult search(SASQuery query)
         {            
             var req = new HttpRequestMessage(){ RequestUri = query.GetUrl()};                        
-            req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);
-            req.Headers.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-            req.Headers.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-            req.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
-            req.Headers.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
-            req.Headers.Connection.Add("keep-alive");
+            req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);            
             var jSon = downLoad(req);            
             var res =  Newtonsoft.Json.JsonConvert.DeserializeObject<SearchResult>(jSon);
             res.json = jSon;
