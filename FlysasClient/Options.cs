@@ -9,10 +9,12 @@ namespace FlysasClient
     [AttributeUsage(AttributeTargets.Property, Inherited = false)]
     public class OptionParserAttribute : Attribute
     {
-        public string OptionName { get; private set; }        
-        public OptionParserAttribute(string optionName)
+        public string OptionName { get; private set; }
+        public bool Secret { get; private set; } = false;
+        public OptionParserAttribute(string optionName,bool Secret = false)
         {
             this.OptionName = optionName;
+            this.Secret = Secret;
         }
     }
 
@@ -63,7 +65,7 @@ namespace FlysasClient
                 var attr = prop.GetCustomAttribute(typeof(OptionParserAttribute)) as OptionParserAttribute;
                 if(attr!=null)
                 {
-                    s += attr.OptionName + " " + prop.GetValue(this).ToString() + " ";
+                    s += attr.OptionName + ":" + (attr.Secret ? "************" : prop.GetValue(this).ToString()) + " ";
                 }
             }
             return s;
@@ -102,7 +104,7 @@ namespace FlysasClient
         public bool Table { get; private set; } = false;
         [OptionParser("username")]
         public string UserName { get; set; }
-        [OptionParser("passWord")]
+        [OptionParser( optionName: "passWord",Secret : true)]
         public string Password { get; set; }
 
 
