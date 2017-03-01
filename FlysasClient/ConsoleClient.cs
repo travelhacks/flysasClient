@@ -15,7 +15,7 @@ namespace FlysasClient
 
         }
 
-        public ConsoleClient(Options options) 
+        public ConsoleClient(Options options)
         {
             this.options = options;
         }
@@ -66,168 +66,171 @@ namespace FlysasClient
                     }
             }
         }
-        
+
+        enum Commands
+        {
+            Login, History, Logout, Points, Set, Help, Benchmark, Options
+        };
+
+        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points };
+
         bool Command(string input)
         {
-            string loginMessage = "This feature requires login";
-            var cmd = input.Trim().ToLower();
-            if (input == "login")
-            {
-                bool result;
-                try
-                {
-                    result = client.Login(options.UserName, options.Password);
-                    Console.WriteLine("Login : " + (result ? " success" : "failed"));
-                }
-                catch (MyHttpException ex)
-                {
-                    Console.WriteLine("Login failed");
-                }
-                return true;
-            }
-            if(cmd.StartsWith("history"))
-            {
-                if (!client.LoggedIn)
-                {
-                    Console.WriteLine(loginMessage);
-                }
-                else
-                {
-                    var parts = input.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                    int n = 1;
-                    int pages = 1;
-                    bool fetchAll = true;
-                    if (parts.Length > 1)
-                    {
-                        int.TryParse(parts.Last(), out n);
-                        fetchAll = false;
-                    }
-                    List<Transaction> all = new List<Transaction>();
-                    TransactionRoot res = null;
-                    Table t = new Table();
-                    Console.WriteLine("");
-                    do
-                    {
-                        Console.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
-                        try
-                        {
-                            res = client.History(n);
-                        }
-                        catch (MyHttpException ex)
-                        {                            
-                            Console.WriteLine("Error getting page " + n);
-                            Console.WriteLine(ex.Message);
-                        }
-                        n++;
-                        if (fetchAll)
-                            pages = res.eurobonus.transactionHistory.totalNumberOfPages;
-                        if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)
-                        {
-                            all.AddRange(res.eurobonus.transactionHistory.transaction);
 
-                            foreach (var r in res.eurobonus.transactionHistory.transaction)
+            var names = Enum.GetNames(typeof(Commands));
+            var stack = new Stack<string>(input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Reverse());
+            if (stack.Any())
+            {
+                var sCmd = stack.Pop();
+                var name = names.FirstOrDefault(s => s.Equals(sCmd, StringComparison.CurrentCultureIgnoreCase));
+                if (name == null)
+                    return false;
+                Commands cmd = (Commands)Enum.Parse(typeof(Commands), name);
+                if (!client.LoggedIn && requiresLogin.Contains(cmd))
+                {
+                    Console.WriteLine("This feature requires login");
+                    return true;
+                }
+                switch (cmd)
+                {
+                    case Commands.Login:
+                        {
+                            bool result;
+                            try
                             {
-                                //Console.WriteLine(r.datePerformed.ToString("yyyy-MM-dd") + "\t" + r.typeOfTransaction + "\t" + r.basicPointsAfterTransaction +  "\t" + r.availablePointsAfterTransaction + "\t"+ r.description + "\t");
-                                var values = new List<string>();
-                                values.Add(r.datePerformed.ToString("yyyy-MM-dd"));
-                                values.Add(r.typeOfTransaction);
-                                values.Add(r.basicPointsAfterTransaction);
-                                values.Add(r.availablePointsAfterTransaction.ToString());
-                                values.Add(r.description);
-                                t.Rows.Add(values);
+                                result = client.Login(options.UserName, options.Password);
+                                Console.WriteLine("Login : " + (result ? " success" : "failed"));
+                            }
+                            catch (MyHttpException ex)
+                            {
+                                Console.WriteLine("Login failed");
                             }
                         }
-                    } while (n <= pages);
-                    Console.SetCursorPosition(0, Console.CursorTop);
-                    t.Print();
-                    if (fetchAll)
-                        foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
-                            Console.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));                    
+                        break;
+                    case Commands.History:
+                        {
+                            int n = 1;
+                            int pages = 1;
+                            bool fetchAll = true;
+                            if (stack.Any())
+                            {
+                                int.TryParse(stack.Pop(), out n);
+                                fetchAll = false;
+                            }
+                            List<Transaction> all = new List<Transaction>();
+                            TransactionRoot res = null;
+                            Table t = new Table();
+                            Console.WriteLine("");
+                            do
+                            {
+                                Console.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
+                                try
+                                {
+                                    res = client.History(n);
+                                }
+                                catch (MyHttpException ex)
+                                {
+                                    Console.WriteLine("Error getting page " + n);
+                                    Console.WriteLine(ex.Message);
+                                }
+                                n++;
+                                if (fetchAll)
+                                    pages = res.eurobonus.transactionHistory.totalNumberOfPages;
+                                if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)
+                                {
+                                    all.AddRange(res.eurobonus.transactionHistory.transaction);
+
+                                    foreach (var r in res.eurobonus.transactionHistory.transaction)
+                                    {
+                                        var values = new List<string>();
+                                        values.Add(r.datePerformed.ToString("yyyy-MM-dd"));
+                                        values.Add(r.typeOfTransaction);
+                                        values.Add(r.basicPointsAfterTransaction);
+                                        values.Add(r.availablePointsAfterTransaction.ToString());
+                                        values.Add(r.description);
+                                        t.Rows.Add(values);
+                                    }
+                                }
+                            } while (n <= pages);
+                            Console.SetCursorPosition(0, Console.CursorTop);
+                            t.Print();
+                            if (fetchAll)
+                                foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
+                                    Console.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));
+                        }
+                        break;
+                    case Commands.Points:
+                        {
+                            try
+                            {
+                                var res = client.History(1);
+                                Console.WriteLine("Status: " + res.eurobonus.currentTierCode);
+                                Console.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
+                                Console.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");
+                            }
+                            catch (System.Net.Http.HttpRequestException ex)
+                            {
+                                Console.WriteLine("Error getting info");
+                                Console.WriteLine(ex.Message);
+
+                            }
+                        }
+                        break;
+                    case Commands.Benchmark:
+                        var count = 40;
+                        int threads = 6;
+                        var watch = System.Diagnostics.Stopwatch.StartNew();
+                        System.Threading.Tasks.Parallel.For(0, count, new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = threads }, x =>
+                        {
+                            SASQuery q = new SASQuery { From = "KLR", To = "ARN", OutDate = DateTime.Now.AddDays(1 + x).Date };
+                            var w2 = System.Diagnostics.Stopwatch.StartNew();
+                            var res = client.Search(q);
+                            Console.WriteLine("Got " + res.outboundFlights?.Count + " in " + w2.Elapsed.TotalSeconds);
+
+                        });
+                        Console.WriteLine(watch.Elapsed.TotalSeconds);
+                        break;
+                    case Commands.Options:
+                        Console.Write(options.Help() + Environment.NewLine);
+                        break;
+                    case Commands.Help:
+                        Console.WriteLine("Commands:");
+                        foreach (var s in names)
+                            Console.WriteLine("\t" + s);
+                        break;
                 }
                 return true;
             }
-            if (cmd == "logout")
-            {
-                client.Logout();
-                return true;
-            }
-            if (cmd == "points")
-            {
-                if (!client.LoggedIn)
-                {
-                    Console.WriteLine(loginMessage);
-                }
-                else
-                {
-                    try
-                    {
-                        var res = client.History(1);
-                        Console.WriteLine("Status: " + res.eurobonus.currentTierCode);
-                        Console.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
-                        Console.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");                     
-                    }
-                    catch (System.Net.Http.HttpRequestException ex)
-                    {
-                        Console.WriteLine("Error getting info");
-                        Console.WriteLine(ex.Message);
-
-                    }                    
-                }
-                return true;
-            }
-            if (cmd == "bench")
-            {
-                var count = 40;
-                int threads = 6;
-                var watch = System.Diagnostics.Stopwatch.StartNew();
-                System.Threading.Tasks.Parallel.For(0, count, new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = threads }, x =>
-                {
-                    SASQuery q = new SASQuery { From = "KLR", To = "ARN", OutDate = DateTime.Now.AddDays(1 + x).Date };
-                    var w2 = System.Diagnostics.Stopwatch.StartNew();
-                    var res = client.Search(q);
-                    Console.WriteLine("Got " + res.outboundFlights?.Count + " in " + w2.Elapsed.TotalSeconds);
-
-                });
-                Console.WriteLine(watch.Elapsed.TotalSeconds);
-                return true;
-            }
-            if (cmd == "help")
-            {
-                Console.Write(options.Help() + Environment.NewLine);
-                return true;
-            }
-
-
             return false;
         }
 
 
         void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
-        {         
-            string slash = "/";            
+        {
+            string slash = "/";
             string format = "HH:mm";
             var codes = products.Select(p => p.productCode).Distinct().ToArray();
             var first = flights.First();
             var headers = new List<string>();
             headers.Add(first.origin.code);
             headers.Add(first.destination.code);
-            if(options.OutputEquipment)
+            if (options.OutputEquipment)
                 headers.Add("Equip");
-            foreach(var c in codes)
+            foreach (var c in codes)
             {
                 headers.Add(c);
                 if (options.OutputBookingClass)
                     headers.Add("");
             }
             Table table = new Table();
-            table.Rows.Add(headers);            
+            table.Rows.Add(headers);
             foreach (var r in flights)
             {
                 var values = new List<string>();
                 var prices = products.Where(p => p.id.EndsWith("_" + r.id.ToString())).ToArray();
                 var dateDiff = (r.endTimeInLocal.Date - r.startTimeInGmt.Date).Days;
                 values.Add(r.startTimeInLocal.ToString(format));
-                values.Add(r.endTimeInLocal.ToString(format)+ (dateDiff > 0 ? "+" + dateDiff : ""));
+                values.Add(r.endTimeInLocal.ToString(format) + (dateDiff > 0 ? "+" + dateDiff : ""));
                 if (options.OutputEquipment)
                 {
                     var s = string.Join(slash, simplify(r.segments.Select(seg => seg.airCraft.code)));
@@ -254,9 +257,9 @@ namespace FlysasClient
                     }
                     values.Add(sPrice);
                     if (options.OutputBookingClass)
-                        values.Add(sClasses);                    
+                        values.Add(sClasses);
                 }
-                table.Rows.Add(values);                
+                table.Rows.Add(values);
             }
             if (options.Table)
                 table.PrintTable();
@@ -269,7 +272,7 @@ namespace FlysasClient
             public List<List<string>> Rows { get; private set; } = new List<List<string>>();
             string tab = "\t";
             int tabLen = 8;
-            Dictionary<int,int> dict = new Dictionary<int, int>();
+            Dictionary<int, int> dict = new Dictionary<int, int>();
             void calc()
             {
                 if (Rows.Any())
@@ -280,19 +283,19 @@ namespace FlysasClient
             public void Print()
             {
                 calc();
-                foreach(var r in Rows)
+                foreach (var r in Rows)
                 {
-                    for(int i = 0; i < r.Count;i++)
+                    for (int i = 0; i < r.Count; i++)
                     {
                         var s = r[i] ?? string.Empty;
-                        var len = dict[i] + tabLen - dict[i] % tabLen;                        
-                        var pad = (len - s.Length-1)/tabLen;
+                        var len = dict[i] + tabLen - dict[i] % tabLen;
+                        var pad = (len - s.Length - 1) / tabLen;
                         Console.Write(s);
                         for (int j = 0; j <= pad; j++)
                             Console.Write(tab);
                     }
                     Console.Write(Environment.NewLine);
-                }                
+                }
             }
             public void PrintTable()
             {
@@ -303,15 +306,15 @@ namespace FlysasClient
                     for (int i = 0; i < r.Count; i++)
                     {
                         var s = r[i] ?? string.Empty;
-                        var len = dict[i] + pad-1;                        
+                        var len = dict[i] + pad - 1;
                         Console.Write(s);
                         for (int j = s.Length; j < len; j++)
                             Console.Write(" ");
-                        Console.Write("|");                        
+                        Console.Write("|");
                     }
                     Console.Write(Environment.NewLine);
                     foreach (int i in dict.Values)
-                        for(int j=0;j<i+pad;j++)
+                        for (int j = 0; j < i + pad; j++)
                             Console.Write("-");
                     Console.Write(Environment.NewLine);
                 }
