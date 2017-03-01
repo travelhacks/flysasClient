@@ -20,7 +20,7 @@ namespace FlysasLib
             client.DefaultRequestHeaders.Connection.Add("keep-alive");
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"));
             client.DefaultRequestHeaders.Host = "api.flysas.com";
-            client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Mozilla/5.0 (compatible)"));
+            //client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Mozilla/5.0 (compatible)"));
             //client.DefaultRequestHeaders.Add("Origin", "https://www.sas.se");
             //client.DefaultRequestHeaders.Referrer  = new Uri("https://www.sas.se");
 
