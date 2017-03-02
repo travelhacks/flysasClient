@@ -12,16 +12,25 @@ namespace FlysasClient
         public ParserException(string s) : base(s) { }
     }
 
+    public class CommandStack : Stack<string>
+    {
+        public CommandStack(string input) : base(input.Split(' ').Reverse())
+        {            
+        }
+        public CommandStack(string input,char[] splitChars) : base(input.Split(splitChars).Reverse())
+        {
+        }
+    }
+
     public class Parser
     {
         Regex airportExp = new Regex("[a-zA-Z]+");
         public SASQuery Parse(string input)
         {
-            var splitChars = new[] { ' ', ',', '-' };
-            var parts = input.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
-            var stack = new Stack<string>(parts.Reverse());
+            var splitChars = new[] { ' ', ',', '-' };            
+            var stack = new CommandStack(input,splitChars);
             SASQuery request = null;
-            if (parts.Length > 2)
+            if (stack.Count > 2)
             {
                 request = new SASQuery();
                 request.From = stack.Pop().ToUpper();

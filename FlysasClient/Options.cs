@@ -71,16 +71,15 @@ namespace FlysasClient
             return s;
         }
 
-        public bool Parse(string s)
+        public bool Set(Stack<string> stack)
         {
-            var stack = new Stack<string>(s.ToLower().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Reverse());
-            if (stack.Any() && stack.Pop() == "set")
+            if (stack.Any())
             {
-                while (stack.Count >= 2)                                    
-                    mySet(stack.Pop(), stack.Pop());                
+                while (stack.Count >= 2)
+                    mySet(stack.Pop(), stack.Pop());
                 return true;
             }
-            else return false;
+            return false;
         }
 
         bool myBool(string s)
