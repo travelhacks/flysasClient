@@ -101,12 +101,12 @@ namespace FlysasClient
                                 bool result;
                                 var u = options.UserName;
                                 var p = options.Password;
-                                if(string.IsNullOrEmpty(u))
+                                if(u.IsNullOrWhiteSpace())
                                 {
                                     txtOut.WriteLine("User: ");
                                     u = txtIn.ReadLine();
                                 }
-                                if (string.IsNullOrEmpty(p))
+                                if (p.IsNullOrEmpty())
                                 {
                                     p = "";
                                     txtOut.WriteLine("Enter password: ");
@@ -211,7 +211,6 @@ namespace FlysasClient
                                 {
                                     txtOut.WriteLine("Error getting info");
                                     txtOut.WriteLine(ex.Message);
-
                                 }
                             }
                             break;
@@ -247,8 +246,8 @@ namespace FlysasClient
 
         void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
         {
-            string slash = "/";
-            string format = "HH:mm";
+            string separator = "/";
+            string timeFormat = "HH:mm";
             var codes = products.Select(p => p.productCode).Distinct().ToArray();
             var first = flights.First();
             var headers = new List<string>();
@@ -269,13 +268,11 @@ namespace FlysasClient
                 var values = new List<string>();
                 var prices = products.Where(p => p.id.EndsWith("_" + r.id.ToString())).ToArray();
                 var dateDiff = (r.endTimeInLocal.Date - r.startTimeInGmt.Date).Days;
-                values.Add(r.startTimeInLocal.ToString(format));
-                values.Add(r.endTimeInLocal.ToString(format) + (dateDiff > 0 ? "+" + dateDiff : ""));
-                if (options.OutputEquipment)
-                {
-                    var s = string.Join(slash, simplify(r.segments.Select(seg => seg.airCraft.code)));
-                    values.Add(s);
-                }
+                values.Add(r.startTimeInLocal.ToString(timeFormat));
+                values.Add(r.endTimeInLocal.ToString(timeFormat) + (dateDiff > 0 ? "+" + dateDiff : ""));
+                if (options.OutputEquipment)                
+                    values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin("/"));                    
+                
                 foreach (var c in codes)
                 {
                     string sClasses = "";
@@ -283,12 +280,8 @@ namespace FlysasClient
                     var sPrice = "";
                     if (p != null)
                     {
-
                         var classes = p.fares.Select(f => f.bookingClass + f.avlSeats);
-                        if (classes.Distinct().Count() == 1)
-                            sClasses = classes.First();
-                        else                        
-                            sClasses = string.Join("/", classes);                            
+                        sClasses = classes.SimplifyAndJoin(separator);
                         sPrice = p.price.formattedTotalPrice;
                     }
                     values.Add(sPrice);
@@ -355,15 +348,6 @@ namespace FlysasClient
                     txtOut.Write(Environment.NewLine);
                 }
             }
-        }
-
-        private IEnumerable<string> simplify(IEnumerable<string> list)
-        {
-            if (list.Distinct().Count() == 1)
-                yield return list.First();
-            else
-                foreach (string s in list)
-                    yield return s;
         }       
-    }
+    }   
 }

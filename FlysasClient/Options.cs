@@ -84,10 +84,6 @@ namespace FlysasClient
             return s == "on" || s == "true" || s == "1" || s == "yes";
         }        
     }
-
-    
-
-
     public class Options : OptionsParser
     {
         [OptionParser("bookingclass")]
@@ -108,18 +104,6 @@ namespace FlysasClient
         public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options)
         {
 
-        }
-    }
-
-    public static class MyExtensions
-    {
-        public static bool IsNullOrEmpty(this string str)
-        {
-            return string.IsNullOrEmpty(str);
-        }
-        public static bool IsNullOrWhiteSpace(this string str)
-        {
-            return string.IsNullOrWhiteSpace(str);
         }
     }
 }
