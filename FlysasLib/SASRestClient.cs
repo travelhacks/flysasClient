@@ -12,7 +12,7 @@ namespace FlysasLib
 
         public SASRestClient()
         {
-          
+
             client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
             client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
@@ -60,7 +60,7 @@ namespace FlysasLib
 
         public bool AnonymousLogin()
         {
-            return login(true, null, null);            
+            return login(true, null, null);
         }
 
 
@@ -69,7 +69,7 @@ namespace FlysasLib
             return login(false, userName, pwd);
         }
         bool login(bool anonymous, string userName, string pwd)
-        { 
+        {
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri("https://api.flysas.com/authorize/oauth/token"),
@@ -77,7 +77,7 @@ namespace FlysasLib
             };
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "U0FTLVVJOg==");
             var dict = new Dictionary<string, string> { { "username", userName }, { "password", pwd }, { "grant_type", "password" } };
-            if(anonymous)
+            if (anonymous)
                 dict = new Dictionary<string, string> { { "grant_type", "client_credentials" } };
             request.Content = new FormUrlEncodedContent(dict);
             var jSon = downLoad(request);
@@ -104,27 +104,30 @@ namespace FlysasLib
                 };
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);
                 string cont = "{ \"customerSessionId\" : \"" + Auth.customerSessionId + "\"}";
-                request.Content =  new StringContent(cont, System.Text.Encoding.UTF8, "application/json");                                
-                var jSon = downLoad(request);                
+                request.Content = new StringContent(cont, System.Text.Encoding.UTF8, "application/json");
+                var jSon = downLoad(request);
                 auth = null;
             }
-            
+
         }
 
         public SearchResult Search(SASQuery query)
-        {            
+        {
             try
             {
-              return search(query);
-            }
-            catch(HttpRequestException ex)
-            {                
-                auth = null;
                 return search(query);
-            }      
-            catch(Exception ex)
+            }            
+            catch (Exception ex)
             {
-                
+                if (ex.InnerException != null && ex.InnerException.GetType() == typeof(MyHttpException))
+                {
+                    auth = null;
+                    try
+                    {
+                        return search(query);
+                    }
+                    catch { }
+                }
             }
             return null;
         }
