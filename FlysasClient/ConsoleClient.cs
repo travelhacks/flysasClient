@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FlysasLib;
+using System.IO;
 
 namespace FlysasClient
 {
@@ -9,12 +10,8 @@ namespace FlysasClient
     {
         SASRestClient client = new SASRestClient();
         Options options = new FlysasClient.Options();
-
-        public ConsoleClient()
-        {
-
-        }
-
+        System.IO.TextWriter txtOut = Console.Out;
+        System.IO.TextReader txtIn = Console.In;
         public ConsoleClient(Options options)
         {
             this.options = options;
@@ -22,14 +19,13 @@ namespace FlysasClient
 
         public void InputLoop()
         {
-
             string input = null;
             var parser = new Parser();
             while (input != "q")
             {
-                Console.WriteLine("Syntax: Origin-Destination outDate [inDate]");
-                Console.Write(">>");
-                input = Console.ReadLine();
+                txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
+                txtOut.Write(">>");
+                input = txtIn.ReadLine();
                 if (!Command(input))
                     foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                     {
@@ -40,29 +36,29 @@ namespace FlysasClient
                         }
                         catch (ParserException ex)
                         {
-                            Console.Write("Syntax error:" + ex.Message);
+                            txtOut.Write("Syntax error:" + ex.Message);
                         }
                         catch (Exception ex)
                         {
-                            Console.Write("Syntax error:");
+                            txtOut.Write("Syntax error:");
                         }
                         if (req != null)
                         {
                             var res = client.Search(req);
                             if (res.errors != null && res.errors.Any())
-                                Console.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
+                                txtOut.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
                             else
                             {
-                                Console.WriteLine("*********Outbound*******");
+                                txtOut.WriteLine("*********Outbound*******");
                                 PrintFlights(res.outboundFlights, res.outboundFlightProducts, options);
                                 if (req.InDate.HasValue)
                                 {
-                                    Console.WriteLine("*********Inbound*******");
+                                    txtOut.WriteLine("*********Inbound*******");
                                     PrintFlights(res.inboundFlights, res.inboundFlightProducts, options);
                                 }
                             }
                         }
-                        Console.Write(Environment.NewLine + Environment.NewLine);
+                        txtOut.Write(Environment.NewLine + Environment.NewLine);
                     }
             }
         }
@@ -76,7 +72,6 @@ namespace FlysasClient
 
         bool Command(string input)
         {
-
             var names = Enum.GetNames(typeof(Commands));
             var stack = new CommandStack(input);
             if (stack.Any())
@@ -88,7 +83,7 @@ namespace FlysasClient
                     Commands cmd = (Commands)Enum.Parse(typeof(Commands), name);
                     if (!client.LoggedIn && requiresLogin.Contains(cmd))
                     {
-                        Console.WriteLine("This feature requires login");
+                        txtOut.WriteLine("This feature requires login");
                         return true;
                     }
                     switch (cmd)
@@ -104,11 +99,11 @@ namespace FlysasClient
                                 try
                                 {
                                     result = client.Login(options.UserName, options.Password);
-                                    Console.WriteLine("Login : " + (result ? " success" : "failed"));
+                                    txtOut.WriteLine("Login : " + (result ? " success" : "failed"));
                                 }
                                 catch (MyHttpException ex)
                                 {
-                                    Console.WriteLine("Login failed");
+                                    txtOut.WriteLine("Login failed");
                                 }
                             }
                             break;
@@ -125,18 +120,18 @@ namespace FlysasClient
                                 List<Transaction> all = new List<Transaction>();
                                 TransactionRoot res = null;
                                 Table t = new Table();
-                                Console.WriteLine("");
+                                txtOut.WriteLine("");
                                 do
                                 {
-                                    Console.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
+                                    txtOut.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
                                     try
                                     {
                                         res = client.History(n);
                                     }
                                     catch (MyHttpException ex)
                                     {
-                                        Console.WriteLine("Error getting page " + n);
-                                        Console.WriteLine(ex.Message);
+                                        txtOut.WriteLine("Error getting page " + n);
+                                        txtOut.WriteLine(ex.Message);
                                     }
                                     n++;
                                     if (fetchAll)
@@ -157,11 +152,11 @@ namespace FlysasClient
                                         }
                                     }
                                 } while (n <= pages);
-                                Console.SetCursorPosition(0, Console.CursorTop);
-                                t.Print();
+                                txtOut.Write("\r");
+                                t.Print(txtOut);
                                 if (fetchAll)
                                     foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
-                                        Console.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));
+                                        txtOut.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));
                             }
                             break;
                         case Commands.Points:
@@ -169,14 +164,14 @@ namespace FlysasClient
                                 try
                                 {
                                     var res = client.History(1);
-                                    Console.WriteLine("Status: " + res.eurobonus.currentTierCode);
-                                    Console.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
-                                    Console.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");
+                                    txtOut.WriteLine("Status: " + res.eurobonus.currentTierCode);
+                                    txtOut.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
+                                    txtOut.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");
                                 }
                                 catch (System.Net.Http.HttpRequestException ex)
                                 {
-                                    Console.WriteLine("Error getting info");
-                                    Console.WriteLine(ex.Message);
+                                    txtOut.WriteLine("Error getting info");
+                                    txtOut.WriteLine(ex.Message);
 
                                 }
                             }
@@ -196,12 +191,12 @@ namespace FlysasClient
                             Console.WriteLine(watch.Elapsed.TotalSeconds);
                             break;
                         case Commands.Options:
-                            Console.Write(options.Help() + Environment.NewLine);
+                            txtOut.Write(options.Help() + Environment.NewLine);
                             break;
                         case Commands.Help:
-                            Console.WriteLine("Commands:");
+                            txtOut.WriteLine("Commands:");
                             foreach (var s in names)
-                                Console.WriteLine("\t" + s);
+                                txtOut.WriteLine("\t" + s);
                             break;
                     }
                     return true;
@@ -264,9 +259,9 @@ namespace FlysasClient
                 table.Rows.Add(values);
             }
             if (options.Table)
-                table.PrintTable();
+                table.PrintTable(txtOut);
             else
-                table.Print();
+                table.Print(txtOut);
         }
 
         public class Table
@@ -282,7 +277,7 @@ namespace FlysasClient
                         dict[i] = Rows.Select(r => r[i]).Select(s => s == null ? 0 : s.Length).Max();
             }
 
-            public void Print()
+            public void Print(TextWriter txtOut)
             {
                 calc();
                 foreach (var r in Rows)
@@ -292,14 +287,14 @@ namespace FlysasClient
                         var s = r[i] ?? string.Empty;
                         var len = dict[i] + tabLen - dict[i] % tabLen;
                         var pad = (len - s.Length - 1) / tabLen;
-                        Console.Write(s);
+                        txtOut.Write(s);
                         for (int j = 0; j <= pad; j++)
-                            Console.Write(tab);
+                            txtOut.Write(tab);
                     }
-                    Console.Write(Environment.NewLine);
+                    txtOut.Write(Environment.NewLine);
                 }
             }
-            public void PrintTable()
+            public void PrintTable(TextWriter txtOut)
             {
                 var pad = 2;
                 calc();
@@ -309,16 +304,16 @@ namespace FlysasClient
                     {
                         var s = r[i] ?? string.Empty;
                         var len = dict[i] + pad - 1;
-                        Console.Write(s);
+                        txtOut.Write(s);
                         for (int j = s.Length; j < len; j++)
-                            Console.Write(" ");
-                        Console.Write("|");
+                            txtOut.Write(" ");
+                        txtOut.Write("|");
                     }
-                    Console.Write(Environment.NewLine);
+                    txtOut.Write(Environment.NewLine);
                     foreach (int i in dict.Values)
                         for (int j = 0; j < i + pad; j++)
-                            Console.Write("-");
-                    Console.Write(Environment.NewLine);
+                            txtOut.Write("-");
+                    txtOut.Write(Environment.NewLine);
                 }
             }
         }

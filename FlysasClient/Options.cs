@@ -16,15 +16,12 @@ namespace FlysasClient
             this.OptionName = optionName;
             this.Secret = Secret;
         }
-    }
-
-    
+    }   
 
     public abstract class OptionsParser
     {
         public OptionsParser()
         {
-
         }
         public OptionsParser(IEnumerable<KeyValuePair<string,string>> options)
         {            
@@ -85,9 +82,7 @@ namespace FlysasClient
         bool myBool(string s)
         {
             return s == "on" || s == "true" || s == "1" || s == "yes";
-        }
-
-        
+        }        
     }
 
     
@@ -105,7 +100,6 @@ namespace FlysasClient
         public string UserName { get; set; }
         [OptionParser( optionName: "passWord",Secret : true)]
         public string Password { get; set; }
-
 
         public Options() : base()
         {
