@@ -10,7 +10,7 @@ namespace FlysasClient
         {
             var builder = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json",true);
             var config = builder.Build();
             Options o = new Options(config.AsEnumerable());                                  
             var c = new ConsoleClient(o);
