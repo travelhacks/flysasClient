@@ -45,8 +45,11 @@ namespace FlysasClient
                         if (req != null)
                         {
                             var res = client.Search(req);
-                            if (res.errors != null && res.errors.Any())
-                                txtOut.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
+                            if (res == null)                             
+                                txtOut.WriteLine("Error");
+                            else
+                                if (res.errors != null && res.errors.Any())                              
+                                    txtOut.WriteLine("flysas.com says: " + res.errors.First().errorMessage);                            
                             else
                             {
                                 txtOut.WriteLine("*********Outbound*******");
@@ -96,12 +99,48 @@ namespace FlysasClient
                         case Commands.Login:
                             {
                                 bool result;
+                                var u = options.UserName;
+                                var p = options.Password;
+                                if(string.IsNullOrEmpty(u))
+                                {
+                                    txtOut.WriteLine("User: ");
+                                    u = txtIn.ReadLine();
+                                }
+                                if (string.IsNullOrEmpty(p))
+                                {
+                                    p = "";
+                                    txtOut.WriteLine("Enter password: ");
+                                    ConsoleKeyInfo key;                                    
+                                    while (true)
+                                    {                                        
+                                        key = Console.ReadKey(true);
+                                        if (key.Key == ConsoleKey.Backspace)
+                                        {
+                                            if (p.Length > 0)
+                                            {
+                                                p = p.Substring(0,p.Length - 1);
+                                                txtOut.Write("\b \b");
+                                            }
+                                        }                                       
+                                        else
+                                        {
+                                            if (key.Key == ConsoleKey.Enter)
+                                                break;
+                                            else
+                                            {
+                                                p += key.KeyChar;
+                                                txtOut.Write("*");
+                                            }
+                                        }
+                                    }
+                                    txtOut.WriteLine();
+                                }
                                 try
                                 {
-                                    result = client.Login(options.UserName, options.Password);
-                                    txtOut.WriteLine("Login : " + (result ? " success" : "failed"));
+                                    result = client.Login(u, p);
+                                    txtOut.WriteLine("Login for " + u + " " + (result ? " success" : "failed"));
                                 }
-                                catch (MyHttpException ex)
+                                catch (Exception ex)
                                 {
                                     txtOut.WriteLine("Login failed");
                                 }
