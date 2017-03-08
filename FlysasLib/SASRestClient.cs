@@ -97,18 +97,12 @@ namespace FlysasLib
         {
             if (LoggedIn)
             {
-                var request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("https://api.flysas.com/customer/signout"),
-                    Method = HttpMethod.Post
-                };
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);
+                var request = createRequest(new Uri("https://api.flysas.com/customer/signout"), HttpMethod.Post);                
                 string cont = "{ \"customerSessionId\" : \"" + Auth.customerSessionId + "\"}";
                 request.Content = new StringContent(cont, System.Text.Encoding.UTF8, "application/json");
                 var jSon = downLoad(request);
                 auth = null;
             }
-
         }
 
         public SearchResult Search(SASQuery query)
@@ -133,9 +127,8 @@ namespace FlysasLib
         }
       
         private SearchResult search(SASQuery query)
-        {            
-            var req = new HttpRequestMessage(){ RequestUri = query.GetUrl()};                        
-            req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);            
+        {
+            var req = createRequest(query.GetUrl(), HttpMethod.Get);                    
             var jSon = downLoad(req);            
             var res =  Newtonsoft.Json.JsonConvert.DeserializeObject<SearchResult>(jSon);
             res.json = jSon;
@@ -145,14 +138,21 @@ namespace FlysasLib
         public TransactionRoot History(int page)        
         {
             var url = $"https://api.flysas.com/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={Auth.customerSessionId}";
-            var request = new HttpRequestMessage
-            {
-                RequestUri = new Uri(url),                
-            };
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);
+            var request = createRequest( new Uri(url), HttpMethod.Get);                        
             var jSon = downLoad(request);
             var res = Newtonsoft.Json.JsonConvert.DeserializeObject<TransactionRoot>(jSon);
             return res;
+        }
+
+        HttpRequestMessage createRequest(Uri uri, HttpMethod method)
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = uri,
+                Method = method
+            };
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);
+            return request;
         }
 
         private string downLoad(HttpRequestMessage request)

@@ -96,11 +96,7 @@ namespace FlysasClient
         public string UserName { get; set; }
         [OptionParser( optionName: "passWord",Secret : true)]
         public string Password { get; set; }
-
-        public Options() : base()
-        {
-
-        }
+       
         public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options)
         {
 

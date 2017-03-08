@@ -76,6 +76,7 @@ namespace FlysasLib
         public string errorCode;
         public string errorMessage;
     }
+
     public class FlightProductBaseClass
     {
         public string id { get; set; }
@@ -94,17 +95,10 @@ namespace FlysasLib
         
     }
 
-
-
-
-
-
-
     public class Via : KVP
     {
         public string haltDuration { get; set; }
     }
-
 
     public class Segment
     {
@@ -143,9 +137,6 @@ namespace FlysasLib
         public List<Via> via { get; set; }
         public List<Segment> segments { get; set; }
     }
-
-
-
 
     public class KVP
     {
@@ -242,7 +233,6 @@ namespace FlysasLib
         public string refresh_token;
         public string customerSessionId;
         public string sessionId;
-
     }
 
     public class Transaction
@@ -260,6 +250,7 @@ namespace FlysasLib
         public int totalNumberOfPages { get; set; }
         public List<Transaction> transaction { get; set; }
     }
+
     public class EuroBonus
     {
       public string euroBonusId { get; set; }
@@ -272,6 +263,7 @@ namespace FlysasLib
       public string currentTierCode { get; set; }
       public TransactionHistory transactionHistory { get; set; }      
     }
+
     public class TransactionRoot
     {
         public EuroBonus eurobonus { get; set; }
