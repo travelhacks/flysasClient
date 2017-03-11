@@ -38,48 +38,15 @@ namespace FlysasLib
             //Pragma:no-cache
             //Referer:https://www.sas.se/
             //User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
-        }
-
-        AuthResponse Auth
-        {
-            get
-            {
-                if (auth == null)
-                {
-                    lock (padLock)
-                    {
-                        if (auth == null)
-                        {
-                            AnonymousLogin();
-                        }
-                    }
-                }
-                return auth;
-            }
-        }
-
-        public bool AnonymousLogin()
-        {
-            return login(true, null, null);
-        }
-
-
+        }              
+        
         public bool Login(string userName, string pwd)
         {
-            return login(false, userName, pwd);
-        }
-        bool login(bool anonymous, string userName, string pwd)
-        {
-            var request = new HttpRequestMessage
-            {
-                RequestUri = new Uri("https://api.flysas.com/authorize/oauth/token"),
-                Method = HttpMethod.Post
-            };
+            var request = createRequest(new Uri("https://api.flysas.com/authorize/oauth/token"), HttpMethod.Post);            
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "U0FTLVVJOg==");
             var dict = new Dictionary<string, string> { { "username", userName }, { "password", pwd }, { "grant_type", "password" } };
-            if (anonymous)
-                dict = new Dictionary<string, string> { { "grant_type", "client_credentials" } };
             request.Content = new FormUrlEncodedContent(dict);
+                        
             var jSon = downLoad(request);
             var response = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(jSon);
             auth = response;
@@ -89,7 +56,7 @@ namespace FlysasLib
         public bool LoggedIn
         {
             get {
-                return auth != null && !string.IsNullOrEmpty(Auth.customerSessionId);
+                return auth != null && !string.IsNullOrEmpty(auth.customerSessionId);
             }
         }
 
@@ -97,8 +64,8 @@ namespace FlysasLib
         {
             if (LoggedIn)
             {
-                var request = createRequest(new Uri("https://api.flysas.com/customer/signout"), HttpMethod.Post);                
-                string cont = "{ \"customerSessionId\" : \"" + Auth.customerSessionId + "\"}";
+                var request = createRequest(new Uri("https://api.flysas.com/customer/signout"), HttpMethod.Post,auth);                
+                string cont = "{ \"customerSessionId\" : \"" + auth.customerSessionId + "\"}";
                 request.Content = new StringContent(cont, System.Text.Encoding.UTF8, "application/json");
                 var jSon = downLoad(request);
                 auth = null;
@@ -110,18 +77,9 @@ namespace FlysasLib
             try
             {
                 return search(query);
-            }            
+            }
             catch (Exception ex)
             {
-                if (ex.InnerException != null && ex.InnerException.GetType() == typeof(MyHttpException))
-                {
-                    auth = null;
-                    try
-                    {
-                        return search(query);
-                    }
-                    catch { }
-                }
             }
             return null;
         }
@@ -137,21 +95,22 @@ namespace FlysasLib
 
         public TransactionRoot History(int page)        
         {
-            var url = $"https://api.flysas.com/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={Auth.customerSessionId}";
-            var request = createRequest( new Uri(url), HttpMethod.Get);                        
+            var url = $"https://api.flysas.com/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={auth.customerSessionId}";
+            var request = createRequest( new Uri(url), HttpMethod.Get,auth);                        
             var jSon = downLoad(request);
             var res = Newtonsoft.Json.JsonConvert.DeserializeObject<TransactionRoot>(jSon);
             return res;
         }
 
-        HttpRequestMessage createRequest(Uri uri, HttpMethod method)
+        HttpRequestMessage createRequest(Uri uri, HttpMethod method,AuthResponse authentication = null)
         {
             var request = new HttpRequestMessage
             {
                 RequestUri = uri,
                 Method = method
             };
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(Auth.access_token);
+            if(authentication != null)
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(authentication.access_token);
             return request;
         }
 
