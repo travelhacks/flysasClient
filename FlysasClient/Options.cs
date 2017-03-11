@@ -62,7 +62,7 @@ namespace FlysasClient
                 var attr = prop.GetCustomAttribute(typeof(OptionParserAttribute)) as OptionParserAttribute;
                 if(attr!=null)
                 {
-                    s += attr.OptionName + ":" + (attr.Secret ? "************" : prop.GetValue(this).ToString()) + " ";
+                    s += attr.OptionName + ":" + (attr.Secret ? "************" : prop.GetValue(this)?.ToString()) + " ";
                 }
             }
             return s;
