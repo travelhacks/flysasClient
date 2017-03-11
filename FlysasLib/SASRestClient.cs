@@ -158,17 +158,16 @@ namespace FlysasLib
         private string downLoad(HttpRequestMessage request)
         {
             string res = null;
-            var task = client.SendAsync(request).ContinueWith(t =>
-            {
-                HttpResponseMessage response = t.Result;                       
-                var readTask = response.Content.ReadAsStringAsync();
-                readTask.Wait();
-                res = readTask.Result;                
-                response.Content.Dispose();
-                if (!response.IsSuccessStatusCode)
-                    throw new MyHttpException(response.StatusCode, res);
-            });
+            var task = client.SendAsync(request);
             task.Wait();
+            task.Result.Content.ReadAsStringAsync().ContinueWith(t =>
+            {
+                res = t.Result;
+            }
+            ).Wait();
+            task.Result.Content.Dispose();
+            if (!task.Result.IsSuccessStatusCode)
+                throw new MyHttpException(task.Result.StatusCode, res);
             return res;
         }
     }
