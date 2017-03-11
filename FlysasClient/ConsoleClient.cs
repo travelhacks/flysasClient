@@ -158,14 +158,19 @@ namespace FlysasClient
             int n = 1;
             int pages = 1;
             bool fetchAll = true;
-            if (stack.Any())
-            {
-                int.TryParse(stack.Pop(), out n);
-                fetchAll = false;
-            }
             List<Transaction> all = new List<Transaction>();
             TransactionRoot res = null;
             Table t = new Table();
+            if (stack.Any())
+            {
+                if(int.TryParse(stack.Pop(), out n) && !stack.Any())
+                    fetchAll = false;
+                else
+                {
+                    txtOut.WriteLine("Parser error");
+                    return;
+                }
+            }            
             txtOut.WriteLine("");
             do
             {
@@ -174,7 +179,7 @@ namespace FlysasClient
                 {
                     res = client.History(n);
                 }
-                catch (MyHttpException ex)
+                catch (Exception ex)
                 {
                     txtOut.WriteLine("Error getting page " + n);
                     txtOut.WriteLine(ex.Message);
@@ -285,7 +290,7 @@ namespace FlysasClient
                 values.Add(r.startTimeInLocal.ToString(timeFormat));
                 values.Add(r.endTimeInLocal.ToString(timeFormat) + (dateDiff > 0 ? "+" + dateDiff : ""));
                 if (options.OutputEquipment)                
-                    values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin("/"));                    
+                    values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin(separator));                    
                 
                 foreach (var c in codes)
                 {
@@ -310,9 +315,11 @@ namespace FlysasClient
                 table.Print(txtOut);
         }
 
+        public enum Alignment {  Left,Right };
         public class Table
         {
             public List<List<string>> Rows { get; private set; } = new List<List<string>>();
+            public Dictionary<int, Alignment> Alignment { get; private set; } = new Dictionary<int, ConsoleClient.Alignment>();
             string tab = "\t";
             int tabLen = 8;
             Dictionary<int, int> dict = new Dictionary<int, int>();
