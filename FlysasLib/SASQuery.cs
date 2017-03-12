@@ -24,11 +24,11 @@ namespace FlysasLib
         static PropertyInfo[] properties = typeof(SASQuery).GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
 
-        public Uri GetUrl()
+        public string GetUrl()
         {
-            var s = "https://api.flysas.com/offers/flightproducts?" + String.Join("&", getParams());
-            return new Uri(s);
+            return "https://api.flysas.com/offers/flightproducts?" + String.Join("&", getParams());            
         }
+
         IEnumerable<string> getParams()
         {
             foreach (var property in properties)

@@ -204,7 +204,7 @@ namespace FlysasLib
         public string href { get; set; }
     }
 
-    public class SearchResult
+    public class SearchResult : RootBaseClass
     {
         public string pricingType { get; set; }
         public List<Offer> offers { get; set; }
@@ -217,11 +217,9 @@ namespace FlysasLib
         public Currency currency { get; set; }
         public List<Link> links { get; set; }
         public string regionName { get; set; }
-        public string offerId { get; set; }
-        public List<Error> errors { get; set; }
-        public string json;
+        public string offerId { get; set; }        
     }
-    public class AuthResponse
+    public class AuthResponse : RootBaseClass
     {
         public string access_token { get; set; }
         public string token_type { get; set; }
@@ -233,6 +231,13 @@ namespace FlysasLib
         public string refresh_token;
         public string customerSessionId;
         public string sessionId;
+    }
+
+    public class RootBaseClass
+    {
+        public List<Error> errors { get; set; }
+        public string json;
+        public bool httpSuccess;
     }
 
     public class Transaction
@@ -264,9 +269,8 @@ namespace FlysasLib
       public TransactionHistory transactionHistory { get; set; }      
     }
 
-    public class TransactionRoot
+    public class TransactionRoot : RootBaseClass
     {
-        public EuroBonus eurobonus { get; set; }
-        public List<Error> errors { get; set; }
+        public EuroBonus eurobonus { get; set; }        
     }
 }
