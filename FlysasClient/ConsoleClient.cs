@@ -203,7 +203,7 @@ namespace FlysasClient
                 }
             } while (n <= pages);
             txtOut.Write("\r");
-            t.Alignment[3] = Alignment.Right;
+            t.Alignment[3] = TextAlignment.Right;
             t.Print(txtOut);
             if (fetchAll)
                 foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
@@ -280,7 +280,7 @@ namespace FlysasClient
             foreach (var c in codes)
             {
                 headers.Add(c);
-                table.Alignment[headers.Count-1] = Alignment.Right;
+                table.Alignment[headers.Count-1] = TextAlignment.Right;
                 if (options.OutputBookingClass)
                     headers.Add("");
             }
@@ -315,45 +315,5 @@ namespace FlysasClient
                 table.Print(txtOut);
         }
 
-        public enum Alignment {  Left,Right };
-        public class Table
-        {
-            public List<List<string>> Rows { get; private set; } = new List<List<string>>();
-            public Dictionary<int, Alignment> Alignment { get; private set; } = new Dictionary<int, ConsoleClient.Alignment>();
-            Dictionary<int, int> dict = new Dictionary<int, int>();
-
-            public Table(List<string> row)
-            {
-                Rows.Add(row);
-            }
-
-            public Table()
-            {
-            }
-                void calc()
-            {
-                if (Rows.Any())
-                    for (int i = 0; i < Rows.First().Count; i++)
-                        dict[i] = Rows.Select(r => r[i]).Select(s => s == null ? 0 : s.Length).Max();
-            }
-
-            public void Print(TextWriter txtOut)
-            {
-                calc();
-                int pad = 2;
-                foreach (var r in Rows)
-                {
-                    for (int i = 0; i < r.Count; i++)
-                    {
-                        var align = Alignment.ContainsKey(i) ? Alignment[i] : ConsoleClient.Alignment.Left;
-                        var s = r[i] ?? string.Empty;
-                        var len = dict[i] + pad;
-                        var padded = align == ConsoleClient.Alignment.Right ? s.PadLeft(len-2)+"".PadLeft(pad) : s.PadRight(len);
-                        txtOut.Write(padded);
-                    }
-                    txtOut.Write(Environment.NewLine);
-                }
-            }           
-        }       
     }   
 }
