@@ -203,6 +203,7 @@ namespace FlysasClient
                 }
             } while (n <= pages);
             txtOut.Write("\r");
+            t.Alignment[3] = Alignment.Right;
             t.Print(txtOut);
             if (fetchAll)
                 foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
@@ -275,13 +276,15 @@ namespace FlysasClient
             headers.Add(first.destination.code);
             if (options.OutputEquipment)
                 headers.Add("Equip");
+            Table table = new Table();
             foreach (var c in codes)
             {
                 headers.Add(c);
+                table.Alignment[headers.Count-1] = Alignment.Right;
                 if (options.OutputBookingClass)
                     headers.Add("");
             }
-            Table table = new Table(headers);            
+            table.Rows.Add(headers);            
             foreach (var r in flights)
             {
                 var values = new List<string>();
@@ -308,10 +311,7 @@ namespace FlysasClient
                         values.Add(sClasses);
                 }
                 table.Rows.Add(values);
-            }
-            if (options.Table)
-                table.PrintTable(txtOut);
-            else
+            }            
                 table.Print(txtOut);
         }
 
@@ -320,8 +320,6 @@ namespace FlysasClient
         {
             public List<List<string>> Rows { get; private set; } = new List<List<string>>();
             public Dictionary<int, Alignment> Alignment { get; private set; } = new Dictionary<int, ConsoleClient.Alignment>();
-            string tab = "\t";
-            int tabLen = 8;
             Dictionary<int, int> dict = new Dictionary<int, int>();
 
             public Table(List<string> row)
@@ -342,42 +340,20 @@ namespace FlysasClient
             public void Print(TextWriter txtOut)
             {
                 calc();
+                int pad = 2;
                 foreach (var r in Rows)
                 {
                     for (int i = 0; i < r.Count; i++)
                     {
+                        var align = Alignment.ContainsKey(i) ? Alignment[i] : ConsoleClient.Alignment.Left;
                         var s = r[i] ?? string.Empty;
-                        var len = dict[i] + tabLen - dict[i] % tabLen;
-                        var pad = (len - s.Length - 1) / tabLen;
-                        txtOut.Write(s);
-                        for (int j = 0; j <= pad; j++)
-                            txtOut.Write(tab);
+                        var len = dict[i] + pad;
+                        var padded = align == ConsoleClient.Alignment.Right ? s.PadLeft(len-2)+"".PadLeft(pad) : s.PadRight(len);
+                        txtOut.Write(padded);
                     }
                     txtOut.Write(Environment.NewLine);
                 }
-            }
-            public void PrintTable(TextWriter txtOut)
-            {
-                var pad = 2;
-                calc();
-                foreach (var r in Rows)
-                {
-                    for (int i = 0; i < r.Count; i++)
-                    {
-                        var s = r[i] ?? string.Empty;
-                        var len = dict[i] + pad - 1;
-                        txtOut.Write(s);
-                        for (int j = s.Length; j < len; j++)
-                            txtOut.Write(" ");
-                        txtOut.Write("|");
-                    }
-                    txtOut.Write(Environment.NewLine);
-                    foreach (int i in dict.Values)
-                        for (int j = 0; j < i + pad; j++)
-                            txtOut.Write("-");
-                    txtOut.Write(Environment.NewLine);
-                }
-            }
+            }           
         }       
     }   
 }
