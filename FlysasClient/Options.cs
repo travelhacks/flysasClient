@@ -89,9 +89,7 @@ namespace FlysasClient
         [OptionParser("bookingclass")]
         public bool OutputBookingClass { get; private set; } = false;
         [OptionParser("equipment")]
-        public bool OutputEquipment { get; private set; } = false;
-        [OptionParser("table")]
-        public bool Table { get; private set; } = false;
+        public bool OutputEquipment { get; private set; } = false;        
         [OptionParser("username")]
         public string UserName { get; set; }
         [OptionParser( optionName: "passWord",Secret : true)]
