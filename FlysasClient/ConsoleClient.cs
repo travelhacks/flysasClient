@@ -184,6 +184,10 @@ namespace FlysasClient
                     txtOut.WriteLine("Error getting page " + n);
                     txtOut.WriteLine(ex.Message);
                 }
+                if(res.errors != null)
+                {
+                    txtOut.WriteLine("Error getting page " + n + " " + res.errors.First().errorMessage);                 
+                }
                 n++;
                 if (fetchAll)
                     pages = res.eurobonus.transactionHistory.totalNumberOfPages;
@@ -206,8 +210,14 @@ namespace FlysasClient
             t.Alignment[3] = TextAlignment.Right;
             t.Print(txtOut);
             if (fetchAll)
+            {
+                txtOut.WriteLine("Summary");    
+                t = new Table();
                 foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
-                    txtOut.WriteLine(g.Key + "\t" + g.Sum(trans => trans.availablePointsAfterTransaction));
+                    t.Rows.Add(new List<string> (new[] { g.Key, g.Sum(trans => trans.availablePointsAfterTransaction).ToString() }));
+                t.Alignment[1] = TextAlignment.Right;
+                t.Print(txtOut);
+            }
         }
 
         private void login()
