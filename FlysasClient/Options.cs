@@ -79,8 +79,9 @@ namespace FlysasClient
             return false;
         }
 
-        bool myBool(string s)
+        bool myBool(string val)
         {
+            string s = val?.ToLower();
             return s == "on" || s == "true" || s == "1" || s == "yes";
         }        
     }
