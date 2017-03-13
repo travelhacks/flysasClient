@@ -38,7 +38,7 @@ namespace FlysasClient
                     var align = Alignment.ContainsKey(i) ? Alignment[i] : TextAlignment.Left;
                     var s = r[i] ?? string.Empty;
                     var len = dict[i] + pad;
-                    var padded = align == TextAlignment.Right ? s.PadLeft(len - 2) + "".PadLeft(pad) : s.PadRight(len);
+                    var padded = align == TextAlignment.Right ? s.PadLeft(len - pad) + "".PadLeft(pad) : s.PadRight(len);
                     txtOut.Write(padded);
                 }
                 txtOut.Write(Environment.NewLine);

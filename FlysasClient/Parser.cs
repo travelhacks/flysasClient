@@ -14,7 +14,7 @@ namespace FlysasClient
 
     public class CommandStack : Stack<string>
     {
-        public CommandStack(string input) : base(input.Split(' ').Reverse())
+        public CommandStack(string input) : this(input, new []{ ' ' })
         {            
         }
         public CommandStack(string input,char[] splitChars) : base(input.Split(splitChars).Reverse())
