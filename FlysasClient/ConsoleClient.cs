@@ -95,7 +95,7 @@ namespace FlysasClient
                             options.Set(stack);
                             break;
                         case Commands.Login:                            
-                            login();                               
+                            login(stack);                               
                             break;
                         case Commands.History:
                             history(stack);                                                                                   
@@ -113,6 +113,9 @@ namespace FlysasClient
                             txtOut.WriteLine("Commands:");
                             foreach (var s in names)
                                 txtOut.WriteLine("\t" + s);
+                            break;
+                        case Commands.Logout:
+                            client.Logout();
                             break;
                     }
                     return true;
@@ -220,19 +223,24 @@ namespace FlysasClient
             }
         }
 
-        private void login()
+        private void login(CommandStack stack)
         {
             var u = options.UserName;
             var p = options.Password;
-            if (u.IsNullOrWhiteSpace())
+            if (u.IsNullOrWhiteSpace() && stack.Any())
+                u = stack.Pop();
+            else
             {
                 txtOut.WriteLine("User: ");
                 u = txtIn.ReadLine();
             }
-            if (p.IsNullOrEmpty())
-            {                
+
+            if (p.IsNullOrWhiteSpace() && stack.Any())
+                p = stack.Pop();
+            else
+            {
                 txtOut.WriteLine("Enter password: ");
-                p = getPassword();                
+                p = getPassword();
             }
             try
             {
