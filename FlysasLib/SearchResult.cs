@@ -225,8 +225,7 @@ namespace FlysasLib
         public string token_type { get; set; }
         public int expires_in { get; set; }
         public string scope { get; set; }
-        public string jti { get; set; }
-        public List<Error> errors { get; set; }
+        public string jti { get; set; }        
         //for logins
         public string refresh_token;
         public string customerSessionId;
@@ -266,6 +265,8 @@ namespace FlysasLib
       public int pointsAvailable { get; set; }
       public int totalPointsForUse { get; set; }
       public string currentTierCode { get; set; }
+      public string currentTierName { get; set; }
+        
       public TransactionHistory transactionHistory { get; set; }      
     }
 

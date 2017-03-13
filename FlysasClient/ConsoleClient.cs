@@ -142,7 +142,7 @@ namespace FlysasClient
             try
             {
                 var res = client.History(1);
-                txtOut.WriteLine("Status: " + res.eurobonus.currentTierCode);
+                txtOut.WriteLine("Status: " + res.eurobonus.currentTierName);
                 txtOut.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
                 txtOut.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");
             }
