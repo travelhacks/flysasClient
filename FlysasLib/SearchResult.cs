@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 /* Response classes generated with http://json2csharp.com/ and then manually edited */
@@ -272,6 +273,17 @@ namespace FlysasLib
 
     public class TransactionRoot : RootBaseClass
     {
-        public EuroBonus eurobonus { get; set; }        
+        public EuroBonus eurobonus { get; set; }
+        public List<Error> errorInfo
+        {
+            get
+            {
+                return errors;
+            }
+            set
+            {
+                errors = value;
+            }
+        }
     }
 }
