@@ -8,6 +8,7 @@ namespace FlysasClient
     {        
         public static void Main(string[] args = null)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             var builder = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json",true);
