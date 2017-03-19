@@ -242,12 +242,55 @@ namespace FlysasLib
 
     public class Transaction
     {
+        static System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(.+) - (.+)(\w\w) (\d+\w?) (\w )?(.+)");
+        System.Text.RegularExpressions.Match m;
+        System.Text.RegularExpressions.Match match
+        {
+            get
+            {
+                if (m == null && description != null)
+                    m = regex.Match(description);
+                return m;
+            }
+        }          
         public string id { get; set; }
         public DateTime datePerformed { get; set; }
         public string description { get; set; }
         public int availablePointsAfterTransaction { get; set; }
         public string basicPointsAfterTransaction { get; set; }
         public string typeOfTransaction { get; set; }
+
+        public string Origin
+        {
+            get{ return getMatch(1);}                 
+        }
+        public string Destination
+        {
+            get { return getMatch(2); }
+        }
+        public string Airline
+        {
+            get { return getMatch(3); }
+        }
+        public string Flight
+        {
+            get { return getMatch(4); }
+        }
+
+        public string BookingClass
+        {
+            get { return getMatch(5); }
+        }
+        public string CabinClass
+        {
+            get { return getMatch(6); }
+        }
+        string getMatch(int group)
+        {            
+                if (match != null && match.Success && match.Groups.Count>group)
+                    return match.Groups[group].Captures[0].Value;
+                return "";          
+        }
     }
 
     public class TransactionHistory
