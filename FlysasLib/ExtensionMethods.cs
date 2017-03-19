@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FlysasClient
+namespace FlysasLib
 {
     public static class ExtensionMethods
-    {     
+    {
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
+        public static bool IsNullOrWhiteSpace(this string str)
+        {
+            return string.IsNullOrWhiteSpace(str);
+        }
         static IEnumerable<string> simplify(IEnumerable<string> list)
         {
             if (list.Distinct().Count() == 1)
