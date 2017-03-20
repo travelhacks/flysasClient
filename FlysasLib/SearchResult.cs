@@ -242,7 +242,7 @@ namespace FlysasLib
 
     public class Transaction
     {
-        static System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(.+) - (.+)(\w\w) (\d+\w?) (\w )?(.+)");
+        static System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(.+) - (.+)(\w\w) (\d+)E? (\w )?(.+)");
         System.Text.RegularExpressions.Match m;
         System.Text.RegularExpressions.Match match
         {
