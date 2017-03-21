@@ -16,6 +16,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Export\dummy.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Export\dummy.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
