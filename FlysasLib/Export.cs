@@ -50,8 +50,15 @@ namespace FlysasLib
         public void SaveCSV(List<FlightExport> exportList)
         {            
             var folder = System.IO.Path.Combine(System.IO.Path.Combine(System.AppContext.BaseDirectory, "Export"));
-            var current = GetCurrent(folder);
-            exportList.RemoveAll(ex => current.Any(c => c.Flight == ex.Flight && c.Date == ex.Date));
+            try
+            {
+                var current = GetCurrent(folder);
+                exportList.RemoveAll(ex => current.Any(c => c.Flight == ex.Flight && c.Date == ex.Date));
+            }
+            catch
+            {
+
+            }
             var good = exportList.Where(f => f.Score >= 50).ToList();
             var bad = exportList.Where(f => f.Score < 50).ToList();
             if (good.Count > 0)
@@ -75,11 +82,12 @@ namespace FlysasLib
 
         public List<FlightExport> GetCurrent(string folder)
         {
-            var sDiary = System.IO.Path.Combine(folder,"diary.csv");
+            var sDiary = System.IO.Path.Combine(folder, "flightdiary.csv");
+            var sOpenFlights = System.IO.Path.Combine(folder, "openflights.csv");
             var res = new List<FlightExport>();
             if (File.Exists(sDiary))
             {
-                foreach (var line in File.ReadAllText(sDiary).Split('\n'))
+                foreach (var line in File.ReadAllText(sDiary).Split('\n').Skip(1))
                 {
                     var cols = line.Split(',').ToList();
                     if (cols.Count > 1)
@@ -90,6 +98,25 @@ namespace FlysasLib
                             {
                                 Date = dt,
                                 Flight = cols[1].Trim('"')
+                            };
+                            res.Add(x);
+                        }
+                    }
+                }
+            }            
+            if (File.Exists(sOpenFlights))
+            {
+                foreach (var line in File.ReadAllText(sOpenFlights).Split(new[] { "\r\n" },StringSplitOptions.None).Skip(1))
+                {
+                    var cols = line.Split(',').ToList();
+                    if (cols.Count > 1)
+                    {
+                        if (DateTime.TryParse(cols[0], out DateTime dt))
+                        {
+                            var x = new FlightExport
+                            {
+                                Date = dt,
+                                Flight = cols[3]
                             };
                             res.Add(x);
                         }
