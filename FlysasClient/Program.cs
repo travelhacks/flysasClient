@@ -9,6 +9,10 @@ namespace FlysasClient
         public static void Main(string[] args = null)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.WriteLine("Welcome to FlysasClient 0.7");
+            Console.WriteLine("SAS flight data from api.flysas.com");
+            Console.WriteLine("Additional data (airports,airlines and routes) from openflights.org");
+            Console.WriteLine("");
             var builder = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json",true);
