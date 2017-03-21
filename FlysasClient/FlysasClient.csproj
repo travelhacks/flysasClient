@@ -22,10 +22,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
+    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
+    <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FlysasLib\FlysasLib.csproj" />
+    <ProjectReference Include="..\OpenFlightsData\OpenFlightsData.csproj" />
   </ItemGroup>
 
 </Project>
