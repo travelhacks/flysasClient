@@ -12,13 +12,9 @@ namespace FlysasClient
         Options options;
         System.IO.TextWriter txtOut = Console.Out;
         System.IO.TextReader txtIn = Console.In;
-        OpenFlightsData.OFData data;
-        
-
-        public ConsoleClient(Options options, OpenFlightsData.OFData data)
+        public ConsoleClient(Options options)
         {
             this.options = options;
-            this.data = data;
         }
 
         public void InputLoop()
@@ -72,7 +68,7 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export
         };
 
         HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
@@ -97,9 +93,6 @@ namespace FlysasClient
                     {
                         case Commands.Set:
                             options.Set(stack);
-                            break;
-                        case Commands.Info:
-                            info(stack);
                             break;
                         case Commands.Login:                            
                             login(stack);                               
@@ -163,54 +156,6 @@ namespace FlysasClient
             {
                 txtOut.WriteLine("Error getting info");
                 txtOut.WriteLine(ex.Message);
-            }
-        }
-
-        private void info(CommandStack stack)
-        {
-            if (stack.Any())
-            {
-                
-                var arglist = stack.ToList();
-                var s = string.Join(" ", arglist);
-                var airport = data.Airports.FirstOrDefault(ap => ap.IATA == s.ToUpper());
-                if (airport != null)
-                {
-                    txtOut.WriteLine("Airport " + airport.IATA+"/"+airport.ICAO);
-                    txtOut.WriteLine("Name " + airport.Name);
-                    txtOut.WriteLine("City " + airport.City);
-                    txtOut.WriteLine("Country " + airport.Country);
-                    txtOut.WriteLine("Type " + airport.Type);
-                }
-                var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.CurrentCultureIgnoreCase)).ToList();
-                if (cities.Any())
-                {
-                    txtOut.WriteLine("Airports in " + s);
-                    foreach (var c in cities)
-                        txtOut.WriteLine("\t" + c.IATA + ": " + c.Name);
-                }
-                var airline = data.Airlines.FirstOrDefault(al => s.Equals(al.Name, StringComparison.CurrentCultureIgnoreCase) || s.ToUpper() == al.IATA || s.ToUpper()==al.ICAO);
-                if (airline != null)
-                {
-                    txtOut.WriteLine("Airline info for " + s);
-                    txtOut.WriteLine("\t" + airline.IATA + "/" + airline.ICAO);
-                    txtOut.WriteLine("\tName:" + airline.Name);
-                    txtOut.WriteLine("\tCallsign:" + airline.Callsign);
-                    txtOut.WriteLine("\tCountry:" + airline.Country);
-                }
-                if (arglist.Count >= 2)
-                {
-                    
-                    var orig = arglist[0];
-                    var dest = arglist[1] == "-" && arglist.Count > 2 ? arglist[2] : arglist[1];
-                    var routeList = data.Routes.Where(r => r.FromIATA == orig.ToUpper() && r.ToIATA == dest.ToUpper()).ToList();
-                    if (routeList.Any())
-                    {
-                        txtOut.WriteLine("Routes from " + orig + " to " + dest);
-                        foreach (var r in routeList)
-                            txtOut.WriteLine("\t" + r.AirlineCode + (r.CodeShare ? " codeshare " : ""));
-                    }
-                }
             }
         }
 

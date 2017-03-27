@@ -12,4 +12,8 @@
     <ProjectReference Include="..\OpenFlightsData\OpenFlightsData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Export\" />
+  </ItemGroup>
+
 </Project>
