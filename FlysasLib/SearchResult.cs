@@ -272,9 +272,9 @@ namespace FlysasLib
         {
             get { return getMatch(3); }
         }
-        public string Flight
+        public int FlightNumber
         {
-            get { return getMatch(4); }
+            get { return int.Parse(getMatch(4)); }
         }
 
         public string BookingClass
