@@ -13,12 +13,21 @@ namespace FlysasClient
             Console.WriteLine("SAS flight data from api.flysas.com");
             Console.WriteLine("Additional data (airports,airlines and routes) from openflights.org");
             Console.WriteLine("");
+            var data = new OpenFlightsData.OFData();
+            try
+            {
+                data.LoadData();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error loading Openfligts data");
+            }
             var builder = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json",true);
             var config = builder.Build();
             Options o = new Options(config.AsEnumerable());                                  
-            var c = new ConsoleClient(o);
+            var c = new ConsoleClient(o,data);
             c.InputLoop();
         }       
     }

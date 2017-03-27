@@ -12,9 +12,13 @@ namespace FlysasClient
         Options options;
         System.IO.TextWriter txtOut = Console.Out;
         System.IO.TextReader txtIn = Console.In;
-        public ConsoleClient(Options options)
+        OpenFlightsData.OFData data;
+        
+
+        public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
             this.options = options;
+            this.data = data;
         }
 
         public void InputLoop()
@@ -68,10 +72,10 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info
         };
 
-        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points };
+        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
 
         bool Command(string input)
         {
@@ -94,11 +98,17 @@ namespace FlysasClient
                         case Commands.Set:
                             options.Set(stack);
                             break;
+                        case Commands.Info:
+                            info(stack);
+                            break;
                         case Commands.Login:                            
                             login(stack);                               
                             break;
+                        case Commands.Export:
+                            history(stack,true);
+                            break;
                         case Commands.History:
-                            history(stack);                                                                                   
+                            history(stack,false);                                                                                   
                             break;
                         case Commands.Points:
                             points();
@@ -156,14 +166,62 @@ namespace FlysasClient
             }
         }
 
-        private void history(CommandStack stack)
+        private void info(CommandStack stack)
         {
+            if (stack.Any())
+            {
+                
+                var arglist = stack.ToList();
+                var s = string.Join(" ", arglist);
+                var airport = data.Airports.FirstOrDefault(ap => ap.IATA == s.ToUpper());
+                if (airport != null)
+                {
+                    txtOut.WriteLine("Airport " + airport.IATA+"/"+airport.ICAO);
+                    txtOut.WriteLine("Name " + airport.Name);
+                    txtOut.WriteLine("City " + airport.City);
+                    txtOut.WriteLine("Country " + airport.Country);
+                    txtOut.WriteLine("Type " + airport.Type);
+                }
+                var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                if (cities.Any())
+                {
+                    txtOut.WriteLine("Airports in " + s);
+                    foreach (var c in cities)
+                        txtOut.WriteLine("\t" + c.IATA + ": " + c.Name);
+                }
+                var airline = data.Airlines.FirstOrDefault(al => s.Equals(al.Name, StringComparison.CurrentCultureIgnoreCase) || s.ToUpper() == al.IATA || s.ToUpper()==al.ICAO);
+                if (airline != null)
+                {
+                    txtOut.WriteLine("Airline info for " + s);
+                    txtOut.WriteLine("\t" + airline.IATA + "/" + airline.ICAO);
+                    txtOut.WriteLine("\tName:" + airline.Name);
+                    txtOut.WriteLine("\tCallsign:" + airline.Callsign);
+                    txtOut.WriteLine("\tCountry:" + airline.Country);
+                }
+                if (arglist.Count >= 2)
+                {
+                    
+                    var orig = arglist[0];
+                    var dest = arglist[1] == "-" && arglist.Count > 2 ? arglist[2] : arglist[1];
+                    var routeList = data.Routes.Where(r => r.FromIATA == orig.ToUpper() && r.ToIATA == dest.ToUpper()).ToList();
+                    if (routeList.Any())
+                    {
+                        txtOut.WriteLine("Routes from " + orig + " to " + dest);
+                        foreach (var r in routeList)
+                            txtOut.WriteLine("\t" + r.AirlineCode + (r.CodeShare ? " codeshare " : ""));
+                    }
+                }
+            }
+        }
+
+        private void history(CommandStack stack, bool export)
+        {            
             int n = 1;
             int pages = 1;
             bool fetchAll = true;
             List<Transaction> all = new List<Transaction>();
             TransactionRoot res = null;
-            Table t = new Table();
+            
             if (stack.Any())
             {
                 if(int.TryParse(stack.Pop(), out n) && !stack.Any())
@@ -194,33 +252,54 @@ namespace FlysasClient
                 n++;
                 if (fetchAll)
                     pages = res.eurobonus.transactionHistory.totalNumberOfPages;
-                if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)
-                {
-                    all.AddRange(res.eurobonus.transactionHistory.transaction);
-                    foreach (var r in res.eurobonus.transactionHistory.transaction)
-                    {
-                        var values = new List<string>();
-                        values.Add(r.datePerformed.ToString("yyyy-MM-dd"));
-                        values.Add(r.typeOfTransaction);
-                        values.Add(r.basicPointsAfterTransaction);
-                        values.Add(r.availablePointsAfterTransaction.ToString());
-                        values.Add(r.description);
-                        t.Rows.Add(values);
-                    }
-                }
+                if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)                
+                    all.AddRange(res.eurobonus.transactionHistory.transaction);                                   
             } while (n <= pages);
             txtOut.Write("\r");
-            t.Alignment[3] = TextAlignment.Right;
-            t.Print(txtOut);
-            if (fetchAll)
+            if (export)
             {
-                txtOut.WriteLine("Summary");    
-                t = new Table();
-                foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
-                    t.Rows.Add(new List<string> (new[] { g.Key, g.Sum(trans => trans.availablePointsAfterTransaction).ToString() }));
-                t.Alignment[1] = TextAlignment.Right;
-                t.Print(txtOut);
+                var exporter = new FlightExporter();
+                var list = exporter.Convert(all);
+                txtOut.WriteLine("Found " + list.Count + " flight");
+                if (list.Any())
+                    try
+                    {
+                        exporter.SaveCSV(list);
+                        txtOut.WriteLine("Files saved");
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
             }
+            else
+            {
+                Table t = new Table();
+                foreach (var r in all)
+                {
+                    var values = new List<string>();
+                    values.Add(r.datePerformed.ToString("yyyy-MM-dd"));
+                    values.Add(r.typeOfTransaction);
+                    values.Add(r.basicPointsAfterTransaction);
+                    values.Add(r.availablePointsAfterTransaction.ToString());
+                    values.Add(r.description);
+
+                    t.Rows.Add(values);
+
+                }
+                
+                t.Alignment[3] = TextAlignment.Right;
+                t.Print(txtOut);
+                if (fetchAll)
+                {
+                    txtOut.WriteLine("Summary");
+                    t = new Table();
+                    foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
+                        t.Rows.Add(new List<string>(new[] { g.Key, g.Sum(trans => trans.availablePointsAfterTransaction).ToString() }));
+                    t.Alignment[1] = TextAlignment.Right;
+                    t.Print(txtOut);
+                }
+            }                  
         }
 
         private void login(CommandStack stack)
