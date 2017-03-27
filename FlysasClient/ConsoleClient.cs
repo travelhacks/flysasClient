@@ -12,9 +12,13 @@ namespace FlysasClient
         Options options;
         System.IO.TextWriter txtOut = Console.Out;
         System.IO.TextReader txtIn = Console.In;
-        public ConsoleClient(Options options)
+        OpenFlightsData.OFData data;
+
+
+        public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
             this.options = options;
+            this.data = data;
         }
 
         public void InputLoop()
@@ -45,11 +49,11 @@ namespace FlysasClient
                         if (req != null)
                         {
                             var res = client.Search(req);
-                            if (res == null)                             
+                            if (res == null)
                                 txtOut.WriteLine("Error");
                             else
-                                if (res.errors != null && res.errors.Any())                              
-                                    txtOut.WriteLine("flysas.com says: " + res.errors.First().errorMessage);                            
+                                if (res.errors != null && res.errors.Any())
+                                txtOut.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
                             else
                             {
                                 txtOut.WriteLine("*********Outbound*******");
@@ -68,7 +72,7 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info
         };
 
         HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
@@ -94,14 +98,17 @@ namespace FlysasClient
                         case Commands.Set:
                             options.Set(stack);
                             break;
-                        case Commands.Login:                            
-                            login(stack);                               
+                        case Commands.Info:
+                            info(stack);
+                            break;
+                        case Commands.Login:
+                            login(stack);
                             break;
                         case Commands.Export:
-                            history(stack,true);
+                            history(stack, true);
                             break;
                         case Commands.History:
-                            history(stack,false);                                                                                   
+                            history(stack, false);
                             break;
                         case Commands.Points:
                             points();
@@ -159,24 +166,72 @@ namespace FlysasClient
             }
         }
 
+        private void info(CommandStack stack)
+        {
+            if (stack.Any())
+            {
+
+                var arglist = stack.ToList();
+                var s = string.Join(" ", arglist);
+                var airport = data.Airports.FirstOrDefault(ap => ap.IATA == s.ToUpper());
+                if (airport != null)
+                {
+                    txtOut.WriteLine("Airport " + airport.IATA + "/" + airport.ICAO);
+                    txtOut.WriteLine("Name " + airport.Name);
+                    txtOut.WriteLine("City " + airport.City);
+                    txtOut.WriteLine("Country " + airport.Country);
+                    txtOut.WriteLine("Type " + airport.Type);
+                }
+                var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                if (cities.Any())
+                {
+                    txtOut.WriteLine("Airports in " + s);
+                    foreach (var c in cities)
+                        txtOut.WriteLine("\t" + c.IATA + ": " + c.Name);
+                }
+                var airline = data.Airlines.FirstOrDefault(al => s.Equals(al.Name, StringComparison.CurrentCultureIgnoreCase) || s.ToUpper() == al.IATA || s.ToUpper() == al.ICAO);
+                if (airline != null)
+                {
+                    txtOut.WriteLine("Airline info for " + s);
+                    txtOut.WriteLine("\t" + airline.IATA + "/" + airline.ICAO);
+                    txtOut.WriteLine("\tName:" + airline.Name);
+                    txtOut.WriteLine("\tCallsign:" + airline.Callsign);
+                    txtOut.WriteLine("\tCountry:" + airline.Country);
+                }
+                if (arglist.Count >= 2)
+                {
+
+                    var orig = arglist[0];
+                    var dest = arglist[1] == "-" && arglist.Count > 2 ? arglist[2] : arglist[1];
+                    var routeList = data.Routes.Where(r => r.FromIATA == orig.ToUpper() && r.ToIATA == dest.ToUpper()).ToList();
+                    if (routeList.Any())
+                    {
+                        txtOut.WriteLine("Routes from " + orig + " to " + dest);
+                        foreach (var r in routeList)
+                            txtOut.WriteLine("\t" + r.AirlineCode + (r.CodeShare ? " codeshare " : ""));
+                    }
+                }
+            }
+        }
+
         private void history(CommandStack stack, bool export)
-        {            
+        {
             int n = 1;
             int pages = 1;
             bool fetchAll = true;
             List<Transaction> all = new List<Transaction>();
             TransactionRoot res = null;
-            
+
             if (stack.Any())
             {
-                if(int.TryParse(stack.Pop(), out n) && !stack.Any())
+                if (int.TryParse(stack.Pop(), out n) && !stack.Any())
                     fetchAll = false;
                 else
                 {
                     txtOut.WriteLine("Parser error");
                     return;
                 }
-            }            
+            }
             txtOut.WriteLine("");
             do
             {
@@ -190,15 +245,15 @@ namespace FlysasClient
                     txtOut.WriteLine("Error getting page " + n);
                     txtOut.WriteLine(ex.Message);
                 }
-                if(res.errors != null)
+                if (res.errors != null)
                 {
-                    txtOut.WriteLine("Error getting page " + n + " " + res.errors.First().errorMessage);                 
+                    txtOut.WriteLine("Error getting page " + n + " " + res.errors.First().errorMessage);
                 }
                 n++;
                 if (fetchAll)
                     pages = res.eurobonus.transactionHistory.totalNumberOfPages;
-                if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)                
-                    all.AddRange(res.eurobonus.transactionHistory.transaction);                                   
+                if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)
+                    all.AddRange(res.eurobonus.transactionHistory.transaction);
             } while (n <= pages);
             txtOut.Write("\r");
             if (export)
@@ -232,7 +287,7 @@ namespace FlysasClient
                     t.Rows.Add(values);
 
                 }
-                
+
                 t.Alignment[3] = TextAlignment.Right;
                 t.Print(txtOut);
                 if (fetchAll)
@@ -244,7 +299,7 @@ namespace FlysasClient
                     t.Alignment[1] = TextAlignment.Right;
                     t.Print(txtOut);
                 }
-            }                  
+            }
         }
 
         private void login(CommandStack stack)
@@ -279,7 +334,7 @@ namespace FlysasClient
 
         private string getPassword()
         {
-            string str="";
+            string str = "";
             ConsoleKeyInfo key;
             while (true)
             {
@@ -322,11 +377,11 @@ namespace FlysasClient
             foreach (var c in codes)
             {
                 headers.Add(c);
-                table.Alignment[headers.Count-1] = TextAlignment.Right;
+                table.Alignment[headers.Count - 1] = TextAlignment.Right;
                 if (options.OutputBookingClass)
                     headers.Add("");
             }
-            table.Rows.Add(headers);            
+            table.Rows.Add(headers);
             foreach (var r in flights)
             {
                 var values = new List<string>();
@@ -334,9 +389,9 @@ namespace FlysasClient
                 var dateDiff = (r.endTimeInLocal.Date - r.startTimeInGmt.Date).Days;
                 values.Add(r.startTimeInLocal.ToString(timeFormat));
                 values.Add(r.endTimeInLocal.ToString(timeFormat) + (dateDiff > 0 ? "+" + dateDiff : ""));
-                if (options.OutputEquipment)                
-                    values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin(separator));                    
-                
+                if (options.OutputEquipment)
+                    values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin(separator));
+
                 foreach (var c in codes)
                 {
                     string sClasses = "";
@@ -353,9 +408,9 @@ namespace FlysasClient
                         values.Add(sClasses);
                 }
                 table.Rows.Add(values);
-            }            
-                table.Print(txtOut);
+            }
+            table.Print(txtOut);
         }
 
-    }   
+    }
 }
