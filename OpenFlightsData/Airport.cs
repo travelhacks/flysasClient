@@ -24,11 +24,10 @@ namespace OpenFlightsData
 
         public List<Airport> GetAll()
         {
-            var list = new List<Airport>();
-            var enc = System.Text.Encoding.GetEncoding("iso-8859-1");
+            var list = new List<Airport>();            
             var fn = GetPath("airports.dat");
             if(System.IO.File.Exists(fn))
-            foreach (var row in System.IO.File.ReadLines(fn, enc))
+            foreach (var row in System.IO.File.ReadLines(fn))
             {
                 var cols = mySplit(row);
                 var a = new Airport
