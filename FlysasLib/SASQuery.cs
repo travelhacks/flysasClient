@@ -8,6 +8,7 @@ namespace FlysasLib
 {
     public abstract class QueryBase
     {
+        protected string dateFormat = "yyyyMMddHHmm";
         protected IEnumerable<string> getParams()
         {
             foreach (var property in this.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
@@ -17,7 +18,7 @@ namespace FlysasLib
                 {
                     string sVal;
                     if (property.PropertyType == typeof(DateTime?) && ((DateTime?)val).HasValue)
-                        sVal = ((DateTime?)val).Value.ToString("yyyyMMdd");
+                        sVal = ((DateTime?)val).Value.ToString(dateFormat);
                     else
                         sVal = val.ToString();
                     var paramName = property.Name.First().ToString().ToLower() + property.Name.Substring(1);
@@ -57,6 +58,11 @@ namespace FlysasLib
         public int Adt { get; set; } = 1;
         public int Chd { get; set; } = 0;
         public int Inf { get; set; } = 0;
+
+        public AwardQuery()
+        {
+            dateFormat = "yyyyMMdd";
+        }
 
         public override string GetUrl()
         {
