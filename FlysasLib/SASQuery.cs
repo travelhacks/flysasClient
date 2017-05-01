@@ -6,12 +6,34 @@ using System.Linq;
 
 namespace FlysasLib
 {
-    public class SASQuery
+    public abstract class QueryBase
+    {
+        protected IEnumerable<string> getParams()
+        {
+            foreach (var property in this.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                var val = property.GetValue(this);
+                if (val != null)
+                {
+                    string sVal;
+                    if (property.PropertyType == typeof(DateTime?) && ((DateTime?)val).HasValue)
+                        sVal = ((DateTime?)val).Value.ToString("yyyyMMdd");
+                    else
+                        sVal = val.ToString();
+                    var paramName = property.Name.First().ToString().ToLower() + property.Name.Substring(1);
+                    yield return $"{paramName}={sVal}";
+                }
+            }
+        }
+        public abstract string GetUrl();
+    }
+
+    public class SASQuery : QueryBase
     {
         public string To { get; set; }
         public string From { get; set; }
         public string ReturnFrom { get; set; }
-       // public string ReturnTo { get; set; }
+        // public string ReturnTo { get; set; }
         public int Adt { get; set; } = 1;
         public string BookingFlow { get; set; } = "REVENUE";
         public string Lng { get; set; } = "GB";
@@ -21,30 +43,24 @@ namespace FlysasLib
         public DateTime? OutDate { get; set; }
         public DateTime? InDate { get; set; }
 
-        static PropertyInfo[] properties = typeof(SASQuery).GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-
-        public string GetUrl()
+        public override string GetUrl()
         {
-            return "https://api.flysas.com/offers/flightproducts?" + String.Join("&", getParams());            
+            return "https://api.flysas.com/offers/flightproducts?" + String.Join("&", getParams());
         }
+    }
+    public class AwardQuery : QueryBase
+    {
+        public DateTime? OutDate { get; set; }
+        public DateTime? InDate { get; set; }
+        public string Org { get; set; }
+        public string Dest { get; set; }
+        public int Adt { get; set; } = 1;
+        public int Chd { get; set; } = 0;
+        public int Inf { get; set; } = 0;
 
-        IEnumerable<string> getParams()
+        public override string GetUrl()
         {
-            foreach (var property in properties)
-            {
-                var val = property.GetValue(this);
-                if (val != null)
-                {
-                    string sVal;
-                    if (property.PropertyType == typeof(DateTime?) && ((DateTime?)val).HasValue)
-                        sVal = ((DateTime?)val).Value.ToString("yyyyMMddHHmm");
-                    else
-                        sVal = val.ToString();
-                    var paramName = property.Name.First().ToString().ToLower() + property.Name.Substring(1);
-                    yield return $"{paramName}={sVal}";
-                }
-            }
+            return "https://labs.flysas.com/labsapi/v1.0/awardCache/flightproducts?pos=SE&" + String.Join("&", getParams());
         }
     }
 }

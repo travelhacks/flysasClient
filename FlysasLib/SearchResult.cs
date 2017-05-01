@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -312,6 +313,52 @@ namespace FlysasLib
       public string currentTierName { get; set; }
         
       public TransactionHistory transactionHistory { get; set; }      
+    }
+
+    public class AwardProduct
+    {
+        public int points { get; set; }
+        public string id { get; set; }
+        public double totalTax { get; set; }
+    }
+
+    public class Products
+    {
+        [JsonProperty(propertyName: "SAS GO")]
+        public AwardProduct GO { get; set; }
+        [JsonProperty(propertyName: "SAS PLUS")]
+        public AwardProduct PLUS { get; set; }
+        [JsonProperty(propertyName: "SAS BUSINESS")]
+        public AwardProduct BUSINESS { get; set; }
+
+    }
+
+    public class AwardSegment
+    {
+        public string org { get; set; }
+        public string dest { get; set; }
+        public DateTimeOffset startTimeLocal { get; set; }
+        public DateTimeOffset endTimeInLocal { get; set; }
+        public string flightNumber { get; set; }
+    }
+
+    public class AwardFlight
+    {
+        public int flightId { get; set; }
+        public string org { get; set; }
+        public string dest { get; set; }
+        public Products products { get; set; }
+        public List<AwardSegment> segments { get; set; }
+        public string totalDuration { get; set; }
+    }
+
+    public class AwardResult : RootBaseClass
+    {
+        public string offerId { get; set; }
+        public string currency { get; set; }
+        public string pos { get; set; }
+        public List<AwardFlight> outbounds { get; set; }
+        public string redirectUrl { get; set; }
     }
 
     public class TransactionRoot : RootBaseClass
