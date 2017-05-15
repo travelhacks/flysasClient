@@ -181,6 +181,8 @@ namespace FlysasClient
                     txtOut.WriteLine("City " + airport.City);
                     txtOut.WriteLine("Country " + airport.Country);
                     txtOut.WriteLine("Type " + airport.Type);
+                    txtOut.WriteLine("Timezone " + airport.Timezone);
+                    txtOut.WriteLine("DST " + airport.DST);
                 }
                 var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.CurrentCultureIgnoreCase)).ToList();
                 if (cities.Any())
