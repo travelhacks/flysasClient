@@ -243,7 +243,7 @@ namespace FlysasLib
 
     public class Transaction
     {
-        static System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(.+) - (.+)(\w\w) (\d+)E? (\w )?(.+)");
+        static System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(.+) ?- ?(.+)([A-Z]{2}) ?(\d+)\w?\w? ?(.+)");
         System.Text.RegularExpressions.Match m;
         System.Text.RegularExpressions.Match match
         {
@@ -278,13 +278,9 @@ namespace FlysasLib
             get { return int.Parse(getMatch(4)); }
         }
 
-        public string BookingClass
-        {
-            get { return getMatch(5); }
-        }
         public string CabinClass
         {
-            get { return getMatch(6); }
+            get { return getMatch(5); }
         }
         string getMatch(int group)
         {            
