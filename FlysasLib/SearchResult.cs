@@ -130,7 +130,7 @@ namespace FlysasLib
         public int id { get; set; }
         public KVP origin { get; set; }
         public KVP destination { get; set; }
-        public DateTime connectionDuration { get; set; }
+        //public DateTime connectionDuration { get; set; }
         public DateTimeOffset startTimeInLocal { get; set; }
         public DateTime startTimeInGmt { get; set; }
         public DateTimeOffset endTimeInLocal { get; set; }
