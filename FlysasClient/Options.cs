@@ -98,6 +98,8 @@ namespace FlysasClient
         public string Password { get; set; }
         [OptionParser("award")]
         public bool Award { get; private set; } = false;
+        [OptionParser("flightnumber")]
+        public bool OutputFlightNumber { get; private set; } = false;
         public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options)
         {
 

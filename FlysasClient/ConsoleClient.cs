@@ -376,6 +376,8 @@ namespace FlysasClient
             headers.Add(first.destination.code);
             if (options.OutputEquipment)
                 headers.Add("Equip");
+            if (options.OutputFlightNumber)
+                headers.Add("Flight");
             Table table = new Table();
             foreach (var c in codes)
             {
@@ -394,6 +396,8 @@ namespace FlysasClient
                 values.Add(r.endTimeInLocal.ToString(timeFormat) + (dateDiff > 0 ? "+" + dateDiff : ""));
                 if (options.OutputEquipment)
                     values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin(separator));
+                if (options.OutputFlightNumber)
+                    values.Add(r.segments.Select(seg => seg.flightNumber).SimplifyAndJoin(separator));
 
                 foreach (var c in codes)
                 {
