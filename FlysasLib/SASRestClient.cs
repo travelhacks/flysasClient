@@ -74,22 +74,7 @@ namespace FlysasLib
         {
             var req = createRequest(query.GetUrl(), HttpMethod.Get);
             return GetRusult<SearchResult>(req);            
-        }
-
-        public AwardResult Award(SASQuery query)
-        {
-            var q = new AwardQuery
-            {
-                Org = query.From,
-                Dest = query.To,
-                OutDate = query.OutDate,
-                InDate = query.InDate,
-                Adt = query.Adt
-            };
-            var req = createRequest(q.GetUrl(), HttpMethod.Get);
-            req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "U0FTTGFiczp0ZXN0Ym90");
-            return GetRusult<AwardResult>(req);
-        }
+        }       
 
         public TransactionRoot History(int page)        
         {

@@ -37,6 +37,7 @@ namespace FlysasClient
                         try
                         {
                             req = parser.Parse(query);
+                            req.Award = options.Award;
                         }
                         catch (ParserException ex)
                         {
