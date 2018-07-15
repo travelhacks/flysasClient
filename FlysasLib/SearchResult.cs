@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,30 +9,6 @@ using System.Linq;
 
 namespace FlysasLib
 {
-
-    public class FlightProduct
-    {
-        public string flightProductId { get; set; }
-        public int recoId { get; set; }
-        public int recoFlightId { get; set; }
-    }
-
-    public class AssociatedProducts
-    {
-        public List<FlightProduct> flightProducts { get; set; }
-    }
-
-    public class Offer
-    {
-        public string id { get; set; }
-        public int recoFlightId { get; set; }
-        public string boundType { get; set; }
-        public bool lowestFare { get; set; }
-        public string productName { get; set; }
-        public string fareKey { get; set; }
-        public AssociatedProducts associatedProducts { get; set; }
-    }
-
     public class Price
     {
         public string currency { get; set; }
@@ -94,7 +71,7 @@ namespace FlysasLib
         public List<Connection> connections { get; set; }
         public bool flyingToOrOverRussia { get; set; }
         public bool flyingToOrOverUs { get; set; }
-        
+
     }
 
     public class Via : KVP
@@ -138,51 +115,52 @@ namespace FlysasLib
         public int stops { get; set; }
         public List<Via> via { get; set; }
         public List<Segment> segments { get; set; }
+        public LowestFares lowestFares { get; set; }        
+        public Cabins cabins { get; set; }
     }
+
+    public class Cabins
+    {
+        [JsonProperty(propertyName: "BUSINESS")]
+        [JsonConverter(typeof(ProductArrayConverter))]
+        public List<FlightProductBaseClass> business { get; set; }
+        [JsonProperty(propertyName: "ECONOMY")]
+        [JsonConverter(typeof(ProductArrayConverter))]
+        public List<FlightProductBaseClass> economy { get; set; }
+        [JsonProperty(propertyName: "GO")]
+        [JsonConverter(typeof(ProductArrayConverter))]
+        public List<FlightProductBaseClass> go { get; set; }
+        [JsonProperty(propertyName: "PLUS")]
+        [JsonConverter(typeof(ProductArrayConverter))]
+        public List<FlightProductBaseClass> plus { get; set; }
+
+        public IEnumerable<FlightProductBaseClass> AllProducts
+        {
+            get
+            {
+                var list = new List<FlightProductBaseClass>();
+                foreach (var prop in this.GetType().GetProperties().Where(pi => pi.PropertyType == typeof(List<FlightProductBaseClass>)))
+                {
+                    var val = prop.GetValue(this);
+                    if (val != null)
+                        list.AddRange(val as List<FlightProductBaseClass>);
+                }
+                return list;
+            }
+        }
+
+    }
+    
+
+   
 
     public class KVP
     {
         public string code { get; set; }
         public string name { get; set; }
-    }
+    }    
 
-    public class Weight
-    {
-        public int checkedBag { get; set; }
-        public int cabinBag { get; set; }
-        public string unit { get; set; }
-    }
-
-    public class Baggage
-    {
-        public int checkedBag { get; set; }
-        public int cabinBag { get; set; }
-        public string unit { get; set; }
-        public List<Weight> weight { get; set; }
-    }
-
-    public class Amenities
-    {
-        public string meal { get; set; }
-        public bool lounge { get; set; }
-        public bool fastTrack { get; set; }
-        public string comfort { get; set; }
-        public bool refund { get; set; }
-        public bool rebook { get; set; }
-        public Baggage baggage { get; set; }
-        public string refundRebookMsg { get; set; }
-    }
-
-    public class ProductInfo
-    {
-        public string productName { get; set; }
-        public string description { get; set; }
-        public string displayType { get; set; }
-        public int rank { get; set; }
-        public int order { get; set; }
-        public Amenities amenities { get; set; }
-    }
-
+    
     public class TabsInfo
     {
         public string boundType { get; set; }
@@ -206,21 +184,45 @@ namespace FlysasLib
         public string href { get; set; }
     }
 
+
+
+    
+
+
     public class SearchResult : RootBaseClass
     {
-        public string pricingType { get; set; }
-        public List<Offer> offers { get; set; }
-        public List<FlightProductBaseClass> outboundFlightProducts { get; set; }
-        public List<FlightProductBaseClass> inboundFlightProducts { get; set; }
+        //public string pricingType { get; set; }
+        //public List<Offer> offers { get; set; }
+        //public List<FlightProductBaseClass> outboundFlightProducts { get; set; }
+        //public List<FlightProductBaseClass> inboundFlightProducts { get; set; }    
+        [JsonConverter(typeof(FlightBaseClassConverter))]
         public List<FlightBaseClass> outboundFlights { get; set; }
+        [JsonConverter(typeof(FlightBaseClassConverter))]
         public List<FlightBaseClass> inboundFlights { get; set; }
-        public List<ProductInfo> productInfo { get; set; }
-        public List<TabsInfo> tabsInfo { get; set; }
+        //public List<ProductInfo> productInfo { get; set; }
+        //public List<TabsInfo> tabsInfo { get; set; }
         public Currency currency { get; set; }
         public List<Link> links { get; set; }
         public string regionName { get; set; }
-        public string offerId { get; set; }        
+        public string offerId { get; set; }       
+        public bool isOutboundIntercontinental { get; set; }
     }
+
+    public class BestPrice 
+    {
+        public string product { get; set; }
+        public string productId { get; set; }
+        public int avlSeats { get; set; }        
+    }
+
+    public class LowestFares
+    {
+        [JsonProperty(propertyName: "BUSINESS")]
+        public BestPrice business { get; set; }
+        [JsonProperty(propertyName: "ECONOMY")]
+        public BestPrice economy { get; set; }
+    }
+
     public class AuthResponse : RootBaseClass
     {
         public string access_token { get; set; }
@@ -326,8 +328,8 @@ namespace FlysasLib
         public AwardProduct PLUS { get; set; }
         [JsonProperty(propertyName: "SAS BUSINESS")]
         public AwardProduct BUSINESS { get; set; }
-
     }
+
 
     public class AwardSegment
     {

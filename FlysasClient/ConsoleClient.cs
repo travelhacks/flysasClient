@@ -58,11 +58,11 @@ namespace FlysasClient
                             else
                             {
                                 txtOut.WriteLine("*********Outbound*******");
-                                PrintFlights(res.outboundFlights, res.outboundFlightProducts, options);
+                                PrintFlights(res.outboundFlights, options);
                                 if (req.InDate.HasValue)
                                 {
                                     txtOut.WriteLine("*********Inbound*******");
-                                    PrintFlights(res.inboundFlights, res.inboundFlightProducts, options);
+                                    PrintFlights(res.inboundFlights, options);
                                 }
                             }
                         }
@@ -145,7 +145,7 @@ namespace FlysasClient
                 SASQuery q = new SASQuery { From = "KLR", To = "ARN", OutDate = DateTime.Now.AddDays(1 + x).Date };
                 var w2 = System.Diagnostics.Stopwatch.StartNew();
                 var res = client.Search(q);
-                txtOut.WriteLine("Got " + res.outboundFlights?.Count + " in " + w2.Elapsed.TotalSeconds);
+                //txtOut.WriteLine("Got " + res.outboundFlights?.Count + " in " + w2.Elapsed.TotalSeconds);
 
             });
             txtOut.WriteLine(watch.Elapsed.TotalSeconds);
@@ -365,11 +365,12 @@ namespace FlysasClient
             return str;
         }
 
-        void PrintFlights(IEnumerable<FlightBaseClass> flights, IEnumerable<FlightProductBaseClass> products, FlysasClient.Options options)
+        void PrintFlights(IEnumerable<FlightBaseClass> flights, FlysasClient.Options options)
         {
             string separator = "/";
             string timeFormat = "HH:mm";
-            var codes = products.Select(p => p.productCode).Distinct().ToArray();
+            var products = flights.Where(f=>f.cabins!=null).SelectMany(f=>f.cabins.AllProducts);
+            var codes = products.Select(p=>p.productCode).Distinct().ToArray();
             var first = flights.First();
             var headers = new List<string>();
             headers.Add(first.origin.code);
@@ -390,27 +391,31 @@ namespace FlysasClient
             foreach (var r in flights)
             {
                 var values = new List<string>();
-                var prices = products.Where(p => p.id.EndsWith("_" + r.id.ToString())).ToArray();
                 var dateDiff = (r.endTimeInLocal.Date - r.startTimeInGmt.Date).Days;
                 values.Add(r.startTimeInLocal.ToString(timeFormat));
                 values.Add(r.endTimeInLocal.ToString(timeFormat) + (dateDiff > 0 ? "+" + dateDiff : ""));
                 if (options.OutputEquipment)
                     values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin(separator));
                 if (options.OutputFlightNumber)
-                    values.Add(r.segments.Select(seg => seg.flightNumber).SimplifyAndJoin(separator));
+                    values.Add(r.segments.Select(seg => seg.marketingCarrier.code + seg.flightNumber).SimplifyAndJoin(separator));
 
                 foreach (var c in codes)
                 {
                     string sClasses = "";
-                    var p = prices.FirstOrDefault(price => price.productCode == c);
+                    var p = r.cabins?.AllProducts.FirstOrDefault(prod => prod.productCode == c);
                     var sPrice = "";
+                    var pax = "";
                     if (p != null)
                     {
                         var classes = p.fares.Select(f => f.bookingClass + f.avlSeats);
+                        pax = p.fares.Min(f=>f.avlSeats).ToString();
                         sClasses = classes.SimplifyAndJoin(separator);
                         sPrice = p.price.formattedTotalPrice;
                     }
-                    values.Add(sPrice);
+                    if (options.Award)
+                        values.Add(pax);
+                    else
+                        values.Add(sPrice);
                     if (options.OutputBookingClass)
                         values.Add(sClasses);
                 }

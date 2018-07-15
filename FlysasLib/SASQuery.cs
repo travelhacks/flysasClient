@@ -24,7 +24,7 @@ namespace FlysasLib
         {
             get
             {
-                return Award ? "POINTS" : "REVENUE";
+                return Award ? "STAR" : "REVENUE"; //POINTS
             } 
         }
         
@@ -36,7 +36,8 @@ namespace FlysasLib
 
         public string GetUrl()
         {
-            return "https://api.flysas.com/offers/flightproducts?" + String.Join("&", getParams());            
+            //return "https://api.flysas.com/offers/flightproducts?" + String.Join("&", getParams());
+            return "https://api.flysas.com/offers/flights?" + String.Join("&", getParams());
         }
 
         IEnumerable<string> getParams()
