@@ -37,7 +37,7 @@ namespace FlysasClient
                         try
                         {
                             req = parser.Parse(query);
-                            req.Award = options.Award;
+                            req.Mode = options.Mode;
                         }
                         catch (ParserException ex)
                         {
@@ -412,7 +412,7 @@ namespace FlysasClient
                         sClasses = classes.SimplifyAndJoin(separator);
                         sPrice = p.price.formattedTotalPrice;
                     }
-                    if (options.Award)
+                    if (options.Mode != "REVENUE")
                         values.Add(pax);
                     else
                         values.Add(sPrice);

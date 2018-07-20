@@ -83,10 +83,10 @@ namespace FlysasLib
     {
         public int id { get; set; }
         public string arrivalTerminal { get; set; }
-        public string arrivalDateTimeInLocal { get; set; }
-        public string arrivalDateTimeInGmt { get; set; }
-        public string departureDateTimeInLocal { get; set; }
-        public string departureDateTimeInGmt { get; set; }
+        public DateTimeOffset? arrivalDateTimeInLocal { get; set; }
+        public DateTimeOffset? arrivalDateTimeInGmt { get; set; }
+        public DateTimeOffset? departureDateTimeInLocal { get; set; }
+        public DateTimeOffset? departureDateTimeInGmt { get; set; }
         public KVP departureAirport { get; set; }
         public KVP arrivalAirport { get; set; }
         public KVP departureCity { get; set; }

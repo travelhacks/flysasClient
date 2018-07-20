@@ -19,13 +19,17 @@ namespace FlysasLib
         public string Channel { get; set; }// = "web";
         public DateTime? OutDate { get; set; }
         public DateTime? InDate { get; set; }
-        public bool Award;
+        public string Mode;
         private string BookingFlow
         {
+
             get
             {
-                return Award ? "STAR" : "REVENUE"; //POINTS
-            } 
+                var validValues = new string[] { "POINTS", "STAR", "REVENUE" };
+                if (validValues.Any(v => v.Equals(Mode, StringComparison.CurrentCultureIgnoreCase)))
+                    return Mode.ToUpper();
+                return "REVENUE"; 
+            }
         }
         
             
