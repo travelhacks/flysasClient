@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace FlysasLib
 {
     public class FlightBaseClassConverter : JsonConverter
     {
-
+        public override bool CanWrite => false;
 
         public override bool CanConvert(Type objectType)
         {
@@ -25,17 +24,12 @@ namespace FlysasLib
                 {
                     if (reader.TokenType == JsonToken.StartObject && regex.IsMatch(reader.Path))
                     {
-                        var x = serializer.Deserialize<FlightBaseClass>(reader);
-                        list.Add(x);
+                        var flight = serializer.Deserialize<FlightBaseClass>(reader);
+                        list.Add(flight);
                     }
                 }
             return list;
-        }
-
-        public override bool CanWrite
-        {
-            get { return false; }
-        }
+        }        
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
@@ -63,8 +57,8 @@ namespace FlysasLib
                     if (reader.TokenType == JsonToken.StartObject)
                         if (reader.Depth - startLevel == 3)
                         {
-                            var x = serializer.Deserialize<FlightProductBaseClass>(reader);
-                            list.Add(x);
+                            var product = serializer.Deserialize<FlightProductBaseClass>(reader);
+                            list.Add(product);
                         }
 
                 }
@@ -72,10 +66,8 @@ namespace FlysasLib
         }
 
 
-        public override bool CanWrite
-        {
-            get { return false; }
-        }
+        public override bool CanWrite => false;
+        
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

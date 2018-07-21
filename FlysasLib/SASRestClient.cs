@@ -13,11 +13,10 @@ namespace FlysasLib
 
         public SASRestClient()
         {
-
             client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
             client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-            client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
-            client.DefaultRequestHeaders.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
+            //client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
+            //client.DefaultRequestHeaders.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
             client.DefaultRequestHeaders.Connection.Add("keep-alive");
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"));
             client.DefaultRequestHeaders.Host = "api.flysas.com";
@@ -79,7 +78,7 @@ namespace FlysasLib
         public TransactionRoot History(int page)        
         {
             var url = $"https://api.flysas.com/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={auth.customerSessionId}";
-            var request = createRequest( url, HttpMethod.Get,auth);                                    
+            var request = createRequest(url, HttpMethod.Get,auth);                                    
             var res = GetRusult<TransactionRoot>(request);
             return res;
         }
@@ -122,9 +121,7 @@ namespace FlysasLib
         {
             return Deserialize<T>(downLoad(req));
         }
-
         
-
         class DownloadResult
         {
             public string Content;

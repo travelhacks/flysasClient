@@ -31,18 +31,11 @@ namespace FlysasLib
                 return "REVENUE"; 
             }
         }
-        
-            
-
 
         static PropertyInfo[] properties = typeof(SASQuery).GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
 
-
-        public string GetUrl()
-        {
-            //return "https://api.flysas.com/offers/flightproducts?" + String.Join("&", getParams());
-            return "https://api.flysas.com/offers/flights?" + String.Join("&", getParams());
-        }
+        public string GetUrl() => "https://api.flysas.com/offers/flights?" + String.Join("&", getParams());
+        
 
         IEnumerable<string> getParams()
         {
