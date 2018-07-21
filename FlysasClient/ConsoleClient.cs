@@ -205,6 +205,13 @@ namespace FlysasClient
                     txtOut.WriteLine("\tCallsign:" + airline.Callsign);
                     txtOut.WriteLine("\tCountry:" + airline.Country);
                 }
+                var plane = data.Planes.FirstOrDefault(p =>  s.ToUpper() == p.IATA || s.ToUpper() == p.ICAO);
+                if (plane != null)
+                {
+                    txtOut.WriteLine("Airplane info for " + s);
+                    txtOut.WriteLine("\t" + plane.IATA + "/" + plane.ICAO);
+                    txtOut.WriteLine("\tName:" + plane.Name);                  
+                }
                 if (arglist.Count >= 2)
                 {
 

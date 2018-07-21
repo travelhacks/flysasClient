@@ -45,8 +45,8 @@ namespace OpenFlightsData
                     DST = cols[10],
                     Type = cols[11],
                     Source = cols[12]
-                    
-    };
+
+                };
                 list.Add(a);
             }
             return list;
