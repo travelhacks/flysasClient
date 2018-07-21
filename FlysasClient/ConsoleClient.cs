@@ -43,30 +43,36 @@ namespace FlysasClient
                         {
                             txtOut.Write("Syntax error:" + ex.Message);
                         }
-                        catch (Exception ex)
+                        catch
                         {
                             txtOut.Write("Syntax error:");
                         }
                         if (req != null)
                         {
-                            var res = client.Search(req);
-                            if (res == null)
+                            SearchResult result = null;
+                            try
+                            {
+                                result = client.Search(req);
+                            }
+                            catch
+                            {
                                 txtOut.WriteLine("Error");
-                            else
-                                if (res.errors != null && res.errors.Any())
-                                txtOut.WriteLine("flysas.com says: " + res.errors.First().errorMessage);
+                            }
+                            if (result.errors != null && result.errors.Any())
+                                txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
                             else
                             {
                                 txtOut.WriteLine("*********Outbound*******");
-                                PrintFlights(res.outboundFlights, options);
+                                PrintFlights(result.outboundFlights, options);
                                 if (req.InDate.HasValue)
                                 {
                                     txtOut.WriteLine("*********Inbound*******");
-                                    PrintFlights(res.inboundFlights, options);
+                                    PrintFlights(result.inboundFlights, options);
                                 }
                             }
+
+                            txtOut.Write(Environment.NewLine + Environment.NewLine);
                         }
-                        txtOut.Write(Environment.NewLine + Environment.NewLine);
                     }
             }
         }

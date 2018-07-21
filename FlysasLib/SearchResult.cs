@@ -22,6 +22,7 @@ namespace FlysasLib
         public int credits { get; set; }
     }
 
+
     public class PricePerPassengerType
     {
         public int id { get; set; }
@@ -42,14 +43,7 @@ namespace FlysasLib
         public string bookingClass { get; set; }
         public int avlSeats { get; set; }
     }
-
-    public class Connection
-    {
-        public int id { get; set; }
-        public string boundType { get; set; }
-        public int flightId { get; set; }
-    }
-
+    
     public class Error
     {
         public string errorCode;
@@ -68,10 +62,6 @@ namespace FlysasLib
         public PriceList price { get; set; }
         public List<Fare> fares { get; set; }
         public string fareKey { get; set; }
-        public List<Connection> connections { get; set; }
-        public bool flyingToOrOverRussia { get; set; }
-        public bool flyingToOrOverUs { get; set; }
-
     }
 
     public class Via : KVP
@@ -107,7 +97,9 @@ namespace FlysasLib
         public int id { get; set; }
         public KVP origin { get; set; }
         public KVP destination { get; set; }
-        //public DateTime connectionDuration { get; set; }
+        public KVP originCity { get; set; }
+        public KVP destinationCity { get; set; }
+        public string connectionDuration { get; set; }
         public DateTimeOffset startTimeInLocal { get; set; }
         public DateTime startTimeInGmt { get; set; }
         public DateTimeOffset endTimeInLocal { get; set; }
@@ -191,21 +183,24 @@ namespace FlysasLib
 
     public class SearchResult : RootBaseClass
     {
-        //public string pricingType { get; set; }
-        //public List<Offer> offers { get; set; }
-        //public List<FlightProductBaseClass> outboundFlightProducts { get; set; }
-        //public List<FlightProductBaseClass> inboundFlightProducts { get; set; }    
+        //Not used
+        //public List<TabsInfo> tabsInfo { get; set; }
+        //productInfo
+        //links
+        //outboundLowestFare
+
         [JsonConverter(typeof(FlightBaseClassConverter))]
         public List<FlightBaseClass> outboundFlights { get; set; }
         [JsonConverter(typeof(FlightBaseClassConverter))]
         public List<FlightBaseClass> inboundFlights { get; set; }
-        //public List<ProductInfo> productInfo { get; set; }
-        //public List<TabsInfo> tabsInfo { get; set; }
+        
+        
         public Currency currency { get; set; }
         public List<Link> links { get; set; }
         public string regionName { get; set; }
         public string offerId { get; set; }       
         public bool isOutboundIntercontinental { get; set; }
+        public string pricingType { get; set; }
     }
 
     public class BestPrice 
@@ -213,6 +208,7 @@ namespace FlysasLib
         public string product { get; set; }
         public string productId { get; set; }
         public int avlSeats { get; set; }        
+        //Todo: prices / points
     }
 
     public class LowestFares

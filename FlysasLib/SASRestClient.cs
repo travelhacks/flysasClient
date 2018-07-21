@@ -59,18 +59,6 @@ namespace FlysasLib
 
         public SearchResult Search(SASQuery query)
         {
-            try
-            {
-                return search(query);
-            }
-            catch (Exception ex)
-            {
-            }
-            return null;
-        }
-      
-        private SearchResult search(SASQuery query)
-        {
             var req = createRequest(query.GetUrl(), HttpMethod.Get);
             return GetRusult<SearchResult>(req);            
         }       
