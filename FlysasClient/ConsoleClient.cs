@@ -25,7 +25,7 @@ namespace FlysasClient
         {
             string input = null;
             var parser = new Parser();
-            while (input != "q")
+            while (!nameof(Commands.Quit).Equals(input,StringComparison.CurrentCultureIgnoreCase))
             {
                 txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
                 txtOut.Write(">>");
@@ -73,7 +73,7 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit
         };
 
         HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
@@ -127,6 +127,10 @@ namespace FlysasClient
                             break;
                         case Commands.Logout:
                             client.Logout();
+                            break;
+                        case Commands.Quit:
+                            client.Logout();
+                            Environment.Exit(0);
                             break;
                     }
                     return true;
