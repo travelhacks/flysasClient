@@ -54,23 +54,25 @@ namespace FlysasClient
                             {
                                 result = client.Search(req);
                             }
-                            catch
+                            catch(Exception ex)
                             {
                                 txtOut.WriteLine("Error");
                             }
-                            if (result.errors != null && result.errors.Any())
-                                txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
-                            else
+                            if (result != null)
                             {
-                                txtOut.WriteLine("*********Outbound*******");
-                                PrintFlights(result.outboundFlights, options);
-                                if (req.InDate.HasValue)
+                                if (result.errors != null && result.errors.Any())
+                                    txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
+                                else
                                 {
-                                    txtOut.WriteLine("*********Inbound*******");
-                                    PrintFlights(result.inboundFlights, options);
+                                    txtOut.WriteLine("*********Outbound*******");
+                                    PrintFlights(result.outboundFlights, options);
+                                    if (req.InDate.HasValue)
+                                    {
+                                        txtOut.WriteLine("*********Inbound*******");
+                                        PrintFlights(result.inboundFlights, options);
+                                    }
                                 }
                             }
-
                             txtOut.Write(Environment.NewLine + Environment.NewLine);
                         }
                     }

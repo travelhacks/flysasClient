@@ -51,11 +51,12 @@ namespace FlysasLib
             var start = reader.Path;
             int startLevel = reader.Depth;
             var list = new List<FlightProductBaseClass>();
+            var regex = new System.Text.RegularExpressions.Regex("\\.products\\.[IO]_\\d+$");
             if (reader.Read())
                 while (!(reader.Path == start && reader.TokenType == JsonToken.EndObject) && reader.Read())
                 {
                     if (reader.TokenType == JsonToken.StartObject)
-                        if (reader.Depth - startLevel == 3)
+                             if (reader.Depth - startLevel == 3 && regex.IsMatch(reader.Path) )
                         {
                             var product = serializer.Deserialize<FlightProductBaseClass>(reader);
                             list.Add(product);
