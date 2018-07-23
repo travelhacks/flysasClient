@@ -410,7 +410,7 @@ namespace FlysasClient
             foreach (var r in flights)
             {
                 var values = new List<string>();
-                var dateDiff = (r.endTimeInLocal.Date - r.startTimeInGmt.Date).Days;
+                var dateDiff = (r.endTimeInLocal.Date - r.startTimeInLocal.Date).Days;
                 values.Add(r.startTimeInLocal.ToString(timeFormat));
                 values.Add(r.endTimeInLocal.ToString(timeFormat) + (dateDiff > 0 ? "+" + dateDiff : ""));
                 if (options.OutputEquipment)
