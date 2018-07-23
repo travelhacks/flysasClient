@@ -25,7 +25,7 @@ namespace FlysasClient
         {
             string input = null;
             var parser = new Parser();
-            while (!nameof(Commands.Quit).Equals(input,StringComparison.CurrentCultureIgnoreCase))
+            while (!nameof(Commands.Quit).Equals(input, StringComparison.CurrentCultureIgnoreCase))
             {
                 txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
                 txtOut.Write(">>");
@@ -213,12 +213,12 @@ namespace FlysasClient
                     txtOut.WriteLine("\tCallsign:" + airline.Callsign);
                     txtOut.WriteLine("\tCountry:" + airline.Country);
                 }
-                var plane = data.Planes.FirstOrDefault(p =>  s.ToUpper() == p.IATA || s.ToUpper() == p.ICAO);
+                var plane = data.Planes.FirstOrDefault(p => s.ToUpper() == p.IATA || s.ToUpper() == p.ICAO);
                 if (plane != null)
                 {
                     txtOut.WriteLine("Airplane info for " + s);
                     txtOut.WriteLine("\t" + plane.IATA + "/" + plane.ICAO);
-                    txtOut.WriteLine("\tName:" + plane.Name);                  
+                    txtOut.WriteLine("\tName:" + plane.Name);
                 }
                 if (arglist.Count >= 2)
                 {
@@ -389,7 +389,8 @@ namespace FlysasClient
             string separator = "/";
             string timeFormat = "HH:mm";
             var products = flights.Where(f=>f.cabins!=null).SelectMany(f=>f.cabins.AllProducts);
-            var codes = products.Select(p=>p.productCode).Distinct().ToArray();
+            var sorter = new ProductComparer();
+            var codes = products.OrderBy(s=>s,sorter).Select(p=>p.productCode).Distinct().ToArray();
             var first = flights.First();
             var headers = new List<string>();
             headers.Add(first.origin.code);
