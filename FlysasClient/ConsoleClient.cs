@@ -64,12 +64,13 @@ namespace FlysasClient
                                     txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
                                 else
                                 {
+                                    var printer = new TablePrinter(txtOut);
                                     txtOut.WriteLine("*********Outbound*******");
-                                    PrintFlights(result.outboundFlights, options);
+                                    printer.PrintFlights(result.outboundFlights, options);
                                     if (req.InDate.HasValue)
                                     {
                                         txtOut.WriteLine("*********Inbound*******");
-                                        PrintFlights(result.inboundFlights, options);
+                                        printer.PrintFlights(result.inboundFlights, options);
                                     }
                                 }
                             }
@@ -383,66 +384,5 @@ namespace FlysasClient
             txtOut.WriteLine();
             return str;
         }
-
-        void PrintFlights(IEnumerable<FlightBaseClass> flights, FlysasClient.Options options)
-        {
-            string separator = "/";
-            string timeFormat = "HH:mm";
-            var products = flights.Where(f=>f.cabins!=null).SelectMany(f=>f.cabins.AllProducts);
-            var sorter = new ProductComparer();
-            var codes = products.OrderBy(s=>s,sorter).Select(p=>p.productCode).Distinct().ToArray();
-            var first = flights.First();
-            var headers = new List<string>();
-            headers.Add(first.origin.code);
-            headers.Add(first.destination.code);
-            if (options.OutputEquipment)
-                headers.Add("Equip");
-            if (options.OutputFlightNumber)
-                headers.Add("Flight");
-            Table table = new Table();
-            foreach (var c in codes)
-            {
-                headers.Add(c);
-                table.Alignment[headers.Count - 1] = TextAlignment.Right;
-                if (options.OutputBookingClass)
-                    headers.Add("");
-            }
-            table.Rows.Add(headers);
-            foreach (var r in flights)
-            {
-                var values = new List<string>();
-                var dateDiff = (r.endTimeInLocal.Date - r.startTimeInLocal.Date).Days;
-                values.Add(r.startTimeInLocal.ToString(timeFormat));
-                values.Add(r.endTimeInLocal.ToString(timeFormat) + (dateDiff > 0 ? "+" + dateDiff : ""));
-                if (options.OutputEquipment)
-                    values.Add(r.segments.Select(seg => seg.airCraft.code).SimplifyAndJoin(separator));
-                if (options.OutputFlightNumber)
-                    values.Add(r.segments.Select(seg => seg.marketingCarrier.code + seg.flightNumber).SimplifyAndJoin(separator));
-
-                foreach (var c in codes)
-                {
-                    string sClasses = "";
-                    var p = r.cabins?.AllProducts.FirstOrDefault(prod => prod.productCode == c);
-                    var sPrice = "";
-                    var pax = "";
-                    if (p != null)
-                    {
-                        var classes = p.fares.Select(f => f.bookingClass + f.avlSeats);
-                        pax = p.fares.Min(f=>f.avlSeats).ToString();
-                        sClasses = classes.SimplifyAndJoin(separator);
-                        sPrice = p.price.formattedTotalPrice;
-                    }
-                    if (options.Mode != "REVENUE")
-                        values.Add(pax);
-                    else
-                        values.Add(sPrice);
-                    if (options.OutputBookingClass)
-                        values.Add(sClasses);
-                }
-                table.Rows.Add(values);
-            }
-            table.Print(txtOut);
-        }
-
     }
 }
