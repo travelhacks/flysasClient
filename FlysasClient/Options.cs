@@ -20,10 +20,7 @@ namespace FlysasClient
     }   
 
     public abstract class OptionsParser
-    {
-        public OptionsParser()
-        {
-        }
+    {        
         public OptionsParser(IEnumerable<KeyValuePair<string,string>> options)
         {            
             try
@@ -95,16 +92,11 @@ namespace FlysasClient
         [OptionParser("username")]
         public string UserName { get; set; }
         [OptionParser( optionName: "passWord",Secret : true)]
-        public string Password { get; set; }
-        //[OptionParser("award")]
-        //public bool Award { get; private set; } = false;
+        public string Password { get; set; }        
         [OptionParser("flightnumber")]
         public bool OutputFlightNumber { get; private set; } = false;
         [OptionParser("mode")]
         public string Mode { get; private set; } = "REVENUE";
-        public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options)
-        {
-
-        }
+        public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options) { }        
     }
 }

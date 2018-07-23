@@ -7,8 +7,15 @@ namespace FlysasLib
     public static class ExtensionMethods
     {
         public static bool IsNullOrEmpty(this string str) => string.IsNullOrEmpty(str);
-        
+
         public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
+
+        public static string camelCase(this string str)
+        {
+            if (str.IsNullOrEmpty())
+                return string.Empty;
+            return str.First().ToString().ToLower() + str.Substring(1);
+        }
         
         static IEnumerable<string> simplify(IEnumerable<string> list)
         {

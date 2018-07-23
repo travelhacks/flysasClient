@@ -49,7 +49,7 @@ namespace FlysasLib
                         sVal = ((DateTime?)val).Value.ToString("yyyyMMddHHmm");
                     else
                         sVal = val.ToString();
-                    var paramName = property.Name.First().ToString().ToLower() + property.Name.Substring(1);
+                    var paramName = property.Name.camelCase();
                     yield return $"{paramName}={sVal}";
                 }
             }

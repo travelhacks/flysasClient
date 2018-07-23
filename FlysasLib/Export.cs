@@ -11,31 +11,23 @@ namespace FlysasLib
 
         public List<FlightExport> Convert(List<Transaction> transactions)
         {
-            var airports = new OpenFlightsData.Airport().GetAll();
-            var routes = new OpenFlightsData.Route().GetAll();
-            var airlines = new OpenFlightsData.Airline().GetAll();
+            var OFData = new OpenFlightsData.OFData();
+            OFData.LoadData();
             var exports = new List<FlightExport>();
+            var map = new Dictionary<string, string>() { { "KF", "SK" } };
             foreach (var r in transactions)
                 if (!r.Origin.IsNullOrEmpty())
-                {
-                    var map = new Dictionary<string, string>() { { "KF", "SK" } };
-                    var o = airports.Where(a => a.City.Equals(r.Origin, StringComparison.CurrentCultureIgnoreCase)).ToList();
-                    var d = airports.Where(a => a.City.Equals(r.Destination, StringComparison.CurrentCultureIgnoreCase)).ToList();
-                    var tmp = routes.Where(route => o.Any(a => a.IATA == route.FromIATA) && d.Any(a => a.IATA == route.ToIATA)).ToList();
-                    var airline = airlines.FirstOrDefault(a => a.IATA == r.Airline);
+                {                    
+                    var o = OFData.Airports.Where(a => a.City.Equals(r.Origin, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    var d = OFData.Airports.Where(a => a.City.Equals(r.Destination, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    var tmp = OFData.Routes.Where(route => o.Any(a => a.IATA == route.FromIATA) && d.Any(a => a.IATA == route.ToIATA)).ToList();
+                    var airline = OFData.Airlines.FirstOrDefault(a => a.IATA == r.Airline);
                     var airlineId = airline != null ? new int?(airline.ID) : new int?();
                     var matches = tmp.Where(route => route.AirlineCode == r.Airline || map.ContainsKey(route.AirlineCode) && map[route.AirlineCode] == r.Airline).ToList();
                     if (matches.Count == 0)
-                    {
-                        //if (tmp.Select(x => x.FromIATA).Distinct().Count() == 1 && tmp.Select(x => x.ToIATA).Distinct().Count() == 1)
-                        //    values.Add(tmp.First().FromIATA + " - " + tmp.First().ToIATA + " (route with " + tmp.First().AirlineCode + ")");
-                        //else
-                        //{
-                        if (o.Count == 1 && d.Count == 1)
-                        {
-                            exports.Add(new FlightExport(r, o.First().IATA, d.First().IATA, airlineId, 50));
-                            //values.Add(o.First().IATA + " - " + d.First().IATA + " (without route)");
-                        }
+                    {                     
+                        if (o.Count == 1 && d.Count == 1)                     
+                            exports.Add(new FlightExport(r, o.First().IATA, d.First().IATA, airlineId, 50));                            
                         else
                             exports.Add(new FlightExport(r, r.Origin, r.Destination, airlineId, 0));
                     }
