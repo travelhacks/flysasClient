@@ -13,8 +13,11 @@
     <ApplicationIcon />
     <OutputTypeEx>exe</OutputTypeEx>
     <StartupObject />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  
+  
   <ItemGroup>
     <None Remove="Export\dummy.txt" />
   </ItemGroup>

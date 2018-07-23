@@ -21,7 +21,7 @@ namespace FlysasClient
             this.data = data;
         }
 
-        public void InputLoop()
+        public async System.Threading.Tasks.Task InputLoop()
         {
             string input = null;
             var parser = new Parser();
@@ -52,9 +52,9 @@ namespace FlysasClient
                             SearchResult result = null;
                             try
                             {
-                                result = client.Search(req);
+                                result = await client.SearchAsync(req);
                             }
-                            catch(Exception ex)
+                            catch
                             {
                                 txtOut.WriteLine("Error");
                             }

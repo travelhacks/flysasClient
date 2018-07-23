@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Collections.Generic;
-
-
+using System.Threading.Tasks;
 
 namespace FlysasLib
 {
@@ -60,14 +59,18 @@ namespace FlysasLib
         public SearchResult Search(SASQuery query)
         {
             var req = createRequest(query.GetUrl(), HttpMethod.Get);
-            return GetRusult<SearchResult>(req);            
-        }       
-
+            return GetResult<SearchResult>(req);            
+        }
+        public Task<SearchResult>  SearchAsync(SASQuery query)
+        {
+            var req = createRequest(query.GetUrl(), HttpMethod.Get);
+            return GetResultAsync<SearchResult>(req);
+        }
         public TransactionRoot History(int page)        
         {
             var url = $"https://api.flysas.com/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={auth.customerSessionId}";
             var request = createRequest(url, HttpMethod.Get,auth);                                    
-            var res = GetRusult<TransactionRoot>(request);
+            var res = GetResult<TransactionRoot>(request);
             return res;
         }
 
@@ -98,6 +101,16 @@ namespace FlysasLib
             return res;
         }
 
+        async Task<DownloadResult> downLoadAsync(HttpRequestMessage request)
+        {
+            var res = new DownloadResult();
+            var task = await client.SendAsync(request);
+            res.Content = await task.Content.ReadAsStringAsync();
+            res.Success = task.IsSuccessStatusCode;
+            task.Content.Dispose();
+            return res;
+        }
+
         T Deserialize<T>(DownloadResult res) where T : FlysasLib.RootBaseClass
         {
             var o = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(res.Content);
@@ -105,11 +118,16 @@ namespace FlysasLib
             o.httpSuccess = res.Success;
             return o;
         }
-        T GetRusult<T>(HttpRequestMessage req) where T : FlysasLib.RootBaseClass
+        T GetResult<T>(HttpRequestMessage req) where T : FlysasLib.RootBaseClass
         {
             return Deserialize<T>(downLoad(req));
         }
-        
+        async Task<T> GetResultAsync<T>(HttpRequestMessage req) where T : FlysasLib.RootBaseClass
+        {
+            var res = await downLoadAsync(req);
+            return Deserialize<T>(res);
+        }
+
         class DownloadResult
         {
             public string Content;

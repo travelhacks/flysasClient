@@ -6,7 +6,7 @@ namespace FlysasClient
 {
     class Program
     {        
-        public static int Main(string[] args = null)
+        public static async System.Threading.Tasks.Task<int> Main(string[] args = null)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.WriteLine("Welcome to FlysasClient 0.9.1");
@@ -28,7 +28,7 @@ namespace FlysasClient
             var config = builder.Build();
             Options o = new Options(config.AsEnumerable());                                  
             var c = new ConsoleClient(o,data);
-            c.InputLoop();
+            await c.InputLoop();
             return 0;
         }       
     }
