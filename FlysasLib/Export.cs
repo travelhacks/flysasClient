@@ -18,8 +18,8 @@ namespace FlysasLib
             foreach (var r in transactions)
                 if (!r.Origin.IsNullOrEmpty())
                 {                    
-                    var o = OFData.Airports.Where(a => a.City.Equals(r.Origin, StringComparison.CurrentCultureIgnoreCase)).ToList();
-                    var d = OFData.Airports.Where(a => a.City.Equals(r.Destination, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    var o = OFData.Airports.Where(a => a.City.Equals(r.Origin, StringComparison.OrdinalIgnoreCase)).ToList();
+                    var d = OFData.Airports.Where(a => a.City.Equals(r.Destination, StringComparison.OrdinalIgnoreCase)).ToList();
                     var tmp = OFData.Routes.Where(route => o.Any(a => a.IATA == route.FromIATA) && d.Any(a => a.IATA == route.ToIATA)).ToList();
                     var airline = OFData.Airlines.FirstOrDefault(a => a.IATA == r.Airline);
                     var airlineId = airline != null ? new int?(airline.ID) : new int?();

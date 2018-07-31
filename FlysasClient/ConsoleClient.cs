@@ -94,7 +94,7 @@ namespace FlysasClient
             if (stack.Any())
             {
                 var sCmd = stack.Pop();
-                var name = names.FirstOrDefault(s => s.Equals(sCmd, .OrdinalIgnoreCase));
+                var name = names.FirstOrDefault(s => s.Equals(sCmd, StringComparison.OrdinalIgnoreCase));
                 if (name != null)
                 {
                     Commands cmd = (Commands)Enum.Parse(typeof(Commands), name);
