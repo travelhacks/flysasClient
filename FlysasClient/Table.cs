@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FlysasLib;
 
 namespace FlysasClient
 {
@@ -24,7 +25,7 @@ namespace FlysasClient
         {
             if (Rows.Any())
                 for (int i = 0; i < Rows.First().Count; i++)
-                    dict[i] = Rows.Select(r => r[i]).Select(s => s == null ? 0 : s.Length).Max();
+                    dict[i] = Rows.Max(r => r[i].MyLength());
         }
 
         public void Print(System.IO.TextWriter txtOut)

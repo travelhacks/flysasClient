@@ -10,6 +10,8 @@ namespace FlysasLib
 
         public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
 
+        public static int MyLength(this string str) => str == null ? 0 : str.Length;
+
         public static string camelCase(this string str)
         {
             if (str.IsNullOrEmpty())
