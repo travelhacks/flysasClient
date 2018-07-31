@@ -26,7 +26,7 @@ namespace FlysasLib
             get
             {
                 var validValues = new string[] { "POINTS", "STAR", "REVENUE" };
-                if (validValues.Any(v => v.Equals(Mode, StringComparison.CurrentCultureIgnoreCase)))
+                if (validValues.Any(v => v.Equals(Mode, StringComparison.OrdinalIgnoreCase)))
                     return Mode.ToUpper();
                 return "REVENUE"; 
             }

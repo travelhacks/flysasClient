@@ -40,7 +40,7 @@ namespace FlysasClient
             foreach (var prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 var attr = prop.GetCustomAttribute(typeof(OptionParserAttribute)) as OptionParserAttribute;
-                if (attr != null && attr.OptionName.Equals(option, StringComparison.CurrentCultureIgnoreCase))
+                if (attr != null && attr.OptionName.Equals(option, StringComparison.OrdinalIgnoreCase))
                 {
                     if (prop.PropertyType == typeof(bool))
                         prop.SetValue(this, myBool(value));

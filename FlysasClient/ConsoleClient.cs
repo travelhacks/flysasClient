@@ -25,7 +25,7 @@ namespace FlysasClient
         {
             string input = null;
             var parser = new Parser();
-            while (!nameof(Commands.Quit).Equals(input, StringComparison.CurrentCultureIgnoreCase))
+            while (!nameof(Commands.Quit).Equals(input, StringComparison.OrdinalIgnoreCase))
             {
                 txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
                 txtOut.Write(">>");
@@ -94,7 +94,7 @@ namespace FlysasClient
             if (stack.Any())
             {
                 var sCmd = stack.Pop();
-                var name = names.FirstOrDefault(s => s.Equals(sCmd, StringComparison.CurrentCultureIgnoreCase));
+                var name = names.FirstOrDefault(s => s.Equals(sCmd, .OrdinalIgnoreCase));
                 if (name != null)
                 {
                     Commands cmd = (Commands)Enum.Parse(typeof(Commands), name);
@@ -198,14 +198,14 @@ namespace FlysasClient
                     txtOut.WriteLine("Timezone " + airport.Timezone);
                     txtOut.WriteLine("DST " + airport.DST);
                 }
-                var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (cities.Any())
                 {
                     txtOut.WriteLine("Airports in " + s);
                     foreach (var c in cities)
                         txtOut.WriteLine("\t" + c.IATA + ": " + c.Name);
                 }
-                var airline = data.Airlines.FirstOrDefault(al => s.Equals(al.Name, StringComparison.CurrentCultureIgnoreCase) || s.ToUpper() == al.IATA || s.ToUpper() == al.ICAO);
+                var airline = data.Airlines.FirstOrDefault(al => s.Equals(al.Name, StringComparison.OrdinalIgnoreCase) || s.ToUpper() == al.IATA || s.ToUpper() == al.ICAO);
                 if (airline != null)
                 {
                     txtOut.WriteLine("Airline info for " + s);
