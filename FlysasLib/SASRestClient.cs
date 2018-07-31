@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace FlysasLib
 {
@@ -12,16 +13,11 @@ namespace FlysasLib
 
         public SASRestClient()
         {
-            client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-            client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("deflate"));
-            //client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue() { NoCache = true };
-            //client.DefaultRequestHeaders.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
+            client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));            
             client.DefaultRequestHeaders.Connection.Add("keep-alive");
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"));
             client.DefaultRequestHeaders.Host = "api.flysas.com";
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible)");
-            //client.DefaultRequestHeaders.Add("Origin", "https://www.sas.se");
-            //client.DefaultRequestHeaders.Referrer  = new Uri("https://www.sas.se");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible)");            
         }              
         
         public bool Login(string userName, string pwd)
@@ -34,22 +30,18 @@ namespace FlysasLib
             var res = downLoad(request);
             var response = Deserialize<AuthResponse>(res);
             auth = response;
-            return response.errors == null;
+            return string.IsNullOrEmpty(response.error);
         }
 
-        public bool LoggedIn
-        {
-            get {
-                return auth != null && !string.IsNullOrEmpty(auth.customerSessionId);
-            }
-        }
-
+        public bool LoggedIn => auth != null && auth.customerSessionId.IsNullOrEmpty() == false;
+        
         public void Logout()
         {
             if (LoggedIn)
             {
                 var request = createRequest("https://api.flysas.com/customer/signout", HttpMethod.Post,auth);                
                 string cont = "{ \"customerSessionId\" : \"" + auth.customerSessionId + "\"}";
+                string cont2 = JsonConvert.SerializeObject(new { customerSessionId = auth.customerSessionId });
                 request.Content = new StringContent(cont, System.Text.Encoding.UTF8, "application/json");
                 var res = downLoad(request);
                 auth = null;

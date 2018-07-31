@@ -201,6 +201,7 @@ namespace FlysasLib
         public string offerId { get; set; }       
         public bool isOutboundIntercontinental { get; set; }
         public string pricingType { get; set; }
+        public List<Error> errors { get; set; }
     }
 
     public class BestPrice 
@@ -230,11 +231,11 @@ namespace FlysasLib
         public string refresh_token;
         public string customerSessionId;
         public string sessionId;
+        public string error;
     }
 
     public class RootBaseClass
-    {
-        public List<Error> errors { get; set; }
+    {        
         public string json;
         public bool httpSuccess;
     }
@@ -358,6 +359,7 @@ namespace FlysasLib
     public class TransactionRoot : RootBaseClass
     {
         public EuroBonus eurobonus { get; set; }
+        public List<Error> errors { get; set; }
         public List<Error> errorInfo
         {
             get
