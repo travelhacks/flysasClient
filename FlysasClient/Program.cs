@@ -18,7 +18,7 @@ namespace FlysasClient
             {
                 data.LoadData();
             }
-            catch(Exception ex)
+            catch
             {
                 Console.WriteLine("Error loading Openfligts data");
             }
@@ -26,9 +26,9 @@ namespace FlysasClient
                  .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json",true);
             var config = builder.Build();
-            Options o = new Options(config.AsEnumerable());                                  
-            var c = new ConsoleClient(o,data);
-            await c.InputLoop();
+            Options options = new Options(config.AsEnumerable());                                  
+            var client = new ConsoleClient(options,data);
+            await client.InputLoop();
             return 0;
         }       
     }
