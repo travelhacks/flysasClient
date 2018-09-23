@@ -19,10 +19,14 @@
   
   
   <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="Export\dummy.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Export\dummy.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
