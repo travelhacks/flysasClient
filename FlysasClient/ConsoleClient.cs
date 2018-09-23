@@ -66,11 +66,11 @@ namespace FlysasClient
                                 {
                                     var printer = new TablePrinter(txtOut);
                                     txtOut.WriteLine("*********Outbound*******");
-                                    printer.PrintFlights(result.outboundFlights, options);
+                                    printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
                                     if (req.InDate.HasValue)
                                     {
                                         txtOut.WriteLine("*********Inbound*******");
-                                        printer.PrintFlights(result.inboundFlights, options);
+                                        printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
                                     }
                                 }
                             }

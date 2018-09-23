@@ -15,7 +15,7 @@ namespace FlysasClient
             this.textWriter = textWriter;
         }
 
-        public void PrintFlights(IEnumerable<FlightBaseClass> flights, FlysasClient.Options options)
+        public void PrintFlights(IEnumerable<FlightBaseClass> flights, FlysasClient.Options options, string From, string To)
         {
             string separator = "/";
             string timeFormat = "HH:mm";
@@ -24,8 +24,8 @@ namespace FlysasClient
             var codes = products.OrderBy(s => s, sorter).Select(p => p.productCode).Distinct().ToArray();
             var first = flights.First();
             var headers = new List<string>();
-            headers.Add(first.origin.code);
-            headers.Add(first.destination.code);
+            headers.Add(From.ToUpper());
+            headers.Add(To.ToUpper());
             if (options.OutputEquipment)
                 headers.Add("Equip");
             if (options.OutputFlightNumber)
