@@ -35,6 +35,8 @@ namespace FlysasClient
             {
                 headers.Add(c);
                 table.Alignment[headers.Count - 1] = TextAlignment.Right;
+                if(options.Mode.Equals("POINTS", StringComparison.OrdinalIgnoreCase))
+                    headers.Add("Tax");
                 if (options.OutputBookingClass)
                     headers.Add("");
             }
@@ -63,9 +65,9 @@ namespace FlysasClient
                         sClasses = classes.SimplifyAndJoin(separator);
                         sPrice = p.price.formattedTotalPrice;
                     }
-                    if (options.Mode != "REVENUE")
+                    if (!options.Mode.Equals("revenue", StringComparison.OrdinalIgnoreCase))
                         values.Add(pax);
-                    else
+                    if (!options.Mode.Equals("star", StringComparison.OrdinalIgnoreCase))
                         values.Add(sPrice);
                     if (options.OutputBookingClass)
                         values.Add(sClasses);
