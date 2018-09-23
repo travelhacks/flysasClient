@@ -41,7 +41,7 @@ namespace FlysasClient
                     headers.Add("");
             }
             table.Rows.Add(headers);
-            foreach (var r in flights)
+            foreach (var r in flights.OrderBy(f => f.startTimeInGmt).ThenBy(f => f.endTimeInGmt))
             {
                 var values = new List<string>();
                 var dateDiff = (r.endTimeInLocal.Date - r.startTimeInLocal.Date).Days;
