@@ -1,0 +1,2917 @@
+{
+  "pricingType": "O",
+  "outboundFlights": {
+    "F3": {
+      "id": 3,
+      "origin": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "destination": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "originCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "destinationCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "connectionDuration": "34:00:00",
+      "startTimeInLocal": "2018-12-16T15:20:00.000+01:00",
+      "startTimeInGmt": "2018-12-16T14:20:00.000Z",
+      "endTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+      "endTimeInGmt": "2018-12-18T00:20:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "LHR",
+          "name": "London Heathrow",
+          "haltDuration": "03:35:00"
+        },
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "04:55:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 11,
+          "arrivalTerminal": "2",
+          "arrivalDateTimeInLocal": "2018-12-16T17:00:00.000Z",
+          "arrivalDateTimeInGmt": "2018-12-16T17:00:00.000Z",
+          "departureTerminal": "5",
+          "departureDateTimeInLocal": "2018-12-16T15:20:00.000+01:00",
+          "departureDateTimeInGmt": "2018-12-16T14:20:00.000Z",
+          "departureAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "arrivalAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "departureCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "arrivalCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "airCraft": {
+            "code": "32A",
+            "name": "Airbus Industrie A320 Sharklets"
+          },
+          "flightNumber": "527",
+          "duration": "02:40:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SK",
+            "name": "SAS IRELAND"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 12,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2018-12-17T17:30:00.000+08:00",
+          "arrivalDateTimeInGmt": "2018-12-17T09:30:00.000Z",
+          "departureTerminal": "2",
+          "departureDateTimeInLocal": "2018-12-16T20:35:00.000Z",
+          "departureDateTimeInGmt": "2018-12-16T20:35:00.000Z",
+          "departureAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "77W",
+            "name": "Boeing 777-300ER"
+          },
+          "flightNumber": "8039",
+          "duration": "12:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 13,
+          "arrivalTerminal": "I",
+          "arrivalDateTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+          "arrivalDateTimeInGmt": "2018-12-18T00:20:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2018-12-17T22:25:00.000+08:00",
+          "departureDateTimeInGmt": "2018-12-17T14:25:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8005",
+          "duration": "10:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "GO": {
+          "SAS GO FLEX": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 3 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 3 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 3 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 2 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 3 } } }
+            },
+            "products": {
+              "O_1": {
+                "productName": "SAS GO FLEX",
+                "productCode": "ECOB",
+                "lowestFare": true,
+                "recommendations": [ 0, 2, 3 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 8520.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 10071.0,
+                  "formattedBasePrice": "8520:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "10071:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 8520.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 10071.0,
+                        "formattedBasePrice": "8520:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "10071:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "EEE"
+              }
+            }
+          }
+        },
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 5 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 4 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 5 } } }
+            },
+            "products": {
+              "O_5": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 1, 4, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 17365.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 18916.0,
+                  "formattedBasePrice": "17365:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "18916:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 17365.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 18916.0,
+                        "formattedBasePrice": "17365:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "18916:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "DDD"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "GO": {
+          "price": "10071:-",
+          "product": "SAS GO FLEX",
+          "productId": "O_1",
+          "avlSeats": 4,
+          "points": 0.0
+        },
+        "BUSINESS": {
+          "price": "18916:-",
+          "product": "SAS BUSINESS",
+          "productId": "O_5",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    },
+    "F0": {
+      "id": 0,
+      "origin": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "destination": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "originCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "destinationCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "connectionDuration": "33:15:00",
+      "startTimeInLocal": "2018-12-16T16:05:00.000+01:00",
+      "startTimeInGmt": "2018-12-16T15:05:00.000Z",
+      "endTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+      "endTimeInGmt": "2018-12-18T00:20:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "LHR",
+          "name": "London Heathrow",
+          "haltDuration": "04:20:00"
+        },
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "03:25:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 11,
+          "arrivalTerminal": "2",
+          "arrivalDateTimeInLocal": "2018-12-16T17:45:00.000Z",
+          "arrivalDateTimeInGmt": "2018-12-16T17:45:00.000Z",
+          "departureTerminal": "5",
+          "departureDateTimeInLocal": "2018-12-16T16:05:00.000+01:00",
+          "departureDateTimeInGmt": "2018-12-16T15:05:00.000Z",
+          "departureAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "arrivalAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "departureCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "arrivalCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "airCraft": {
+            "code": "32A",
+            "name": "Airbus Industrie A320 Sharklets"
+          },
+          "flightNumber": "1523",
+          "duration": "02:40:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 12,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2018-12-17T19:00:00.000+08:00",
+          "arrivalDateTimeInGmt": "2018-12-17T11:00:00.000Z",
+          "departureTerminal": "2",
+          "departureDateTimeInLocal": "2018-12-16T22:05:00.000Z",
+          "departureDateTimeInGmt": "2018-12-16T22:05:00.000Z",
+          "departureAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8041",
+          "duration": "12:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 13,
+          "arrivalTerminal": "I",
+          "arrivalDateTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+          "arrivalDateTimeInGmt": "2018-12-18T00:20:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2018-12-17T22:25:00.000+08:00",
+          "departureDateTimeInGmt": "2018-12-17T14:25:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8005",
+          "duration": "10:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "GO": {
+          "SAS GO FLEX": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 3 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 3 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 3 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 2 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 3 } } }
+            },
+            "products": {
+              "O_2": {
+                "productName": "SAS GO FLEX",
+                "productCode": "ECOB",
+                "lowestFare": true,
+                "recommendations": [ 0, 2, 3 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 8520.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 10071.0,
+                  "formattedBasePrice": "8520:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "10071:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 8520.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 10071.0,
+                        "formattedBasePrice": "8520:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "10071:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "EEE"
+              }
+            }
+          }
+        },
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 5 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 4 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 5 } } }
+            },
+            "products": {
+              "O_6": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 1, 4, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 17365.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 18916.0,
+                  "formattedBasePrice": "17365:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "18916:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 17365.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 18916.0,
+                        "formattedBasePrice": "17365:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "18916:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "DDD"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "GO": {
+          "price": "10071:-",
+          "product": "SAS GO FLEX",
+          "productId": "O_2",
+          "avlSeats": 4,
+          "points": 0.0
+        },
+        "BUSINESS": {
+          "price": "18916:-",
+          "product": "SAS BUSINESS",
+          "productId": "O_6",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    },
+    "F1": {
+      "id": 1,
+      "origin": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "destination": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "originCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "destinationCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "connectionDuration": "33:15:00",
+      "startTimeInLocal": "2018-12-16T16:05:00.000+01:00",
+      "startTimeInGmt": "2018-12-16T15:05:00.000Z",
+      "endTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+      "endTimeInGmt": "2018-12-18T00:20:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "LHR",
+          "name": "London Heathrow",
+          "haltDuration": "02:50:00"
+        },
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "04:55:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 11,
+          "arrivalTerminal": "2",
+          "arrivalDateTimeInLocal": "2018-12-16T17:45:00.000Z",
+          "arrivalDateTimeInGmt": "2018-12-16T17:45:00.000Z",
+          "departureTerminal": "5",
+          "departureDateTimeInLocal": "2018-12-16T16:05:00.000+01:00",
+          "departureDateTimeInGmt": "2018-12-16T15:05:00.000Z",
+          "departureAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "arrivalAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "departureCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "arrivalCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "airCraft": {
+            "code": "32A",
+            "name": "Airbus Industrie A320 Sharklets"
+          },
+          "flightNumber": "1523",
+          "duration": "02:40:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 12,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2018-12-17T17:30:00.000+08:00",
+          "arrivalDateTimeInGmt": "2018-12-17T09:30:00.000Z",
+          "departureTerminal": "2",
+          "departureDateTimeInLocal": "2018-12-16T20:35:00.000Z",
+          "departureDateTimeInGmt": "2018-12-16T20:35:00.000Z",
+          "departureAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "77W",
+            "name": "Boeing 777-300ER"
+          },
+          "flightNumber": "8039",
+          "duration": "12:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 13,
+          "arrivalTerminal": "I",
+          "arrivalDateTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+          "arrivalDateTimeInGmt": "2018-12-18T00:20:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2018-12-17T22:25:00.000+08:00",
+          "departureDateTimeInGmt": "2018-12-17T14:25:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8005",
+          "duration": "10:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "GO": {
+          "SAS GO FLEX": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 3 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 3 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 3 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 2 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 3 } } }
+            },
+            "products": {
+              "O_3": {
+                "productName": "SAS GO FLEX",
+                "productCode": "ECOB",
+                "lowestFare": true,
+                "recommendations": [ 0, 2, 3 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 8520.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 10071.0,
+                  "formattedBasePrice": "8520:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "10071:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 8520.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 10071.0,
+                        "formattedBasePrice": "8520:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "10071:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "EEE"
+              }
+            }
+          }
+        },
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 5 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 4 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 5 } } }
+            },
+            "products": {
+              "O_7": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 1, 4, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 17365.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 18916.0,
+                  "formattedBasePrice": "17365:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "18916:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 17365.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 18916.0,
+                        "formattedBasePrice": "17365:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "18916:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "DDD"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "GO": {
+          "price": "10071:-",
+          "product": "SAS GO FLEX",
+          "productId": "O_3",
+          "avlSeats": 4,
+          "points": 0.0
+        },
+        "BUSINESS": {
+          "price": "18916:-",
+          "product": "SAS BUSINESS",
+          "productId": "O_7",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    },
+    "F2": {
+      "id": 2,
+      "origin": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "destination": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "originCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "destinationCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "connectionDuration": "31:05:00",
+      "startTimeInLocal": "2018-12-16T18:15:00.000+01:00",
+      "startTimeInGmt": "2018-12-16T17:15:00.000Z",
+      "endTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+      "endTimeInGmt": "2018-12-18T00:20:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "LHR",
+          "name": "London Heathrow",
+          "haltDuration": "02:10:00"
+        },
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "03:25:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 11,
+          "arrivalTerminal": "2",
+          "arrivalDateTimeInLocal": "2018-12-16T19:55:00.000Z",
+          "arrivalDateTimeInGmt": "2018-12-16T19:55:00.000Z",
+          "departureTerminal": "5",
+          "departureDateTimeInLocal": "2018-12-16T18:15:00.000+01:00",
+          "departureDateTimeInGmt": "2018-12-16T17:15:00.000Z",
+          "departureAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "arrivalAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "departureCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "arrivalCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "airCraft": {
+            "code": "32A",
+            "name": "Airbus Industrie A320 Sharklets"
+          },
+          "flightNumber": "533",
+          "duration": "02:40:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 12,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2018-12-17T19:00:00.000+08:00",
+          "arrivalDateTimeInGmt": "2018-12-17T11:00:00.000Z",
+          "departureTerminal": "2",
+          "departureDateTimeInLocal": "2018-12-16T22:05:00.000Z",
+          "departureDateTimeInGmt": "2018-12-16T22:05:00.000Z",
+          "departureAirport": {
+            "code": "LHR",
+            "name": "London Heathrow"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "LON",
+            "name": "London"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8041",
+          "duration": "12:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 13,
+          "arrivalTerminal": "I",
+          "arrivalDateTimeInLocal": "2018-12-18T13:20:00.000+13:00",
+          "arrivalDateTimeInGmt": "2018-12-18T00:20:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2018-12-17T22:25:00.000+08:00",
+          "departureDateTimeInGmt": "2018-12-17T14:25:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8005",
+          "duration": "10:55:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "GO": {
+          "SAS GO FLEX": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 3 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 3 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 3 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 2 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 3 } } }
+            },
+            "products": {
+              "O_4": {
+                "productName": "SAS GO FLEX",
+                "productCode": "ECOB",
+                "lowestFare": true,
+                "recommendations": [ 0, 2, 3 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 8520.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 10071.0,
+                  "formattedBasePrice": "8520:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "10071:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 8520.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 10071.0,
+                        "formattedBasePrice": "8520:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "10071:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "EEE"
+              }
+            }
+          }
+        },
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "I_1": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "I_2": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "I_3": 1 } },
+                "BUSINESS": { "SAS BUSINESS": { "I_8": 5 } }
+              },
+              "F3": { "BUSINESS": { "SAS BUSINESS": { "I_4": 4 } } },
+              "F4": { "BUSINESS": { "SAS BUSINESS": { "I_5": 5 } } }
+            },
+            "products": {
+              "O_8": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 1, 4, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 17365.0,
+                  "totalTax": 1551.0,
+                  "totalPrice": 18916.0,
+                  "formattedBasePrice": "17365:-",
+                  "formattedTotalTax": "1551:-",
+                  "formattedTotalPrice": "18916:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 17365.0,
+                        "totalTax": 1551.0,
+                        "totalPrice": 18916.0,
+                        "formattedBasePrice": "17365:-",
+                        "formattedTotalTax": "1551:-",
+                        "formattedTotalPrice": "18916:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "11",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "12",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "13",
+                    "fareClass": "D1SSEBIZ",
+                    "bookingClass": "D",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "DDD"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "GO": {
+          "price": "10071:-",
+          "product": "SAS GO FLEX",
+          "productId": "O_4",
+          "avlSeats": 4,
+          "points": 0.0
+        },
+        "BUSINESS": {
+          "price": "18916:-",
+          "product": "SAS BUSINESS",
+          "productId": "O_8",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    }
+  },
+  "inboundFlights": {
+    "F3": {
+      "id": 3,
+      "origin": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destination": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "originCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destinationCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "connectionDuration": "29:00:00",
+      "startTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+      "startTimeInGmt": "2019-01-07T02:15:00.000Z",
+      "endTimeInLocal": "2019-01-08T08:15:00.000+01:00",
+      "endTimeInGmt": "2019-01-08T07:15:00.000Z",
+      "stops": 1,
+      "via": [
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "03:25:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 21,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2019-01-07T20:40:00.000+08:00",
+          "arrivalDateTimeInGmt": "2019-01-07T12:40:00.000Z",
+          "departureTerminal": "I",
+          "departureDateTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+          "departureDateTimeInGmt": "2019-01-07T02:15:00.000Z",
+          "departureAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8006",
+          "duration": "09:25:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 22,
+          "arrivalTerminal": "5",
+          "arrivalDateTimeInLocal": "2019-01-08T08:15:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T07:15:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-08T00:05:00.000+08:00",
+          "departureDateTimeInGmt": "2019-01-07T16:05:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "airCraft": {
+            "code": "359",
+            "name": "Airbus Industrie A350-900"
+          },
+          "flightNumber": "8048",
+          "duration": "15:10:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 1,
+          "via": [
+            {
+              "code": "MOW",
+              "name": "Moscow",
+              "haltDuration": "01:15:00"
+            }
+          ]
+        }
+      ],
+      "cabins": {
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 2 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 4 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 2 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 4 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 2 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 4 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 2 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 4 } }
+              }
+            },
+            "products": {
+              "I_4": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 2, 4 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 25415.0,
+                  "totalTax": 255.0,
+                  "totalPrice": 25670.0,
+                  "formattedBasePrice": "25415:-",
+                  "formattedTotalTax": "255:-",
+                  "formattedTotalPrice": "25670:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 25415.0,
+                        "totalTax": 255.0,
+                        "totalPrice": 25670.0,
+                        "formattedBasePrice": "25415:-",
+                        "formattedTotalTax": "255:-",
+                        "formattedTotalPrice": "25670:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "CSSE3BIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "CSSE3BIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "CC"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "BUSINESS": {
+          "price": "25670:-",
+          "product": "SAS BUSINESS",
+          "productId": "I_4",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    },
+    "F4": {
+      "id": 4,
+      "origin": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destination": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "originCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destinationCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "connectionDuration": "29:20:00",
+      "startTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+      "startTimeInGmt": "2019-01-07T02:15:00.000Z",
+      "endTimeInLocal": "2019-01-08T08:35:00.000+01:00",
+      "endTimeInGmt": "2019-01-08T07:35:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "03:15:00"
+        },
+        {
+          "code": "CPH",
+          "name": "Köpenhamn Kastrup",
+          "haltDuration": "01:20:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 21,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2019-01-07T20:40:00.000+08:00",
+          "arrivalDateTimeInGmt": "2019-01-07T12:40:00.000Z",
+          "departureTerminal": "I",
+          "departureDateTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+          "departureDateTimeInGmt": "2019-01-07T02:15:00.000Z",
+          "departureAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8006",
+          "duration": "09:25:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 22,
+          "arrivalTerminal": "3",
+          "arrivalDateTimeInLocal": "2019-01-08T06:00:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T05:00:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-07T23:55:00.000+08:00",
+          "departureDateTimeInGmt": "2019-01-07T15:55:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "airCraft": {
+            "code": "77W",
+            "name": "Boeing 777-300ER"
+          },
+          "flightNumber": "8000",
+          "duration": "13:05:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 23,
+          "arrivalTerminal": "5",
+          "arrivalDateTimeInLocal": "2019-01-08T08:35:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T07:35:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-08T07:20:00.000+01:00",
+          "departureDateTimeInGmt": "2019-01-08T06:20:00.000Z",
+          "departureAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "arrivalAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "departureCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "arrivalCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "airCraft": {
+            "code": "321",
+            "name": "Airbus Industrie A321"
+          },
+          "flightNumber": "402",
+          "duration": "01:15:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 5 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 5 } }
+              }
+            },
+            "products": {
+              "I_5": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 3, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 28745.0,
+                  "totalTax": 578.0,
+                  "totalPrice": 29323.0,
+                  "formattedBasePrice": "28745:-",
+                  "formattedTotalTax": "578:-",
+                  "formattedTotalPrice": "29323:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 28745.0,
+                        "totalTax": 578.0,
+                        "totalPrice": 29323.0,
+                        "formattedBasePrice": "28745:-",
+                        "formattedTotalTax": "578:-",
+                        "formattedTotalPrice": "29323:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "23",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "CCC"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "BUSINESS": {
+          "price": "29323:-",
+          "product": "SAS BUSINESS",
+          "productId": "I_5",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    },
+    "F0": {
+      "id": 0,
+      "origin": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destination": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "originCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destinationCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "connectionDuration": "29:55:00",
+      "startTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+      "startTimeInGmt": "2019-01-07T02:15:00.000Z",
+      "endTimeInLocal": "2019-01-08T09:10:00.000+01:00",
+      "endTimeInGmt": "2019-01-08T08:10:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "03:15:00"
+        },
+        {
+          "code": "CPH",
+          "name": "Köpenhamn Kastrup",
+          "haltDuration": "01:55:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 21,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2019-01-07T20:40:00.000+08:00",
+          "arrivalDateTimeInGmt": "2019-01-07T12:40:00.000Z",
+          "departureTerminal": "I",
+          "departureDateTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+          "departureDateTimeInGmt": "2019-01-07T02:15:00.000Z",
+          "departureAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8006",
+          "duration": "09:25:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 22,
+          "arrivalTerminal": "3",
+          "arrivalDateTimeInLocal": "2019-01-08T06:00:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T05:00:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-07T23:55:00.000+08:00",
+          "departureDateTimeInGmt": "2019-01-07T15:55:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "airCraft": {
+            "code": "77W",
+            "name": "Boeing 777-300ER"
+          },
+          "flightNumber": "8000",
+          "duration": "13:05:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 23,
+          "arrivalTerminal": "5",
+          "arrivalDateTimeInLocal": "2019-01-08T09:10:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T08:10:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-08T07:55:00.000+01:00",
+          "departureDateTimeInGmt": "2019-01-08T06:55:00.000Z",
+          "departureAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "arrivalAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "departureCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "arrivalCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "airCraft": {
+            "code": "321",
+            "name": "Airbus Industrie A321"
+          },
+          "flightNumber": "1416",
+          "duration": "01:15:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "GO": {
+          "SAS GO FLEX": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 1 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 1 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 1 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 1 } }
+              }
+            },
+            "products": {
+              "I_1": {
+                "productName": "SAS GO FLEX",
+                "productCode": "ECOB",
+                "lowestFare": true,
+                "recommendations": [ 0, 1 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 8520.0,
+                  "totalTax": 578.0,
+                  "totalPrice": 9098.0,
+                  "formattedBasePrice": "8520:-",
+                  "formattedTotalTax": "578:-",
+                  "formattedTotalPrice": "9098:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 8520.0,
+                        "totalTax": 578.0,
+                        "totalPrice": 9098.0,
+                        "formattedBasePrice": "8520:-",
+                        "formattedTotalTax": "578:-",
+                        "formattedTotalPrice": "9098:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "23",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "EEE"
+              }
+            }
+          }
+        },
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 5 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 5 } }
+              }
+            },
+            "products": {
+              "I_6": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 3, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 28745.0,
+                  "totalTax": 578.0,
+                  "totalPrice": 29323.0,
+                  "formattedBasePrice": "28745:-",
+                  "formattedTotalTax": "578:-",
+                  "formattedTotalPrice": "29323:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 28745.0,
+                        "totalTax": 578.0,
+                        "totalPrice": 29323.0,
+                        "formattedBasePrice": "28745:-",
+                        "formattedTotalTax": "578:-",
+                        "formattedTotalPrice": "29323:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "23",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "CCC"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "GO": {
+          "price": "9098:-",
+          "product": "SAS GO FLEX",
+          "productId": "I_1",
+          "avlSeats": 4,
+          "points": 0.0
+        },
+        "BUSINESS": {
+          "price": "29323:-",
+          "product": "SAS BUSINESS",
+          "productId": "I_6",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    },
+    "F1": {
+      "id": 1,
+      "origin": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destination": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "originCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destinationCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "connectionDuration": "31:00:00",
+      "startTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+      "startTimeInGmt": "2019-01-07T02:15:00.000Z",
+      "endTimeInLocal": "2019-01-08T10:15:00.000+01:00",
+      "endTimeInGmt": "2019-01-08T09:15:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "03:15:00"
+        },
+        {
+          "code": "CPH",
+          "name": "Köpenhamn Kastrup",
+          "haltDuration": "03:05:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 21,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2019-01-07T20:40:00.000+08:00",
+          "arrivalDateTimeInGmt": "2019-01-07T12:40:00.000Z",
+          "departureTerminal": "I",
+          "departureDateTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+          "departureDateTimeInGmt": "2019-01-07T02:15:00.000Z",
+          "departureAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8006",
+          "duration": "09:25:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 22,
+          "arrivalTerminal": "3",
+          "arrivalDateTimeInLocal": "2019-01-08T06:00:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T05:00:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-07T23:55:00.000+08:00",
+          "departureDateTimeInGmt": "2019-01-07T15:55:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "airCraft": {
+            "code": "77W",
+            "name": "Boeing 777-300ER"
+          },
+          "flightNumber": "8000",
+          "duration": "13:05:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 23,
+          "arrivalTerminal": "5",
+          "arrivalDateTimeInLocal": "2019-01-08T10:15:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T09:15:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-08T09:05:00.000+01:00",
+          "departureDateTimeInGmt": "2019-01-08T08:05:00.000Z",
+          "departureAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "arrivalAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "departureCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "arrivalCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "airCraft": {
+            "code": "73W",
+            "name": "Boeing 737-700 (Winglets)"
+          },
+          "flightNumber": "1418",
+          "duration": "01:10:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "GO": {
+          "SAS GO FLEX": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 1 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 1 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 1 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 1 } }
+              }
+            },
+            "products": {
+              "I_2": {
+                "productName": "SAS GO FLEX",
+                "productCode": "ECOB",
+                "lowestFare": true,
+                "recommendations": [ 0, 1 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 8520.0,
+                  "totalTax": 578.0,
+                  "totalPrice": 9098.0,
+                  "formattedBasePrice": "8520:-",
+                  "formattedTotalTax": "578:-",
+                  "formattedTotalPrice": "9098:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 8520.0,
+                        "totalTax": 578.0,
+                        "totalPrice": 9098.0,
+                        "formattedBasePrice": "8520:-",
+                        "formattedTotalTax": "578:-",
+                        "formattedTotalPrice": "9098:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "23",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "EEE"
+              }
+            }
+          }
+        },
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 5 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 5 } }
+              }
+            },
+            "products": {
+              "I_7": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 3, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 28745.0,
+                  "totalTax": 578.0,
+                  "totalPrice": 29323.0,
+                  "formattedBasePrice": "28745:-",
+                  "formattedTotalTax": "578:-",
+                  "formattedTotalPrice": "29323:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 28745.0,
+                        "totalTax": 578.0,
+                        "totalPrice": 29323.0,
+                        "formattedBasePrice": "28745:-",
+                        "formattedTotalTax": "578:-",
+                        "formattedTotalPrice": "29323:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "23",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "CCC"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "GO": {
+          "price": "9098:-",
+          "product": "SAS GO FLEX",
+          "productId": "I_2",
+          "avlSeats": 4,
+          "points": 0.0
+        },
+        "BUSINESS": {
+          "price": "29323:-",
+          "product": "SAS BUSINESS",
+          "productId": "I_7",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    },
+    "F2": {
+      "id": 2,
+      "origin": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destination": {
+        "code": "ARN",
+        "name": "Stockholm Arlanda"
+      },
+      "originCity": {
+        "code": "AKL",
+        "name": "Auckland"
+      },
+      "destinationCity": {
+        "code": "STO",
+        "name": "Stockholm"
+      },
+      "connectionDuration": "33:40:00",
+      "startTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+      "startTimeInGmt": "2019-01-07T02:15:00.000Z",
+      "endTimeInLocal": "2019-01-08T12:55:00.000+01:00",
+      "endTimeInGmt": "2019-01-08T11:55:00.000Z",
+      "stops": 2,
+      "via": [
+        {
+          "code": "SIN",
+          "name": "Singapore",
+          "haltDuration": "03:15:00"
+        },
+        {
+          "code": "CPH",
+          "name": "Köpenhamn Kastrup",
+          "haltDuration": "05:45:00"
+        }
+      ],
+      "segments": [
+        {
+          "id": 21,
+          "arrivalTerminal": "0",
+          "arrivalDateTimeInLocal": "2019-01-07T20:40:00.000+08:00",
+          "arrivalDateTimeInGmt": "2019-01-07T12:40:00.000Z",
+          "departureTerminal": "I",
+          "departureDateTimeInLocal": "2019-01-07T15:15:00.000+13:00",
+          "departureDateTimeInGmt": "2019-01-07T02:15:00.000Z",
+          "departureAirport": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "departureCity": {
+            "code": "AKL",
+            "name": "Auckland"
+          },
+          "arrivalCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "airCraft": {
+            "code": "388",
+            "name": "Airbus Industrie A380-800"
+          },
+          "flightNumber": "8006",
+          "duration": "09:25:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 22,
+          "arrivalTerminal": "3",
+          "arrivalDateTimeInLocal": "2019-01-08T06:00:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T05:00:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-07T23:55:00.000+08:00",
+          "departureDateTimeInGmt": "2019-01-07T15:55:00.000Z",
+          "departureAirport": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "departureCity": {
+            "code": "SIN",
+            "name": "Singapore"
+          },
+          "arrivalCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "airCraft": {
+            "code": "77W",
+            "name": "Boeing 777-300ER"
+          },
+          "flightNumber": "8000",
+          "duration": "13:05:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "operatingCarrier": {
+            "code": "SQ",
+            "name": "Singapore Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        },
+        {
+          "id": 23,
+          "arrivalTerminal": "5",
+          "arrivalDateTimeInLocal": "2019-01-08T12:55:00.000+01:00",
+          "arrivalDateTimeInGmt": "2019-01-08T11:55:00.000Z",
+          "departureTerminal": "3",
+          "departureDateTimeInLocal": "2019-01-08T11:45:00.000+01:00",
+          "departureDateTimeInGmt": "2019-01-08T10:45:00.000Z",
+          "departureAirport": {
+            "code": "CPH",
+            "name": "Köpenhamn Kastrup"
+          },
+          "arrivalAirport": {
+            "code": "ARN",
+            "name": "Stockholm Arlanda"
+          },
+          "departureCity": {
+            "code": "CPH",
+            "name": "Köpenhamn"
+          },
+          "arrivalCity": {
+            "code": "STO",
+            "name": "Stockholm"
+          },
+          "airCraft": {
+            "code": "321",
+            "name": "Airbus Industrie A321"
+          },
+          "flightNumber": "1420",
+          "duration": "01:10:00",
+          "marketingCarrier": {
+            "code": "SK",
+            "name": "Scandinavian Airlines"
+          },
+          "onTimePerformance": 0.0,
+          "miles": 0,
+          "numberOfStops": 0
+        }
+      ],
+      "cabins": {
+        "GO": {
+          "SAS GO FLEX": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 1 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 1 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 1 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 0 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 1 } }
+              }
+            },
+            "products": {
+              "I_3": {
+                "productName": "SAS GO FLEX",
+                "productCode": "ECOB",
+                "lowestFare": true,
+                "recommendations": [ 0, 1 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 8520.0,
+                  "totalTax": 578.0,
+                  "totalPrice": 9098.0,
+                  "formattedBasePrice": "8520:-",
+                  "formattedTotalTax": "578:-",
+                  "formattedTotalPrice": "9098:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 8520.0,
+                        "totalTax": 578.0,
+                        "totalPrice": 9098.0,
+                        "formattedBasePrice": "8520:-",
+                        "formattedTotalTax": "578:-",
+                        "formattedTotalPrice": "9098:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "23",
+                    "fareClass": "ESSEECO",
+                    "bookingClass": "E",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "EEE"
+              }
+            }
+          }
+        },
+        "BUSINESS": {
+          "SAS BUSINESS": {
+            "associations": {
+              "F0": {
+                "GO": { "SAS GO FLEX": { "O_2": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_6": 5 } }
+              },
+              "F1": {
+                "GO": { "SAS GO FLEX": { "O_3": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_7": 5 } }
+              },
+              "F2": {
+                "GO": { "SAS GO FLEX": { "O_4": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_8": 5 } }
+              },
+              "F3": {
+                "GO": { "SAS GO FLEX": { "O_1": 3 } },
+                "BUSINESS": { "SAS BUSINESS": { "O_5": 5 } }
+              }
+            },
+            "products": {
+              "I_8": {
+                "productName": "SAS BUSINESS",
+                "productCode": "BUSA",
+                "lowestFare": true,
+                "recommendations": [ 3, 5 ],
+                "price": {
+                  "currency": "SEK",
+                  "basePrice": 28745.0,
+                  "totalTax": 578.0,
+                  "totalPrice": 29323.0,
+                  "formattedBasePrice": "28745:-",
+                  "formattedTotalTax": "578:-",
+                  "formattedTotalPrice": "29323:-",
+                  "points": 0,
+                  "credits": 0,
+                  "pricePerPassengerType": [
+                    {
+                      "id": 1,
+                      "type": "ADT",
+                      "numberCount": 1,
+                      "price": {
+                        "currency": "SEK",
+                        "basePrice": 28745.0,
+                        "totalTax": 578.0,
+                        "totalPrice": 29323.0,
+                        "formattedBasePrice": "28745:-",
+                        "formattedTotalTax": "578:-",
+                        "formattedTotalPrice": "29323:-",
+                        "points": 0,
+                        "credits": 0
+                      }
+                    }
+                  ]
+                },
+                "fares": [
+                  {
+                    "segmentId": "21",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "22",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  },
+                  {
+                    "segmentId": "23",
+                    "fareClass": "CSSEBIZ",
+                    "bookingClass": "C",
+                    "avlSeats": 4
+                  }
+                ],
+                "fareKey": "CCC"
+              }
+            }
+          }
+        }
+      },
+      "lowestFares": {
+        "GO": {
+          "price": "9098:-",
+          "product": "SAS GO FLEX",
+          "productId": "I_3",
+          "avlSeats": 4,
+          "points": 0.0
+        },
+        "BUSINESS": {
+          "price": "29323:-",
+          "product": "SAS BUSINESS",
+          "productId": "I_8",
+          "avlSeats": 4,
+          "points": 0.0
+        }
+      }
+    }
+  },
+  "productInfo": {
+    "GO": {
+      "1": "SAS GO",
+      "2": "SAS GO FLEX"
+    },
+    "BUSINESS": { "1": "SAS BUSINESS" }
+  },
+  "tabsInfo": {
+    "outboundInfo": [
+      {
+        "date": "2018-12-15",
+        "price": "10071:-",
+        "points": 0.0
+      },
+      {
+        "date": "2018-12-16",
+        "price": "10071:-",
+        "points": 0.0
+      },
+      {
+        "date": "2018-12-17",
+        "price": "10071:-",
+        "points": 0.0
+      }
+    ],
+    "inboundInfo": [
+      {
+        "date": "2019-01-06",
+        "price": "8588:-",
+        "points": 0.0
+      },
+      {
+        "date": "2019-01-07",
+        "price": "9098:-",
+        "points": 0.0
+      },
+      {
+        "date": "2019-01-08",
+        "price": "6138:-",
+        "points": 0.0
+      }
+    ]
+  },
+  "currency": {
+    "code": "SEK",
+    "name": "Swedish Krone",
+    "symbol": ":-",
+    "decimalSeperator": ".",
+    "position": "Suffix",
+    "currencyDelimiter": "none"
+  },
+  "links": [
+    {
+      "rel": "GetEBMSPoints",
+      "href": "/offers/flightproducts/getAccrualPoints"
+    },
+    {
+      "rel": "FareReview",
+      "href": "/offers/flightproducts/getFare"
+    },
+    {
+      "rel": "InitiateCheckout",
+      "href": "/checkout/initiate"
+    }
+  ],
+  "regionName": "Rev Scand-Intercont",
+  "offerId": "b8545ecb-49a0-40b0-82e9-472bf2a920e8_2018-07-22",
+  "outboundLowestFare": {
+    "price": "10071:-",
+    "product": "SAS GO FLEX",
+    "productId": "O_1",
+    "avlSeats": 4,
+    "points": 0.0,
+    "cabinName": "GO",
+    "flightId": "F3"
+  },
+  "inboundLowestFare": {
+    "price": "9098:-",
+    "product": "SAS GO FLEX",
+    "productId": "I_1",
+    "avlSeats": 4,
+    "points": 0.0,
+    "cabinName": "GO",
+    "flightId": "F0"
+  },
+  "isOutboundIntercontinental": true,
+  "isInboundIntercontinental": true
+}
