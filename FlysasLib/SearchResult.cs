@@ -152,14 +152,6 @@ namespace FlysasLib
         public string name { get; set; }
     }    
 
-    
-    public class TabsInfo
-    {
-        public string boundType { get; set; }
-        public int noOfTabsBefore { get; set; }
-        public int noOfTabsAfter { get; set; }
-    }
-
     public class Currency
     {
         public string code { get; set; }
@@ -184,7 +176,6 @@ namespace FlysasLib
     public class SearchResult : RootBaseClass
     {
         //Not used
-        //public List<TabsInfo> tabsInfo { get; set; }
         //productInfo
         //links
         //outboundLowestFare
@@ -201,6 +192,8 @@ namespace FlysasLib
         public string offerId { get; set; }       
         public bool isOutboundIntercontinental { get; set; }
         public string pricingType { get; set; }
+
+        public TabsInfo tabsInfo { get; set; }
         public List<Error> errors { get; set; }
     }
 
@@ -372,4 +365,18 @@ namespace FlysasLib
             }
         }
     }
+
+    public class TabsInfo
+    {
+        public List<TabInfo> outboundInfo { get; set; }
+        public List<TabInfo> inboundInfo { get; set; }
+    }
+
+    public class TabInfo
+    {
+        public DateTime date { get; set; }
+        public string price { get; set; }
+        public double points { get; set; }
+    }
+
 }
