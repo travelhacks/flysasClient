@@ -39,7 +39,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="2.2.1" />
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="2.0.8" />
   </ItemGroup>
 
