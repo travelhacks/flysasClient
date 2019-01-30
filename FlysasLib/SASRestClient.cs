@@ -3,13 +3,18 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace FlysasLib
 {
     public class SASRestClient
     {
         AuthResponse auth = null;
-        HttpClient client = new HttpClient();        
+        HttpClient client = new HttpClient(
+             new HttpClientHandler
+             {
+                 AutomaticDecompression = DecompressionMethods.GZip| DecompressionMethods.Deflate
+             });        
 
         public SASRestClient()
         {
