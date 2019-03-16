@@ -16,7 +16,7 @@ namespace FlysasLib
             var exports = new List<FlightExport>();
             var map = new Dictionary<string, string>() { { "KF", "SK" } };
             foreach (var r in transactions)
-                if (!r.Origin.IsNullOrEmpty())
+                if (!r.Origin.IsNullOrEmpty() && !string.IsNullOrEmpty(r.FlightNumber))
                 {                    
                     var o = OFData.Airports.Where(a => a.City.Equals(r.Origin, StringComparison.OrdinalIgnoreCase)).ToList();
                     var d = OFData.Airports.Where(a => a.City.Equals(r.Destination, StringComparison.OrdinalIgnoreCase)).ToList();

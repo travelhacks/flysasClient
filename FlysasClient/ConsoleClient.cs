@@ -305,7 +305,7 @@ namespace FlysasClient
                     values.Add(r.typeOfTransaction);
                     values.Add(r.basicPointsAfterTransaction);
                     values.Add(r.availablePointsAfterTransaction.ToString());
-                    values.Add(r.description);
+                    values.Add(r.description1 + " " + r.description2);
 
                     t.Rows.Add(values);
 

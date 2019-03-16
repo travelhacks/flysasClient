@@ -235,44 +235,46 @@ namespace FlysasLib
 
     public class Transaction
     {
-        static System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(.+) ?- ?(.+)([A-Z]{2}) ?(\d+)\w?\w? ?(.+)");
+        static System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"([A-Z]{2}) ?(\d*)\w?\w? ?(.+)");
         System.Text.RegularExpressions.Match m;
         System.Text.RegularExpressions.Match match
         {
             get
             {
-                if (m == null && description != null)
-                    m = regex.Match(description);
+                //Booked awardfligts has the same syntax as flown legs but with no flight number and negative points
+                if (m == null && description2 != null && typeOfTransaction.Equals("Flight Activity", StringComparison.OrdinalIgnoreCase) && availablePointsAfterTransaction > 0)
+                    m = regex.Match(description2);
                 return m;
             }
-        }          
+        }
         public string id { get; set; }
         public DateTime datePerformed { get; set; }
-        public string description { get; set; }
+        public string description1 { get; set; }
+        public string description2 { get; set; }
         public int availablePointsAfterTransaction { get; set; }
         public string basicPointsAfterTransaction { get; set; }
         public string typeOfTransaction { get; set; }
 
         public string Origin
         {
-            get{ return getMatch(1);}                 
+            get{ return description1.Split('-').First();}                 
         }
         public string Destination
         {
-            get { return getMatch(2); }
+            get { return description1.Split('-').Last(); }
         }
         public string Airline
         {
-            get { return getMatch(3); }
+            get { return getMatch(1); }
         }
-        public int FlightNumber
+        public string FlightNumber
         {
-            get { return int.Parse(getMatch(4)); }
+            get { return getMatch(2); }
         }
 
         public string CabinClass
         {
-            get { return getMatch(5); }
+            get { return getMatch(3); }
         }
         string getMatch(int group)
         {            
