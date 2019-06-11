@@ -10,7 +10,7 @@ namespace FlysasClient
         public static async System.Threading.Tasks.Task<int> Main(string[] args = null)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.WriteLine("Welcome to FlysasClient 0.9.3");
+            Console.WriteLine("Welcome to FlysasClient 0.9.4");
             Console.WriteLine("SAS flight data from api.flysas.com");
             Console.WriteLine("Additional offline data (airports,airlines and routes) from openflights.org");
             Console.WriteLine("");
