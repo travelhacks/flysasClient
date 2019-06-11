@@ -24,60 +24,65 @@ namespace FlysasClient
         public async System.Threading.Tasks.Task InputLoop()
         {
             string input = null;
-            var parser = new Parser();
             while (!nameof(Commands.Quit).Equals(input, StringComparison.OrdinalIgnoreCase))
             {
                 txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
                 txtOut.Write(">>");
                 input = txtIn.ReadLine();
-                if (!Command(input))
-                    foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                await Run(input);
+            }
+        }
+
+        public async System.Threading.Tasks.Task Run(string input)
+        {
+            var parser = new Parser();
+            if (!Command(input))
+                foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    SASQuery req = null;
+                    try
                     {
-                        SASQuery req = null;
+                        req = parser.Parse(query.Trim());
+                        req.Mode = options.Mode;
+                    }
+                    catch (ParserException ex)
+                    {
+                        txtOut.Write("Syntax error:" + ex.Message);
+                    }
+                    catch
+                    {
+                        txtOut.Write("Syntax error:");
+                    }
+                    if (req != null)
+                    {
+                        SearchResult result = null;
                         try
                         {
-                            req = parser.Parse(query);
-                            req.Mode = options.Mode;
-                        }
-                        catch (ParserException ex)
-                        {
-                            txtOut.Write("Syntax error:" + ex.Message);
+                            result = await client.SearchAsync(req);
                         }
                         catch
                         {
-                            txtOut.Write("Syntax error:");
+                            txtOut.WriteLine("Error");
                         }
-                        if (req != null)
+                        if (result != null)
                         {
-                            SearchResult result = null;
-                            try
+                            if (result.errors != null && result.errors.Any())
+                                txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
+                            else
                             {
-                                result = await client.SearchAsync(req);
-                            }
-                            catch
-                            {
-                                txtOut.WriteLine("Error");
-                            }
-                            if (result != null)
-                            {
-                                if (result.errors != null && result.errors.Any())
-                                    txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
-                                else
+                                var printer = new TablePrinter(txtOut);
+                                txtOut.WriteLine("*********Outbound*******");
+                                printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
+                                if (req.InDate.HasValue)
                                 {
-                                    var printer = new TablePrinter(txtOut);
-                                    txtOut.WriteLine("*********Outbound*******");
-                                    printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
-                                    if (req.InDate.HasValue)
-                                    {
-                                        txtOut.WriteLine("*********Inbound*******");
-                                        printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
-                                    }
+                                    txtOut.WriteLine("*********Inbound*******");
+                                    printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
                                 }
                             }
-                            txtOut.Write(Environment.NewLine + Environment.NewLine);
                         }
+                        txtOut.Write(Environment.NewLine + Environment.NewLine);
                     }
-            }
+                }
         }
 
         enum Commands

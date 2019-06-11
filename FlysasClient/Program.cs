@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Linq;
 
 namespace FlysasClient
 {
@@ -28,7 +29,10 @@ namespace FlysasClient
             var config = builder.Build();
             Options options = new Options(config.AsEnumerable());                                  
             var client = new ConsoleClient(options,data);
-            await client.InputLoop();
+            if (args.Any())
+                await client.Run(string.Join(" ", args ));
+            else
+                await client.InputLoop();
             return 0;
         }       
     }
