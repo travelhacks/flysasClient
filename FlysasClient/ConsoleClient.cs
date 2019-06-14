@@ -334,21 +334,23 @@ namespace FlysasClient
         {
             var u = options.UserName;
             var p = options.Password;
-            if (u.IsNullOrWhiteSpace() && stack.Any())
-                u = stack.Pop();
-            else
-            {
-                txtOut.WriteLine("User: ");
-                u = txtIn.ReadLine();
-            }
-
-            if (p.IsNullOrWhiteSpace() && stack.Any())
-                p = stack.Pop();
-            else
-            {
-                txtOut.WriteLine("Enter password: ");
-                p = getPassword();
-            }
+            if (u.IsNullOrWhiteSpace())
+                if (stack.Any())
+                    u = stack.Pop();
+                else
+                {
+                    txtOut.WriteLine("User: ");
+                    u = txtIn.ReadLine();
+                }
+                
+            if (p.IsNullOrWhiteSpace())
+                if(stack.Any())
+                    p = stack.Pop();
+                else
+                {
+                    txtOut.WriteLine("Enter password: ");
+                    p = getPassword();
+                }
             try
             {
                 var result = client.Login(u, p);
