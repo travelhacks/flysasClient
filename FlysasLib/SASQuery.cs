@@ -16,7 +16,7 @@ namespace FlysasLib
         public string Lng { get; set; } = "GB";
         public string Pos { get; set; } = "se";
         public string DisplayType { get; set; } //displayType:CALENDAR
-        public string Channel { get; set; }// = "web";
+        public string Channel { get; set; } = "web";
         public DateTime? OutDate { get; set; }
         public DateTime? InDate { get; set; }
         public string Mode;
@@ -27,8 +27,8 @@ namespace FlysasLib
             {
                 var validValues = new string[] { "POINTS", "STAR", "REVENUE" };
                 if (validValues.Any(v => v.Equals(Mode, StringComparison.OrdinalIgnoreCase)))
-                    return Mode.ToUpper();
-                return "REVENUE"; 
+                    return Mode.ToLower();
+                return "revenue"; 
             }
         }
 
@@ -46,7 +46,7 @@ namespace FlysasLib
                 {
                     string sVal;
                     if (property.PropertyType == typeof(DateTime?) && ((DateTime?)val).HasValue)
-                        sVal = ((DateTime?)val).Value.ToString("yyyyMMddHHmm");
+                        sVal = ((DateTime?)val).Value.ToString("yyyyMMdd");
                     else
                         sVal = val.ToString();
                     var paramName = property.Name.camelCase();
