@@ -64,7 +64,7 @@ namespace FlysasLib
         public string fareKey { get; set; }
     }
 
-    public class Via : KVP
+    public class Via : KeyValuePair
     {
         public string haltDuration { get; set; }
     }
@@ -77,15 +77,15 @@ namespace FlysasLib
         public DateTimeOffset? arrivalDateTimeInGmt { get; set; }
         public DateTimeOffset? departureDateTimeInLocal { get; set; }
         public DateTimeOffset? departureDateTimeInGmt { get; set; }
-        public KVP departureAirport { get; set; }
-        public KVP arrivalAirport { get; set; }
-        public KVP departureCity { get; set; }
-        public KVP arrivalCity { get; set; }
-        public KVP airCraft { get; set; }
+        public KeyValuePair departureAirport { get; set; }
+        public KeyValuePair arrivalAirport { get; set; }
+        public KeyValuePair departureCity { get; set; }
+        public KeyValuePair arrivalCity { get; set; }
+        public KeyValuePair airCraft { get; set; }
         public string flightNumber { get; set; }
         public string duration { get; set; }
-        public KVP marketingCarrier { get; set; }
-        public KVP operatingCarrier { get; set; }
+        public KeyValuePair marketingCarrier { get; set; }
+        public KeyValuePair operatingCarrier { get; set; }
         public double onTimePerformance { get; set; }
         public int miles { get; set; }
         public int numberOfStops { get; set; }
@@ -95,10 +95,10 @@ namespace FlysasLib
     public class FlightBaseClass
     {
         public int id { get; set; }
-        public KVP origin { get; set; }
-        public KVP destination { get; set; }
-        public KVP originCity { get; set; }
-        public KVP destinationCity { get; set; }
+        public KeyValuePair origin { get; set; }
+        public KeyValuePair destination { get; set; }
+        public KeyValuePair originCity { get; set; }
+        public KeyValuePair destinationCity { get; set; }
         public string connectionDuration { get; set; }
         public DateTimeOffset startTimeInLocal { get; set; }
         public DateTime startTimeInGmt { get; set; }
@@ -146,16 +146,14 @@ namespace FlysasLib
 
    
 
-    public class KVP
+    public class KeyValuePair
     {
         public string code { get; set; }
         public string name { get; set; }
     }    
 
-    public class Currency
-    {
-        public string code { get; set; }
-        public string name { get; set; }
+    public class Currency : KeyValuePair
+    {        
         public string symbol { get; set; }
         public string decimalSeperator { get; set; }
         public string position { get; set; }
