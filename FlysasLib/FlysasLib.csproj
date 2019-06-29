@@ -16,10 +16,4 @@
     <Folder Include="Export\" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="Microsoft.Net.Http">
-      <Version>2.2.29</Version>
-    </PackageReference>
-  </ItemGroup>
-
 </Project>

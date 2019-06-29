@@ -26,29 +26,29 @@ namespace OpenFlightsData
         {
             var list = new List<Airport>();            
             var fn = GetPath("airports.dat");
-            if(System.IO.File.Exists(fn))
-            foreach (var row in System.IO.File.ReadLines(fn))
-            {
-                var cols = mySplit(row);
-                var a = new Airport
+            if (System.IO.File.Exists(fn))
+                foreach (var row in System.IO.File.ReadLines(fn))
                 {
-                    ID = int.Parse(cols[0]),
-                    Name = cols[1],
-                    City = cols[2],
-                    Country = cols[3],
-                    IATA = cols[4],
-                    ICAO = cols[5],
-                    Lat = myDouble(cols[6]),
-                    Long = myDouble(cols[7]),
-                    Alt = myDouble(cols[8]),
-                    Timezone = myDouble(cols[9]),
-                    DST = cols[10],
-                    Type = cols[11],
-                    Source = cols[12]
+                    var cols = mySplit(row);
+                    var a = new Airport
+                    {
+                        ID = int.Parse(cols[0]),
+                        Name = cols[1],
+                        City = cols[2],
+                        Country = cols[3],
+                        IATA = cols[4],
+                        ICAO = cols[5],
+                        Lat = myDouble(cols[6]),
+                        Long = myDouble(cols[7]),
+                        Alt = myDouble(cols[8]),
+                        Timezone = myDouble(cols[9]),
+                        DST = cols[10],
+                        Type = cols[11],
+                        Source = cols[12]
 
-                };
-                list.Add(a);
-            }
+                    };
+                    list.Add(a);
+                }
             return list;
         }                
     }    
