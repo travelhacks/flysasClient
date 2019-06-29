@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <OutputType>exe</OutputType>    
-    <TargetFrameworks>netcoreapp2.2</TargetFrameworks>    
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>    
     <ApplicationIcon />
     <OutputTypeEx>exe</OutputTypeEx>
     <StartupObject />
