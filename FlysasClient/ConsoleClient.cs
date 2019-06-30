@@ -14,6 +14,12 @@ namespace FlysasClient
         System.IO.TextReader txtIn = Console.In;
         OpenFlightsData.OFData data;
 
+        enum Commands
+        {
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit
+        };
+
+        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
 
         public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
@@ -36,8 +42,9 @@ namespace FlysasClient
         public async System.Threading.Tasks.Task Run(string input)
         {
             var parser = new Parser();
-            if (!Command(input))
-                foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (!Command(query))
                 {
                     SASQuery req = null;
                     try
@@ -83,14 +90,8 @@ namespace FlysasClient
                         txtOut.Write(Environment.NewLine + Environment.NewLine);
                     }
                 }
+            }
         }
-
-        enum Commands
-        {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit
-        };
-
-        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
 
         bool Command(string input)
         {
@@ -195,13 +196,13 @@ namespace FlysasClient
                 var airport = data.Airports.FirstOrDefault(ap => ap.IATA == s.ToUpper());
                 if (airport != null)
                 {
-                    txtOut.WriteLine("Airport " + airport.IATA + "/" + airport.ICAO);
-                    txtOut.WriteLine("Name " + airport.Name);
-                    txtOut.WriteLine("City " + airport.City);
-                    txtOut.WriteLine("Country " + airport.Country);
-                    txtOut.WriteLine("Type " + airport.Type);
-                    txtOut.WriteLine("Timezone " + airport.Timezone);
-                    txtOut.WriteLine("DST " + airport.DST);
+                    txtOut.WriteLine($"Airport: {airport.IATA}/{airport.ICAO}");
+                    txtOut.WriteLine($"Name: {airport.Name}" );
+                    txtOut.WriteLine($"City: {airport.City}");
+                    txtOut.WriteLine($"Country: {airport.Country}");
+                    txtOut.WriteLine($"Type: {airport.Type}");
+                    txtOut.WriteLine($"Timezone {airport.Timezone}");
+                    txtOut.WriteLine($"Daylight saving time: {airport.DST}");
                 }
                 var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (cities.Any())
@@ -214,17 +215,17 @@ namespace FlysasClient
                 if (airline != null)
                 {
                     txtOut.WriteLine("Airline info for " + s);
-                    txtOut.WriteLine("\t" + airline.IATA + "/" + airline.ICAO);
-                    txtOut.WriteLine("\tName:" + airline.Name);
-                    txtOut.WriteLine("\tCallsign:" + airline.Callsign);
-                    txtOut.WriteLine("\tCountry:" + airline.Country);
+                    txtOut.WriteLine($"\t{airline.IATA}/{airline.ICAO}");
+                    txtOut.WriteLine($"\tName: {airline.Name}");
+                    txtOut.WriteLine($"\tCallsign: {airline.Callsign}");
+                    txtOut.WriteLine($"\tCountry: {airline.Country}");
                 }
                 var plane = data.Planes.FirstOrDefault(p => s.ToUpper() == p.IATA || s.ToUpper() == p.ICAO);
                 if (plane != null)
                 {
                     txtOut.WriteLine("Airplane info for " + s);
-                    txtOut.WriteLine("\t" + plane.IATA + "/" + plane.ICAO);
-                    txtOut.WriteLine("\tName:" + plane.Name);
+                    txtOut.WriteLine($"\t{plane.IATA}/{plane.ICAO}");
+                    txtOut.WriteLine($"\tName: {plane.Name}");
                 }
                 if (arglist.Count >= 2)
                 {
