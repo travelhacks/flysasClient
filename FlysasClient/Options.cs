@@ -22,17 +22,10 @@ namespace FlysasClient
     public abstract class OptionsParser
     {        
         public OptionsParser(IEnumerable<KeyValuePair<string,string>> options)
-        {            
-            try
-            {
-                foreach (var option in options)
-                    if (!option.Value.IsNullOrWhiteSpace())
-                        mySet(option.Key, option.Value);
-            }
-            catch(Exception ex)
-            {
-
-            }
+        {
+            foreach (var option in options)
+                if (!option.Value.IsNullOrWhiteSpace())
+                    mySet(option.Key, option.Value);
         }
 
         private bool mySet(string option,string value)
