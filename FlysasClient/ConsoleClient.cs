@@ -235,7 +235,7 @@ namespace FlysasClient
                     var routeList = data.Routes.Where(r => r.FromIATA == orig.ToUpper() && r.ToIATA == dest.ToUpper()).ToList();
                     if (routeList.Any())
                     {
-                        txtOut.WriteLine("Routes from " + orig + " to " + dest);
+                        txtOut.WriteLine($"Routes from {orig} to {dest}");
                         foreach (var r in routeList)
                             txtOut.WriteLine("\t" + r.AirlineCode + (r.CodeShare ? " codeshare " : ""));
                     }
@@ -245,7 +245,7 @@ namespace FlysasClient
 
         private void history(CommandStack stack, bool export)
         {
-            int n = 1;
+            int page = 1;
             int pages = 1;
             bool fetchAll = true;
             List<Transaction> all = new List<Transaction>();
@@ -253,7 +253,7 @@ namespace FlysasClient
 
             if (stack.Any())
             {
-                if (int.TryParse(stack.Pop(), out n) && !stack.Any())
+                if (int.TryParse(stack.Pop(), out page) && !stack.Any())
                     fetchAll = false;
                 else
                 {
@@ -264,32 +264,32 @@ namespace FlysasClient
             txtOut.WriteLine("");
             do
             {
-                txtOut.Write("\rFetching page " + n + (pages > 1 ? " of " + pages.ToString() : ""));
+                txtOut.Write($"\rFetching page { page}{(pages > 1 ? " of " + pages : "")}");
                 try
                 {
-                    res = client.History(n);
+                    res = client.History(page);
                 }
                 catch (Exception ex)
                 {
-                    txtOut.WriteLine("Error getting page " + n);
+                    txtOut.WriteLine($"Error getting page {page}");
                     txtOut.WriteLine(ex.Message);
                 }
                 if (res.errors != null)
                 {
-                    txtOut.WriteLine("Error getting page " + n + " " + res.errors.First().errorMessage);
+                    txtOut.WriteLine($"Error getting page {page} {res.errors.First().errorMessage}");
                 }
-                n++;
+                page++;
                 if (fetchAll)
                     pages = res.eurobonus.transactionHistory.totalNumberOfPages;
                 if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)
                     all.AddRange(res.eurobonus.transactionHistory.transaction);
-            } while (n <= pages);
+            } while (page <= pages);
             txtOut.Write("\r");
             if (export)
             {
                 var exporter = new FlightExporter();
                 var list = exporter.Convert(all);
-                txtOut.WriteLine("Found " + list.Count + " flight");
+                txtOut.WriteLine($"Found {list.Count} flights");
                 if (list.Any())
                     try
                     {
@@ -333,29 +333,29 @@ namespace FlysasClient
 
         private void login(CommandStack stack)
         {
-            var u = options.UserName;
-            var p = options.Password;
-            if (u.IsNullOrWhiteSpace())
+            var userName = options.UserName;
+            var passWord = options.Password;
+            if (userName.IsNullOrWhiteSpace())
                 if (stack.Any())
-                    u = stack.Pop();
+                    userName = stack.Pop();
                 else
                 {
                     txtOut.WriteLine("User: ");
-                    u = txtIn.ReadLine();
+                    userName = txtIn.ReadLine();
                 }
                 
-            if (p.IsNullOrWhiteSpace())
+            if (passWord.IsNullOrWhiteSpace())
                 if(stack.Any())
-                    p = stack.Pop();
+                    passWord = stack.Pop();
                 else
                 {
                     txtOut.WriteLine("Enter password: ");
-                    p = getPassword();
+                    passWord = getPassword();
                 }
             try
             {
-                var result = client.Login(u, p);
-                txtOut.WriteLine("Login for " + u + " " + (result ? " success" : "failed"));
+                var result = client.Login(userName, passWord);
+                txtOut.WriteLine($"Login for {userName}  {(result ? " success" : "failed")}");
             }
             catch (Exception ex)
             {
