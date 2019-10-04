@@ -34,13 +34,13 @@ namespace FlysasClient
             {
                 request = new SASQuery();
                 request.From = stack.Pop().ToUpper();
-                if (airportExp.IsMatch(stack.Peek()))
+                if (isAirport(stack.Peek()))
                 {
                     request.To = stack.Pop().ToUpper();
-                    if (airportExp.IsMatch(stack.Peek()))
+                    if (isAirport(stack.Peek()))
                     {
                         request.ReturnFrom = stack.Pop().ToUpper();
-                        if (airportExp.IsMatch(stack.Peek()))
+                        if (isAirport(stack.Peek()))
                         {
 
                             //req.ReturnTo = stack.Pop().ToUpper();
@@ -59,6 +59,12 @@ namespace FlysasClient
             else
                 throw new ParserException("Too few arguments");
             return request;
+        }
+
+        private bool isAirport(string candidate)
+        {
+            //Use OF-data instead?
+            return airportExp.IsMatch(candidate);
         }
 
         DateTime parseDate(string s, DateTime relativeTo)
