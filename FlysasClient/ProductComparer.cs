@@ -14,11 +14,11 @@ namespace FlysasClient
         );
         public int Compare(FlightProductBaseClass p1, FlightProductBaseClass p2)
         {
-            return getVal(p1).CompareTo(getVal(p2));
+            return getOrder(p1).CompareTo(getOrder(p2));
         }
-        private int getVal(FlightProductBaseClass product)
+        private int getOrder(FlightProductBaseClass product)
         {
-            return order.FindIndex(code => code == product.productCode);                        
-        }
+            return order.IndexOf(product.productCode);                        
+        }   
     }
 }
