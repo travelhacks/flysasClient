@@ -3,14 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="airlines.dat" />
-    <None Remove="airports.dat" />
-    <None Remove="routes.dat" />
-    <None Remove="planes.dat" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <Content Include="data\airlines.dat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
