@@ -6,15 +6,38 @@ using System.Linq;
 
 namespace FlysasLib
 {
+
+    [AttributeUsage(AttributeTargets.Property, Inherited = false)]
+    public class UrlParameterAttribute : Attribute
+    {
+        public string ParameterName { get; private set; }
+        public UrlParameterAttribute(string ParameterName)
+        {
+            this.ParameterName = ParameterName;
+        }
+    }
+
     public class SASQuery
     {
         public string To { get; set; }
         public string From { get; set; }
         public string ReturnFrom { get; set; }
        // public string ReturnTo { get; set; }
-        public int Adt { get; set; } = 1;       
-        public string Lng { get; set; } = "GB";
-        public string Pos { get; set; } = "se";
+        [UrlParameterAttribute("adt")]
+        public int Adults { get; set; } = 1;
+
+        [UrlParameterAttribute("chd")]
+        public int Children { get; set; } = 0;
+        [UrlParameterAttribute("inf")]
+        public int Infants { get; set; } = 0;
+        [UrlParameterAttribute("yth")]
+        public int Youth { get; set; } = 0;
+
+        [UrlParameterAttribute("lng")]
+        public string Language { get; set; } = "GB";
+
+        [UrlParameterAttribute("pos")]
+        public string Position { get; set; } = "se";
         public string DisplayType { get; set; } //displayType:CALENDAR
         public string Channel { get; set; } = "web";
         public DateTime? OutDate { get; set; }
@@ -22,13 +45,12 @@ namespace FlysasLib
         public string Mode;
         private string BookingFlow
         {
-
             get
             {
                 var validValues = new string[] { "POINTS", "STAR", "REVENUE" };
                 if (validValues.Any(v => v.Equals(Mode, StringComparison.OrdinalIgnoreCase)))
                     return Mode.ToLower();
-                return "revenue"; 
+                return "revenue";
             }
         }
 
@@ -36,20 +58,23 @@ namespace FlysasLib
 
         public string GetUrl() => "https://api.flysas.com/offers/flights?" + String.Join("&", getParams());
         
-
         IEnumerable<string> getParams()
         {
             foreach (var property in properties)
             {
+                var paramName = property.Name.camelCase();
+                var attr = property.GetCustomAttribute(typeof(UrlParameterAttribute)) as UrlParameterAttribute;
+                if (attr != null)                
+                    paramName = attr.ParameterName;                
+
                 var val = property.GetValue(this);
                 if (val != null)
                 {
                     string sVal;
                     if (property.PropertyType == typeof(DateTime?) && ((DateTime?)val).HasValue)
-                        sVal = ((DateTime?)val).Value.ToString("yyyyMMdd");
+                        sVal = ((DateTime?)val).Value.ToString("yyyyMMddHHmm");
                     else
-                        sVal = val.ToString();
-                    var paramName = property.Name.camelCase();
+                        sVal = val.ToString();                    
                     yield return $"{paramName}={sVal}";
                 }
             }
