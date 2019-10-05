@@ -19,9 +19,9 @@ namespace FlysasClient
             {
                 data.LoadData();
             }
-            catch
+            catch(Exception ex)
             {
-                Console.WriteLine("Error loading Openfligts data");
+                Console.WriteLine("Error loading Openfligts data:" + ex.Message);
             }
             var builder = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())

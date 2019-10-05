@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace OpenFlightsData
@@ -24,19 +25,19 @@ namespace OpenFlightsData
 
             var list = new List<string>();
             bool open = false;
-            string s = "";
-            foreach (char c in str + ",")
+            var builder = new StringBuilder();
+            foreach (char c in str.ToCharArray().Concat(new[] { ',' }))
                 if (c == ',' && !open)
                 {
-                    list.Add(s);
-                    s = "";
+                    list.Add(builder.ToString());
+                    builder.Clear();
                 }
                 else
                 {
                     if (c == '"')
                         open = !open;
                     else
-                        s += c;
+                        builder.Append(c);
                 }
             return list.ToArray();
         }
