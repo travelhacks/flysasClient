@@ -291,18 +291,11 @@ namespace FlysasClient
                 var list = exporter.Convert(all);
                 txtOut.WriteLine($"Found {list.Count} flights");
                 if (list.Any())
-                    try
-                    {
-                        exporter.SaveCSV(list);
-                        txtOut.WriteLine("Files saved");
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-            }
-            else
-            {
+					exporter.SaveCSV(list);
+				    txtOut.WriteLine("Files saved");
+	        }
+			else
+			{
                 Table t = new Table();
                 foreach (var r in all)
                 {
@@ -357,7 +350,7 @@ namespace FlysasClient
                 var result = client.Login(userName, passWord);
                 txtOut.WriteLine($"Login for {userName}  {(result ? " success" : "failed")}");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 txtOut.WriteLine("Login failed");
             }

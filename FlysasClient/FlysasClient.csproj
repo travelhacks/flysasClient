@@ -1,4 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
   <PropertyGroup>
     <OutputType>exe</OutputType>    
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>               
