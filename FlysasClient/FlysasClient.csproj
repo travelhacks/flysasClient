@@ -8,8 +8,7 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <OutputType>exe</OutputType>    
+  <PropertyGroup>    
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>               
     <LangVersion>latest</LangVersion>
     <PublishTrimmed>true</PublishTrimmed>
