@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>        
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <RuntimeIdentifiers>win-x86;win10-x86</RuntimeIdentifiers>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>    
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncEnumerator" Version="2.2.2" />
+    <PackageReference Include="McMaster.AspNetCore.LetsEncrypt" Version="0.1.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />      
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />    
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\AwardData\AwardData.csproj" />
+    <ProjectReference Include="..\FlysasLib\FlysasLib.csproj" />
+    <ProjectReference Include="..\OpenFlightsData\OpenFlightsData.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="wwwroot\lib\jquery-ajax-unobtrusive\gulpfile.js" />
+    <None Include="wwwroot\lib\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.js" />
+    <None Include="wwwroot\lib\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.min.js" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Update="wwwroot\images\1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\images\2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\images\chart.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

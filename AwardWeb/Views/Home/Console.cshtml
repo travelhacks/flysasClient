@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Flysas console app";
+    ViewData["Meta"] = "Console app for searching revenue and award tickes with Scandinavian Airlines (SAS)";
+    ViewData["Canonical"] = Url.Action("Console");
+}
+<div>    
+        <h5>What is this?</h5>
+        <p>A console app for searching for SAS and *A tickets. Both reward and revenue are supported</p>    
+</div>    
+        <h5>Where can i get it?</h5>
+        <p>c# Source code <a href="https://github.com/travelhacks/flysasClient">Here</a> </p>
+        <p>Windows binaries <a href="https://github.com/travelhacks/flysasClient/releases">Here</a> </p>    
+    <div>
+        <h5>Basic examples:</h5>
+        <p>Origin - Destination OutDate [InDate]</p>
+        <p><img src="~/images/1.jpg" /></p>
+    </div>
+    <div>
+        <h5>About dates:</h5>
+        <p>Tickets are avalable 11 months ahead so year can be ommited</p>
+        <p>Shortcuts: = for today (or same day return). +1 for today (or one day after departure when used for return flight)</p>
+        <p><img src="~/images/2.jpg" /></p>
+    </div>
+    <div>
+        <h5>How do i search for award tickets?</h5>
+        <p>type "set mode points" for sas ticket and "set mode star" for Star Alliance flights (slower)<br/>
+        Number of available seats are shown</p>
+    </div>
+    <div>
+        <h5>Personal data</h5>
+        <p>After logging in (with the login command) you can use these commands</p>
+        <p>points: for checking you status and points</p>
+        <p>history [page]: for transaction history</p>
+        <p>export [page]: for exporting flights into the export folder. Can be used for importing data to <a href="https://openflights.org/">OpenFlights.org</a> or <a href="https://my.flightradar24.com"> my.flightradar24.com</a></p>
+    </div>
+
+   
+   
+        
+    
