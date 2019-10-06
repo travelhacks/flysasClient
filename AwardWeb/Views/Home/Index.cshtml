@@ -1,0 +1,161 @@
+﻿@model AwardWeb.Models.SASSearch
+@using System.Linq
+@{
+    ViewData["Title"] = "SAS Business award flights";
+    ViewData["Meta"] = "Search for award tickets with scandinavian airlines (SAS)";
+    var days = Enum.GetValues(typeof(System.DayOfWeek)).Cast<System.DayOfWeek>().OrderBy(x => (int)x == 0 ? 7 : (int)x).Select(v => v.ToString()).ToList();
+}
+<form asp-action="ListResult" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#result">
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label asp-for="MinDays" class="control-label"></label>
+            <input asp-for="MinDays" class="form-control" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="MinDays" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="MaxDays" class="control-label"></label>
+            <input asp-for="MaxDays" class="form-control" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="MaxDays" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Passengers" class="control-label"></label>
+            <input asp-for="Passengers" class="form-control" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="Passengers" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="CabinClass" class="control-label"></label>
+            <select asp-for="CabinClass" class="form-control" asp-items="Model.Classes" onchange="$('#btnSubmit').trigger( 'click' );"></select>
+            <span asp-validation-for="CabinClass" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Equipment" class="control-label"></label>
+            <select asp-for="Equipment" class="form-control" asp-items="Model.EquipmentList" onchange="$('#btnSubmit').trigger( 'click' );"></select>
+            <span asp-validation-for="CabinClass" class="text-danger"></span>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label asp-for="OutMin" class="control-label"></label>
+            <input asp-for="OutMin" type="text" class="form-control myDate" asp-format="{0:yyyy-MM-dd}" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="OutMin" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="OutMax" class="control-label"></label>
+            <input asp-for="OutMax" type="text" class="form-control myDate" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="OutMax" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="InMin" class="control-label"></label>
+            <input asp-for="InMin" type="text" class="form-control myDate" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="InMin" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="InMax" class="control-label"></label>
+            <input asp-for="InMax" type="text" data-date-format="yyyy-mm-dd" class="form-control myDate" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="InMax" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="OpenJaw" class="control-label"></label>
+            <input asp-for="OpenJaw" class="form-control noshadow left" onchange="$('#btnSubmit').trigger( 'click' );" />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Return" class="control-label"></label>
+            <input asp-for="Return" class="form-control noshadow left" onchange="$('#btnSubmit').trigger( 'click' );" />
+            <span asp-validation-for="Return" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label asp-for="From" class="control-label"></label>
+            <select size="10" asp-for="From" class="form-control" asp-items="Model.Routes" onchange="fixOptions(this);$('#btnSubmit').trigger( 'click' );"></select>
+            <span asp-validation-for="Routes" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="To" class="control-label"></label>
+            <select size="10" asp-for="To" class="form-control" asp-items="Model.ReturnRoutes" onchange="fixOptions(this);$('#btnSubmit').trigger( 'click' );"></select>
+            <span asp-validation-for="To" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            
+            <table>
+                <tr><td><label asp-for="OutWeekDays" class="control-label"></label></td><td></td></tr>
+                @for (int i = 1; i <= 7; i++)
+                {
+                <tr><td><label>@days[i - 1]</label></td>
+                <td><input type="checkbox" name="OutWeekDays" @(Model.OutWeekDays.Contains(i) ? "checked" : "") onchange="$('#btnSubmit').trigger( 'click' );" value="@i" /></td>
+                </tr>                    
+                }
+                </table>
+</div>
+        <div class="form-group col-md-2">
+            <table>
+                <tr><td><label asp-for="InWeekDays" class="control-label"></label></td><td></td></tr>
+                @for (int i = 1; i <= 7; i++)
+                {
+                    <tr>
+                        <td><label>@days[i - 1]</label></td>
+                        <td><input type="checkbox" name="InWeekDays" @(Model.InWeekDays.Contains(i) ? "checked" : "") onchange="$('#btnSubmit').trigger( 'click' );" value="@i" /></td>
+                    </tr>
+                }
+            </table>
+        </div>
+        @*<div class="form-group col-md-6">
+            <lablel>Show details</lablel>
+            <input type="checkbox" id="toggleDetails" class="form-control noshadow left" onchange="$('.details').toggle(this.val)" value="1" />
+        </div>*@
+        <input id="sortField" type="hidden" value="@Model.Sort" />
+        <div class="d-none">
+            <input id="btnSubmit" type="submit" value="Search" class="btn btn-primary" />
+        </div>
+    </div>
+
+</form>
+<script type="text/javascript">
+
+    function event(action, label) {
+        if (typeof ga !== 'undefined') {
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'UserEvent',
+                eventAction: action,
+                eventLabel: label
+            });
+        }
+    }    
+    function bEvent() {
+        event('Booking', 'Booking');
+    }
+
+</script>
+
+<div class="row">
+    <div id="result">
+        @await Component.InvokeAsync("ListResult", Model)
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        function field() {
+            $('#sortField').val(field);
+            $('#btnSubmit').trigger('click');
+        }
+
+        function fixOptions(select) {
+            if (select.selectedIndex == -1)
+                select.selectedIndex = 0;
+        }
+
+        function toggleDetails() {
+            var val = $('#toggleDetails').is(":checked");
+            $('.details').toggle(val);
+        }
+
+        $(document).ready(function () {
+
+            $('.myDate').datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        });
+    </script>
+}

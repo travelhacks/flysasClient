@@ -1,0 +1,127 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Frequently asked questions";
+    ViewData["Canonical"] = Url.Action("FAQ");
+}
+<h1 class="display-4">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div>
+        <h5>What is this?</h5>
+        <p>A listing for SAS award tickets. Only direct longhauls are shown.</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Anyone using it?</h5>
+        <p>About 4k sessions/week, performing 25k searches. 15k alert mails are sent every month</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Do you work for SAS?</h5>
+        <p>No. I get the data from their "public" API and SAS is in no way involved.</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>How recent is the data?</h5>
+        <p>Depends. Spaces in Business are refreshed every 48h (or sooner). Plus/Go can have false positives up to 72h.</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>When are award tickets released?</h5>
+        <p>No earlier than 329 days before departure (midnight local time)</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>How many seats are released?</h5>
+        <p>None or 2 in business class. More spaces can become avilable between 125 days before departure and the day of the flight</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Do you have data for Star Alliance awards?</h5>
+        <p>No, fetching all those flights would put a huge load on the SAS API. I am however developing a <a href="/star">real time search</a> for these fligts. </p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Can you let me know when tickets becomes available?</h5>
+        <p>Sure! <a asp-action="register" asp-controller="account">Register an account</a> and create alerts for the routes and dates of your interest (SAS only)</p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>Does this site use cookies?</h5>
+        <p>Yes, for logins and google analytics</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>What information about me do you store?</h5>
+        <p>email, passwordhash, alerts and mail stats</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Who made this?</h5>
+        <p>A Swedish/Norwegian computer and aviation geek</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Do you accept donations?</h5>
+        <p>No. I do this for fun, in my spare time and with very low costs. No need for donations. 
+ I will however happily send you an invite to Amex, Curve, Revolut or similar services offering signup bonuses for both parties should you decide to sign up. Use the form bellow.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>I have a question/suggestion. Can i contact you?</h5>
+        A discussion about this site can be found in the swedish forum <a href="http://www.businessclass.se/forum/threads/utveckling-av-nya-tj%C3%A4nster-med-api-flysas-com.37316/">businessclass.se</a>
+        <br />
+        Or use the form bellow:<br />
+    </div>
+</div>
+<a id="form" name="form">
+@if (Model == null)
+{
+    <div class="row">
+        <br />
+        <div class="col-md-6">
+            <form method="POST" action="/Home/FAQ">
+                <input type="hidden" name="hideMe" id="hideMe" value="3" />
+                <div class="form-group">
+                    <label class="control-label">Email</label>  (if you expect an answer)
+                    <input class="form-control" style="min-width: 100%" type="email" name="email" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Message</label> (use English or any Scandinavian language)
+                    <textarea name="message" class="form-control" style="min-width: 100%" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <input class="form-control btn btn-primary" type="submit" value="Send" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <br />
+    <br />
+    <h5>Thanks for your message!</h5>
+}
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#hideMe').val(2 * 2);
+        });
+    </script>
+}

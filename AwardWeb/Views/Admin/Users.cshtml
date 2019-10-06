@@ -1,0 +1,48 @@
+﻿@model IEnumerable<AwardWeb.Models.UserViewModel>
+
+
+<table class="table">
+    <thead>
+        <tr>
+                
+                <th>
+                    @Html.DisplayNameFor(model => model.User.Email)
+                </th>                
+                <th>
+                    @Html.DisplayNameFor(model => model.User.EmailConfirmed)
+                </th>     
+            <th>alerts</th>
+            <th>Mails</th>           
+        </tr>
+        <tr>
+
+            <th>
+                Totals
+            </th>
+
+            <th>Users: @Model.Count()</th>
+            <th>@Model.Sum(u=>u.AlertCount)</th>
+            
+            <th>@Model.Sum(u => u.SentCount)</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.OrderBy(u=>u.User.Email)) {
+        <tr>            
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Email)
+            </td>            
+            <td>
+                @Html.DisplayFor(modelItem => item.User.EmailConfirmed)
+            </td>
+            <td>
+                @item.AlertCount
+            </td>
+            <td>
+                @item.SentCount
+            </td>
+           
+        </tr>
+}
+    </tbody>
+</table>

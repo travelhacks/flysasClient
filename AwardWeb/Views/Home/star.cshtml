@@ -1,0 +1,217 @@
+﻿@model AwardWeb.Models.StarSearch
+@{ 
+    ViewData["Canonical"] = Url.Action("Star");
+    ViewData["Title"] = "Star alliance award search";
+}
+    
+
+    <form asp-action="starresult" asp-controller="Home" method="post" class="form-horizontal">
+        <div class="row">
+            @Html.AntiForgeryToken()
+
+             
+                <div class="form-group col-md-2">
+                    <label asp-for="Origin" class="control-label"></label>
+                    <input asp-for="Origin" type="text" class="form-control" placeholder="IATA Code" />
+                    <span asp-validation-for="Origin" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Destination" class="control-label"></label>
+                    <input asp-for="Destination" type="text" class="form-control" placeholder="IATA Code" />
+                    <span asp-validation-for="Destination" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group col-md-2">
+                    <label asp-for="OutDate" class="control-label"></label>
+                    <input asp-for="OutDate" type="text" class="form-control myDate" asp-format="{0:yyyy-MM-dd}" />
+                    <span asp-validation-for="OutDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="SearchDays" class="control-label"></label>
+                    <select asp-for="SearchDays" class="form-control">
+                        <option value="7">7 days</option>
+                        <option value="14">14 days (slower)</option>
+                        <option value="1">1 day</option>
+                    </select>
+                    <span asp-validation-for="SearchDays" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="MaxLegs" class="control-label"></label>
+                    <select asp-for="MaxLegs" class="form-control">
+                        <option value="0">Any</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                    </select>
+                    <span asp-validation-for="MaxLegs" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-1">
+                    <label asp-for="Pax" class="control-label"></label>
+                    <select asp-for="Pax" class="form-control">
+                        @for (int i = 1; i <= 9; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+
+                    </select>
+                </div>
+                <div class="form-group col-md-1">
+                    <label class="control-label">&nbsp;</label>
+                    <input type="submit" class="btn btn-primary form-control" value="Go!" />
+                </div>
+            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@           
+            </div>        
+    </form>
+        
+
+        @if (Model.Results == null)
+        {
+
+            <div class="row">
+                <div>
+                    <h4>What is this?</h4>
+                    <p>This tool will search the SAS star alliance API 7 or 14 days at the time. This will take a minute or so and the results are grouped by cabin class. </p>
+                </div>
+            </div>
+            }
+
+            else
+            {
+                var legs = Model.Results.Any() ?  Model.Results.Max(r => r.segments.Count()) : 0;
+                var next = new StarSearch {
+                    Destination = Model.Destination,
+                    Origin = Model.Origin,
+                    Pax = Model.Pax,
+                    SearchDays = Model.SearchDays,
+                    MaxLegs = Model.MaxLegs
+                };
+                var dict = new Dictionary<string, string>();
+                var reverse = new Dictionary<string, string>();
+                foreach(var p in next.GetType().GetProperties() )
+                {
+                    var val = p.GetValue(next);
+                    if (val != null)
+                    {
+                        dict[p.Name] = val.ToString();
+                        reverse[p.Name] = val.ToString();
+                    }
+                }
+                dict[nameof(StarSearch.OutDate)] = Model.OutDate.AddDays(Model.SearchDays).ToString("yyyy-MM-dd");
+                reverse[nameof(StarSearch.OutDate)] = Model.OutDate.ToString("yyyy-MM-dd");
+                var tmp = reverse[nameof(StarSearch.Destination)];
+                reverse[nameof(StarSearch.Destination)]=reverse[nameof(StarSearch.Origin)];
+                reverse[nameof(StarSearch.Origin)] = tmp;
+<div class="row">
+    <div><a asp-controller="home" asp-action="starresult" asp-all-route-data="@dict">Next period</a></div>&nbsp;&nbsp;
+    <div><a asp-controller="home" asp-action="starresult" asp-all-route-data="@reverse">Reverse</a></div>
+</div>
+        var bus = Model.Results.Where(f => f.cabins.business != null && f.cabins.business.First().fares.All(fare => fare.avlSeats >= Model.Pax)).ToList();
+        if (bus.Any())
+        {
+
+        <div class="row">
+            <div>
+                <table class="table-striped table">
+                    <thead>
+                        <tr><th>Business</th></tr>
+                        <tr>
+                            <th>Dep</th>
+                            @for (int i = 1; i <= legs; i++)
+                            {
+                                <th>Leg@(i)</th>
+                            }
+                            <th>Seats</th>
+                            <th>Arr</th>
+                            <th>Dur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trip in bus.OrderBy(t => t.startTimeInLocal))
+                        {
+
+                            var str = trip.origin + "," + @trip.destination;
+                            var dur = trip.endTimeInGmt.Subtract(trip.startTimeInGmt);
+                            <tr>
+                                <td>@trip.startTimeInLocal.ToString("yyyy-MM-dd HH:mm")</td>
+                                @foreach (var s in trip.segments)
+                                {
+                                    <td data-toggle="tooltip" title="@s.operatingCarrier.code@s.flightNumber using @s.airCraft.name">@s.operatingCarrier.code: @s.departureAirport.code-@s.arrivalAirport.code</td>
+                                }
+                                @for (int i = 0; i < legs - trip.segments.Count; i++)
+                                {
+                                    <td></td>
+                                }
+                                <td>@trip.cabins.business[0].fares.Min(f => f.avlSeats)</td>
+                                <td>@trip.endTimeInLocal.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@((int)dur.TotalHours):@(dur.Minutes.ToString("00"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        }
+        else
+        {
+        <div>Sorry, no business class seats found</div>
+        }
+
+        var eco = Model.Results.Where(f => f.cabins.economy != null && f.cabins.economy.Any() && f.cabins.economy.First().fares.All(fare => fare.avlSeats >= Model.Pax)).ToList();
+        if (eco.Any())
+        {
+        <div class="row">
+            <div>
+                <table class="table-striped table">
+                    <thead>
+                        <tr><th>Economy</th></tr>
+                        <tr>
+                            <th>Dep</th>
+                            @for (int i = 1; i <= legs; i++)
+                            {
+                                <th>Leg@(i)</th>
+                            }
+                            <th>Seats</th>
+                            <th>Arr</th>
+                            <th>Dur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trip in eco.OrderBy(t => t.startTimeInLocal))
+                        {
+
+                            var str = trip.origin + "," + @trip.destination;
+                            var dur = trip.endTimeInGmt.Subtract(trip.startTimeInGmt);
+                            <tr>
+                                <td>@trip.startTimeInLocal.ToString("yyyy-MM-dd HH:mm")</td>
+                                @foreach (var s in trip.segments)
+                                {
+                                    <td data-toggle="tooltip" title="@s.operatingCarrier.code@s.flightNumber using @s.airCraft.name">@s.operatingCarrier.code: @s.departureAirport.code-@s.arrivalAirport.code</td>
+                                }
+                                @for (int i = 0; i < legs - trip.segments.Count; i++)
+                                {
+                                    <td></td>
+                                }
+                                <td>@trip.cabins.economy[0].fares.Min(f => f.avlSeats)</td>
+                                <td>@trip.endTimeInLocal.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@((int)dur.TotalHours):@(dur.Minutes.ToString("00"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        }
+        }
+    
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.myDate').datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        });
+    </script>
+}

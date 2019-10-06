@@ -1,0 +1,179 @@
+﻿@model string
+@{
+    ViewData["Title"] = "News";
+    ViewData["Canonical"] = @Url.Action("News");
+}
+<h1 class="display-4">@ViewData["Title"]</h1>
+
+
+<div class="row">
+    <div>
+        <h5>New domain name and server<small>(2019-09-28)</small></h5>
+        <p>
+            I moved the site to a new server and registered the domain name awardhacks.se. Calls to the old site will be redirected to here.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>Still no blackout for summer 2020<small>(2019-09-05)</small></h5>
+        <p>
+            If SAS follows their pattern all these tickets will disapear at once at some point. 
+        </p>
+    </div>
+</div>
+
+
+<div class="row">
+    <div>
+        <h5>SAS moves Los Angeles flight from Stockholm to Copenhagen <small>(2019-09-05)</small></h5>
+        <p>
+            CPH-LAX will replace ARN-LAX from January 2020. No award tickets released yet, but you can create an alert.
+        </p>
+    </div>
+</div>
+
+
+<div class="row">
+    <div>
+        <h5>SAS begins their A350 service 28 Jan 2020 <small>(2019-06-17)</small></h5>
+        <p>
+            CPH-ORD and CPH-PEK will be first to get the new A350. Layout is still undisclosed but there will be 40 seats in Business. Use the new Equpment-filter to search for these flghts.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>All availabilities for summer 2019 has been withdrawn <small>(2019-06-02)</small></h5>
+        <p>
+            There has been quite a lot of tickets for summer 2019 released but suddenly they were all revoked. There is now not a single ticket in any class for the period 30 June - 15 August.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>End of Blackout <small>(2019-05-22)</small></h5>
+        <p>
+            The blackout is over and tickets for +329 days are now released again. The blackout was 3-13 April.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>Blackout for Easter 2020 <small>(2019-05-19)</small></h5>
+        <p>
+            No tickets for 5 April or later has been released in any class. Probably a Easter blackout.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>New layout <small>(2019-03-10)</small></h5>
+        <p>
+            I've migrated the site to latest the Microsoft stack (.Net MVC core 3.0 preview 3). During this i also used the latest layout templates. <a href="/FAQ#form">Let me know</a> if something broke...
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>AwardHacks *A award search <small>(2019-02-24)</small></h5>
+        <p>
+            Fetching all routes for Star alliance would put a huge load on the SAS API so I have no plan of doing that.
+            I'm however developing a feature that allows you to search two weeks at the time. Output is grouped by cabin class. <a target="_blank" href="https://www.sas.se/eurobonus/star-alliance-award-trips/">*A search </a>.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>Star alliance award search online again <small>(2019-02-14)</small></h5>
+        <p>
+            Today SAS rereleased their <a target="_blank" href="https://www.sas.se/eurobonus/star-alliance-award-trips/">*A search </a>. Still no support for First class or premium economy. This also means that the "star mode" in the <a href="/console">console app</a> is working again.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>One million searches performed <small>(2019-02-14)</small></h5>
+        <p>
+            Since the release in September 2017, one million searches has been performed on this site. <a href="list">List views</a> and alert generation excluded.
+        </p>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div>
+        <h5>Award space for Easter 2019 now released <small>(2019-02-07)</small></h5>
+        <p>
+            There are quite a lot of options for going from Scandinavia before Easter but hard finding seats back the week after.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>New search filters <small>(2019-02-07)</small></h5>
+        <p>
+            I've added some new features
+            <ul>
+                <li>Weekday filters</li>
+                <li>Open jaw: Will include trips like ARN-EWR-CPH</li>
+            </ul>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div>
+        <h5>Christmas 2019 <small>(2019-01-28)</small></h5>
+        <p>Still no blackout for +329days and tickets for 24/12 was released today. Flying home for Christmas?</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Star alliance search <small>(2019-01-28)</small></h5>
+        <p>
+            The SAS Star alliance award search was taken down for maintenance a few weeks ago. It's still down and no official info about when it will be rereleased.
+            The <a asp-action="Console" asp-controller="Home">Console app </a> will return an error in star mode.
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Easter blackout 2019 <small>(2019-01-28)</small></h5>
+        <p>Tickets for 10-28 April was released about 300 days ahead but then withdrawn in September 2018. The period i still in blackout but I expect some tickets to be released later on.</p>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h5>Release schedule <small>(2019-01-28)</small></h5>
+        <p>There is still a big spike +123-125 days and some activity 0-123. The 90d spike seems to be totaly gone.</p>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+    function event(action, label) {
+        if (typeof ga !== 'undefined') {
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'UserEvent',
+                eventAction: action,
+                eventLabel: label
+            });
+        }
+    }
+    function aEvent() {
+        event('news', 'amex');
+    }
+
+</script>

@@ -1,0 +1,97 @@
+﻿@model AwardWeb.Models.ResultContainer
+<table class="table-striped table">
+    <thead>
+        <tr>
+            <th>
+            Out
+            </th>
+            <th>
+                Departure
+            </th>
+
+            @if (Model.Return)
+            {
+                <th>
+                    Return
+                </th>
+                @*<th>
+                    Return to
+                </th>*@
+                <th>
+                    Departure
+                </th>
+            }
+            <th>
+                Book
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ 
+         var enUS=   System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+        }
+            @foreach (var item in Model.Flights)
+        {
+            <tr>
+                <td>
+                    @item.Out.Origin - @item.Out.Destination
+                    <div class="small details">seats @((int)DateTime.UtcNow.Subtract(item.Out.CrawlDate).TotalHours)h ago:@item.Out.Business/@item.Out.Plus/@item.Out.Go </div>
+                </td>                
+                <td>
+                   @item.Out.Departure.Value.Date.ToShortDateString() 
+                    <div class="small details">@item.Out.Departure.Value.Date.ToString("ddd", enUS) @item.Out.TimeString </div>
+                </td>
+                @if (Model.Return)
+                {
+                <td>
+                    @item.In.Origin - @item.In.Destination
+                    <div class="small details">seats @((int)DateTime.UtcNow.Subtract(item.In.CrawlDate).TotalHours)h ago:@item.In.Business/@item.In.Plus/@item.In.Go </div>
+                </td>
+                    <td>
+                        @item.In.Departure.Value.Date.ToShortDateString()
+                        <div class="small details">@item.In.Departure.Value.Date.ToString("ddd", enUS) @item.In.TimeString </div>
+                    </td>
+                    @*<td>
+                        @item.In.Departure.Value.Date.ToShortDateString()
+                    </td>*@
+
+                 
+                 
+                 
+                }
+                
+                @{
+                    var sDur = "";
+                    if (Model.Return)
+                    {
+                        var dur = (int)item.In.Departure.Value.Date.Subtract(item.Out.Arrival.Value.Date).TotalDays + 1;
+                        sDur = dur.ToString() + "d";
+                    }
+                    var url = Utils.CreateUrl(Model.Site, item.Out, item.In, (BookingClass)Model.iClass, Model.Pax);                   
+                }
+                <td>              
+                    @if(url != null)
+                    {
+                        <a target="_blank" href="@url" onclick="bEvent();">Book</a>
+                    }
+                    else
+                    {
+                    <text>Open jaw</text>
+                    }
+                    @if (Model.Return)
+                    {
+                        <div class="small details">duration: @sDur </div>
+                    }
+                </td>
+
+            </tr>
+
+                    }
+    </tbody>   
+</table>
+@if (Model.Flights.Count >= Model.RowLimit)
+{
+    <div><p class="text-danger">The result was limited to @Model.RowLimit rows. Please narrow you search</p></div>
+
+}
+<script type="text/javascript">event('Search', 'Search');</script>

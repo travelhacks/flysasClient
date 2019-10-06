@@ -1,0 +1,131 @@
+﻿@model AwardWeb.Models.AlertModel
+
+@{ 
+    ViewData["Canonical"] = Url.Action("Alerts");
+}
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    ViewData["Title"] = "Manage alerts";
+    <form asp-action="CreateAlert" method="post">
+        <div class="row">
+            <div class="form-group col-md-2">
+                <label class="control-label">From</label>
+                <select name="from" id="from" class="form-control" onchange="myChanged(this)"></select>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="control-label">To</label>
+                <select asp-for="NewAlert.RouteId" id="to" class="form-control"></select>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="NewAlert.Passengers" class="control-label"></label>
+                <input asp-for="NewAlert.Passengers" class="form-control" />
+                <span asp-validation-for="NewAlert.Passengers" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="NewAlert.CabinClass" class="control-label"></label>
+                <select asp-for="NewAlert.CabinClass" class="form-control" asp-items="Model.Classes"></select>
+                <span asp-validation-for="NewAlert.CabinClass" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label asp-for="NewAlert.FromDate" class="control-label"></label>
+                <input asp-for="NewAlert.FromDate" type="text" class="form-control myDate" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="NewAlert.FromDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="NewAlert.ToDate" class="control-label"></label>
+                <input asp-for="NewAlert.ToDate" type="text" class="form-control myDate" />
+                <span asp-validation-for="NewAlert.ToDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-1">
+                <label></label>
+                <input id="btnSubmit" type="submit" value="Create" class="btn btn-primary form-control" />
+            </div>
+        </div>
+
+
+
+
+    </form>
+
+
+    <div class="row">
+        <div id="result">
+            @await Component.InvokeAsync("AlertList", new { userEmail = User.Identity.Name, orderField = Model.OrderField, descending = Model.Descending })
+        </div>
+    </div>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script type="text/javascript">
+    var data = @Html.Raw(Model.Json);
+    function field()
+    {
+        $('#sortField').val(field);
+        $('#btnSubmit').trigger('click');
+    }
+
+    function myChanged()
+    {
+        var from = $("#from").val();
+        $("#to").children().remove();
+        for (var i = 0; i < data.length; i++)
+        {
+            var item = data[i];
+            if(item.To == from)
+                $("#to").append('<option value=@System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NegativeSign' + item.Id + '>' + item.From + '</option >');
+            if (item.From == from)
+                $("#to").append('<option value=' + item.Id + '>' + item.To + '</option >');
+        }
+
+    }
+
+    function toggleDetails()
+    {
+        var val = $('#toggleDetails').is(":checked");
+        $('.details').toggle(val);
+    }
+
+        $(document).ready(function () {
+
+            $('.myDate').datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+            var origins = new Array();
+            for (var i = 0; i < data.length; i++) {
+                var from = data[i].From;
+                var to = data[i].To;
+                if ($.inArray(from, origins)<0) {
+                    origins.push(from);
+                }
+                if ($.inArray(to, origins) < 0) {
+                    origins.push(to);
+                }
+            }
+            origins.sort();
+            for (var i = 0; i < origins.length;i++) {
+                $("#from").append('<option value=' + origins[i] + '>' + origins[i] + '</option >');
+            }
+            myChanged();
+
+
+    });
+
+
+</script>
+    }
+            }
+            else
+            {
+                ViewData["Title"] = "Create free flight alerts";
+                ViewData["Meta"] = "Setup free award alerts for SAS tickets";
+        <div class="row">
+            <p>You must be logged in to create Alerts.
+            <a asp-action="login" asp-controller="account"> Login </a> or 
+            <a asp-action="register" asp-controller="account"> create an account </a>
+            </p>
+        </div>
+}

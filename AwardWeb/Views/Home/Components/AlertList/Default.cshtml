@@ -1,0 +1,42 @@
+﻿@model AwardWeb.AlertListModel
+<table class="table-striped table">
+    <thead>
+        <tr>
+            <th scope="col">
+                @Html.ActionLink("From", null,null,new { orderField = AlertOrderField.From, descending = !Model.Descending && Model.OrderField==AlertOrderField.From })
+            </th>
+            <th scope="col">
+                @Html.ActionLink("To",  null, null, new { orderField = AlertOrderField.To, descending = !Model.Descending && Model.OrderField == AlertOrderField.To })
+            </th>          
+            <th scope="col">
+                @Html.ActionLink("Pax", null, null, new { orderField = AlertOrderField.Pax, descending = !Model.Descending && Model.OrderField == AlertOrderField.Pax })
+            </th >          
+            <th scope="col">
+                @Html.ActionLink("Class", null, null, new { orderField = AlertOrderField.BookinClass, descending = !Model.Descending &&  Model.OrderField == AlertOrderField.BookinClass })
+            </th>    
+            <th scope="col">
+                @Html.ActionLink("From date", null, null, new { orderField = AlertOrderField.FromDate, descending = !Model.Descending && Model.OrderField == AlertOrderField.FromDate })
+            </th>          
+            <th scope="col">
+                @Html.ActionLink("To date", null, null, new { orderField = AlertOrderField.ToDate, descending = !Model.Descending && Model.OrderField == AlertOrderField.ToDate})
+            </th>          
+            <th scope="col">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var a in Model.Alerts)
+        {
+            var css = !a.IsActive ? "class=warning" : "";
+            <tr >
+                <td @css>@(a.Origin)</td>
+                <td @css>@(a.Destination)</td>
+                <td @css>@(a.Passengers)</td>
+                <td @css>@(a.CabinClass)</td>
+                <td @css>@(a.FromDate.HasValue ? a.FromDate.Value.ToString("yyyy-MM-dd") : "")</td>
+                <td @css>@(a.ToDate.HasValue ? a.ToDate.Value.ToString("yyyy-MM-dd") : "")</td>
+                <td @css><a href="/home/deleteAlert/@a.Id">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

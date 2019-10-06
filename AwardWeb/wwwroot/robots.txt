@@ -1,0 +1,3 @@
+﻿User-agent: *
+Disallow: /starresult
+Disallow: /home/starresult
