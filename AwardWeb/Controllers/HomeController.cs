@@ -226,7 +226,7 @@ namespace AwardWeb.Controllers
                 if (search.Origin.MyLength() == 3 && search.Destination.MyLength() == 3)
                 {
                     var dates = System.Linq.Enumerable.Range(0, search.SearchDays).Select(i => search.OutDate.AddDays(i)).ToList();
-                    shuffle(dates);
+                    dates.Shuffle();
                     var res = new System.Collections.Concurrent.ConcurrentDictionary<DateTime, FlysasLib.SearchResult>();                    
                     await Dasync.Collections.ParallelForEachExtensions.ParallelForEachAsync<DateTime>( dates, 
                         async date =>
@@ -261,21 +261,7 @@ namespace AwardWeb.Controllers
                 else
                     search.Results = new List<FlysasLib.FlightBaseClass>();
             }
-            return View("Star", search);
-        }
-
-        private void shuffle(List<DateTime> list)
-        {
-            Random rng = new Random();
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                var value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
+            return View(nameof(Star), search);
         }
 
         public IActionResult RedirectToFaq()
