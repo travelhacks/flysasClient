@@ -19,6 +19,8 @@ namespace FlysasLib
 
     public class SASQuery
     {
+
+        public enum SearhMode { UNSET, POINTS, STAR, REVENUE };
         public string To { get; set; }
         public string From { get; set; }
         public string ReturnFrom { get; set; }
@@ -42,15 +44,12 @@ namespace FlysasLib
         public string Channel { get; set; } = "web";
         public DateTime? OutDate { get; set; }
         public DateTime? InDate { get; set; }
-        public string Mode;
+        public SearhMode Mode;
         private string BookingFlow
         {
             get
             {
-                var validValues = new string[] { "POINTS", "STAR", "REVENUE" };
-                if (validValues.Any(v => v.Equals(Mode, StringComparison.OrdinalIgnoreCase)))
-                    return Mode.ToLower();
-                return "revenue";
+                return Mode.ToString().ToLower();
             }
         }
 

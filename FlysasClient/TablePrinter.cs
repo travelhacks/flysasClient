@@ -35,7 +35,7 @@ namespace FlysasClient
             {
                 headers.Add(c);
                 table.Alignment[headers.Count - 1] = TextAlignment.Right;
-                if(options.Mode.Equals("POINTS", StringComparison.OrdinalIgnoreCase))
+                if(options.Mode == SASQuery.SearhMode.POINTS)
                     headers.Add("Tax");
                 if (options.OutputBookingClass)
                     headers.Add("");
@@ -65,9 +65,9 @@ namespace FlysasClient
                         sClasses = classes.SimplifyAndJoin(separator);
                         sPrice = p.price.formattedTotalPrice;
                     }
-                    if (!options.Mode.Equals("revenue", StringComparison.OrdinalIgnoreCase))
+                    if (options.Mode != SASQuery.SearhMode.REVENUE)
                         values.Add(pax);
-                    if (!options.Mode.Equals("star", StringComparison.OrdinalIgnoreCase))
+                    if (options.Mode != SASQuery.SearhMode.STAR)
                         values.Add(sPrice);
                     if (options.OutputBookingClass)
                         values.Add(sClasses);

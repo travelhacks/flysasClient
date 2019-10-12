@@ -239,7 +239,7 @@ namespace AwardWeb.Controllers
                                     From = search.Origin,
                                     To = search.Destination,
                                     Adults = search.Pax,
-                                    Mode = "star"
+                                    Mode = SASQuery.SearhMode.STAR
                                 };
                                 var c = new FlysasLib.SASRestClient();
                                 FlysasLib.SearchResult searchResult = await c.SearchAsync(q);
