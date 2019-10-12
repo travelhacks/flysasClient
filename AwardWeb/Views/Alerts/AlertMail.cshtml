@@ -1,0 +1,53 @@
+﻿@model AwardWeb.Models.AlertMailModel
+@{
+    Layout = "";
+}
+<html>
+<head>
+    <title>Email alert from AwardHacks</title>
+</head>
+<body>
+    <h2>New flights found</h2>
+    <table cellspacing="0" cellpadding="10" border="1">
+        <thead>
+            <tr>
+                <th width="50">From</th>
+                <th width="50">To</th>
+                <th width="100">Departure</th>
+                <th width="150">Bus / Plus / Go</th>
+                <th width="50">Alerts</th>
+                <th width="50">Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in @Model.Rows)
+            {
+                var c = row.Crawl;
+                <tr>
+                    <td>
+                        @c.Route.GetFrom(c.Return)
+                    </td>
+                    <td>
+                        @c.Route.GetTo(c.Return)
+                    </td>
+                    <td align="right">
+                        @c.TravelDate.ToString("yyyy-MM-dd")
+                    </td>
+                    <td align="center">
+                        @c.Business / @c.Plus / @c.Go
+                    </td>
+                    <td align="right">
+                        @(Model.CountHash[c.Id])
+                    </td>
+                    <td>
+                        <a href="@Utils.CreateUrl(Model.User.Site,c,null, row.CabinClass,row.Pax)">SAS</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    This mail was sent from <a href="https://awardhacks.se/">awardhacks.se</a>. Log in to delete or create new alerts.<br />
+    Don't reply to this email. To contact me, use the form on my <a href="https://awardhacks.se/FAQ">FAQ page</a>
+</body>
+</html>

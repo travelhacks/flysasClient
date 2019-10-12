@@ -20,22 +20,27 @@ namespace AwardData
         public virtual ApplicationUser User { get; set; }
         public virtual Route Route { get; set; }
         public DateTime Created { get; set; }
-        public string Origin
+        public string Origin => Route.GetFrom(this.Return);
+
+        public string Destination => Route.GetTo(this.Return);
+        
+        public bool IsActive
         {
             get
             {
-                return Route != null ?  Route.GetFrom(this.Return) : "";
+                return ToDate == null || ToDate >= DateTime.Now.Date;
             }
         }
-        public string Destination
+
+        public bool Matches(BookingClass bc, int pax)
         {
-            get
-            {
-                return Route != null ?  Route.GetTo(this.Return) :"";
-            }
+            return Passengers >= pax && (bc == CabinClass || CabinClass == BookingClass.All);                
         }
-        public bool IsActive =>  (!ToDate.HasValue || ToDate.Value >= DateTime.Now.Date);
-        
-        
+
+        public bool IsInRange(DateTime date)
+        {
+            var dt = date.Date;
+            return (FromDate == null || FromDate <= dt) && (ToDate == null || ToDate >= dt);
+        }
     }
 }
