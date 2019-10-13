@@ -1,6 +1,6 @@
 ﻿using System;
 using AwardData;
-namespace AwardWeb
+namespace AwardWeb.Code
 {
     public class Utils
     {

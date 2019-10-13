@@ -67,7 +67,7 @@
                         var dur = (int)item.In.Departure.Value.Date.Subtract(item.Out.Arrival.Value.Date).TotalDays + 1;
                         sDur = dur.ToString() + "d";
                     }
-                    var url = Utils.CreateUrl(Model.Site, item.Out, item.In, (BookingClass)Model.iClass, Model.Pax);                   
+                    var url = AwardWeb.Code.Utils.CreateUrl(Model.Site, item.Out, item.In, (BookingClass)Model.iClass, Model.Pax);                   
                 }
                 <td>              
                     @if(url != null)
