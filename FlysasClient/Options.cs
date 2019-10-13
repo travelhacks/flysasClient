@@ -28,7 +28,7 @@ namespace FlysasClient
                     mySet(option.Key, option.Value);
         }
 
-        private bool mySet(string option,string value)
+        private bool mySet(string option, string value)
         {
             foreach (var prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
@@ -39,6 +39,14 @@ namespace FlysasClient
                         prop.SetValue(this, myBool(value));
                     if (prop.PropertyType == typeof(string))
                         prop.SetValue(this, value);
+                    if (prop.PropertyType.IsEnum)
+                    {
+                        object enumVal = null;
+                        if (Enum.TryParse(prop.PropertyType, value, true, out enumVal))
+                            prop.SetValue(this, enumVal);
+                        else
+                            return false;
+                    }
                     return true;
                 }
             }
@@ -63,9 +71,10 @@ namespace FlysasClient
         {
             if (stack.Any())
             {
+                var allGood = true;
                 while (stack.Count >= 2)
-                    mySet(stack.Pop(), stack.Pop());
-                return true;
+                   allGood &= mySet(stack.Pop(), stack.Pop());
+                return allGood;
             }
             return false;
         }
@@ -89,7 +98,7 @@ namespace FlysasClient
         [OptionParser("flightnumber")]
         public bool OutputFlightNumber { get; private set; } = false;
         [OptionParser("mode")]
-        public string Mode { get; private set; } = "REVENUE";
+        public SASQuery.SearhMode Mode { get; private set; } = SASQuery.SearhMode.REVENUE;
         public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options) { }        
     }
 }

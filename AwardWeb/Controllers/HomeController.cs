@@ -8,7 +8,6 @@ using AwardData;
 using AwardWeb.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Async;
 using FlysasLib;
 using Microsoft.Extensions.Options;
 
@@ -18,7 +17,7 @@ namespace AwardWeb.Controllers
     public class HomeController : Controller
     {
         AwardData.AwardContext ctx;        
-
+       
         public HomeController(AwardData.AwardContext context)
         {
             ctx = context;            
@@ -227,36 +226,33 @@ namespace AwardWeb.Controllers
                 if (search.Origin.MyLength() == 3 && search.Destination.MyLength() == 3)
                 {
                     var dates = System.Linq.Enumerable.Range(0, search.SearchDays).Select(i => search.OutDate.AddDays(i)).ToList();
-                    shuffle(dates, threads);
+                    dates.Shuffle();
                     var res = new System.Collections.Concurrent.ConcurrentDictionary<DateTime, FlysasLib.SearchResult>();                    
-                    await dates.ParallelForEachAsync(
+                    await Dasync.Collections.ParallelForEachExtensions.ParallelForEachAsync<DateTime>( dates, 
                         async date =>
                         {
                             if (!res.ContainsKey(date))//this looks smart, but doesn't realy save a lot of calls...
-                        {
-                                bool err = false;
+                            {                                
                                 var q = new SASQuery
                                 {
                                     OutDate = date,
                                     From = search.Origin,
                                     To = search.Destination,
                                     Adults = search.Pax,
-                                    Mode = "star"
+                                    Mode = SASQuery.SearhMode.STAR
                                 };
                                 var c = new FlysasLib.SASRestClient();
-                                FlysasLib.SearchResult tmp = await c.SearchAsync(q);
-                                if (tmp.tabsInfo != null && tmp.tabsInfo.outboundInfo != null)
-                                {
-                                    var tabs = tmp.tabsInfo.outboundInfo.Where(tab => tab.points == 0);
-                                    foreach (var x in tabs)
-                                        res.TryAdd(x.date, null);
-                                }
-                                res.TryAdd(date, tmp);
+                                FlysasLib.SearchResult searchResult = await c.SearchAsync(q);
+
+                                if (searchResult.tabsInfo != null && searchResult.tabsInfo.outboundInfo != null)                                
+                                    foreach(var dayWithNoSeats in searchResult.tabsInfo.outboundInfo.Where(tab => tab.points == 0))                                    
+                                        res.TryAdd(dayWithNoSeats.date, null);                                
+
+                                res.TryAdd(date, searchResult);
                             }
                         },
                         threads,
                         false
-
                         );
                     search.Results = res.Where(r => r.Value?.outboundFlights != null).SelectMany(r => r.Value.outboundFlights).ToList();
                     if (search.MaxLegs > 0)
@@ -265,21 +261,7 @@ namespace AwardWeb.Controllers
                 else
                     search.Results = new List<FlysasLib.FlightBaseClass>();
             }
-            return View("Star", search);
-        }
-
-        private void shuffle(List<DateTime> list, int threads)
-        {
-            Random rng = new Random();
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                var value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
+            return View(nameof(Star), search);
         }
 
         public IActionResult RedirectToFaq()

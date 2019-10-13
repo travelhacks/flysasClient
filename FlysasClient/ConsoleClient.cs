@@ -112,7 +112,8 @@ namespace FlysasClient
                     switch (cmd)
                     {
                         case Commands.Set:
-                            options.Set(stack);
+                            if (!options.Set(stack))
+                                txtOut.WriteLine("Error: Unknown settings");
                             break;
                         case Commands.Info:
                             info(stack);
