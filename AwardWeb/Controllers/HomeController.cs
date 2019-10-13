@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using AwardData;
 using AwardWeb.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
 using FlysasLib;
 using Microsoft.Extensions.Options;
 
@@ -33,50 +32,6 @@ namespace AwardWeb.Controllers
             return RedirectToActionPermanent(nameof(HomeController.List));
         }
     
-        public IActionResult Alerts(AlertOrderField orderField = AlertOrderField.Id, bool descending = false)
-        {
-            var dict = new Dictionary<string, List<string>>();
-            var model = new Models.AlertModel();
-            model.NewAlert = new AwardData.Alerts { Passengers = 1, CabinClass = BookingClass.Business };            
-            model.Json = Newtonsoft.Json.JsonConvert.SerializeObject(ctx.Routes.Where(r => r.Crawl && r.Show));
-            model.Classes = new List<SelectListItem>();           
-            foreach (var bookingClass in Enum.GetValues(typeof(BookingClass)))
-                if ((int)bookingClass > 0)
-                    model.Classes.Add(new SelectListItem { Text = bookingClass.ToString(), Value = ((int)bookingClass).ToString() });
-            model.Classes.Reverse();            
-            model.OrderField = orderField;
-            model.Descending = descending;
-            return View(model);
-        }
-                
-        [Authorize]
-        public IActionResult DeleteAlert(int Id)
-        {
-            var alert = ctx.Alerts.Include(a => a.User).FirstOrDefault(a => a.Id == Id);
-            if (alert != null && alert.User.Email == User.Identity.Name)
-            {
-                ctx.Alerts.Remove(alert);
-                ctx.SaveChanges();
-            }
-            return RedirectToAction(nameof(Alerts));
-        }
-        [HttpPost]
-        [Authorize]
-        public IActionResult CreateAlert(Alerts NewAlert)
-        {
-            var user = ctx.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
-            NewAlert.UserId = user.Id;
-            if (NewAlert.RouteId < 0)
-            {
-                NewAlert.RouteId *= -1;
-                NewAlert.Return = true;
-            }
-            NewAlert.Created = DateTime.UtcNow;            
-            ctx.Alerts.Add(NewAlert);
-            ctx.SaveChanges();            
-            return RedirectToAction(nameof(Alerts));
-        }
-
   
         public IActionResult Console()
         {

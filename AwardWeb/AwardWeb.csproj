@@ -34,7 +34,6 @@
 
   
   <ItemGroup>
-    <Folder Include="Views\Alerts\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
   

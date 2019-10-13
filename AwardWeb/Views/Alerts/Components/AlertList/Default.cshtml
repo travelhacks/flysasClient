@@ -25,17 +25,17 @@
     </thead>
     <tbody>
         
-        @foreach (var a in Model.Alerts)
+        @foreach (var alert in Model.Alerts)
         {
-            var css = !a.IsActive ? "class=warning" : "";
+            var css = !alert.IsActive ? "class=warning" : "";
             <tr >
-                <td @css>@(a.Origin)</td>
-                <td @css>@(a.Destination)</td>
-                <td @css>@(a.Passengers)</td>
-                <td @css>@(a.CabinClass)</td>
-                <td @css>@(a.FromDate.HasValue ? a.FromDate.Value.ToString("yyyy-MM-dd") : "")</td>
-                <td @css>@(a.ToDate.HasValue ? a.ToDate.Value.ToString("yyyy-MM-dd") : "")</td>
-                <td @css><a href="/home/deleteAlert/@a.Id">Delete</a></td>
+                <td @css>@(alert.Origin)</td>
+                <td @css>@(alert.Destination)</td>
+                <td @css>@(alert.Passengers)</td>
+                <td @css>@(alert.CabinClass)</td>
+                <td @css>@(alert.FromDate.HasValue ? alert.FromDate.Value.ToString("yyyy-MM-dd") : "")</td>
+                <td @css>@(alert.ToDate.HasValue ? alert.ToDate.Value.ToString("yyyy-MM-dd") : "")</td>
+                <td @css>@Html.ActionLink("Delete", nameof(AwardWeb.Controllers.AlertsController.DeleteAlert), "Alerts" , new { id = alert.Id })</td>
             </tr>
         }
     </tbody>

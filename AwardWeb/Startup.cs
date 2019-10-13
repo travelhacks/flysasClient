@@ -121,7 +121,7 @@ namespace AwardWeb
                 routes.MapControllerRoute(
                     name: null,
                     pattern: "Alerts",
-                    defaults: new { controller = "Home", action = nameof(Controllers.HomeController.Alerts) });
+                    defaults: new { controller = "Alerts", action = nameof(Controllers.AlertsController.Index) });
 
                 routes.MapControllerRoute(
                     name: null,
