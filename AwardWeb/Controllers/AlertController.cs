@@ -25,7 +25,7 @@ namespace AwardWeb.Controllers
         public async Task<IActionResult> SendAlerts(
             [FromServices]Services.IViewRenderService render,
             [FromServices]Services.IEmailSender sender,            
-            bool DryRun = true, string secret = null)
+            bool dryRun = true, string secret = null)
         {
             if (secret == appSettings.Secret)
             {
@@ -40,7 +40,7 @@ namespace AwardWeb.Controllers
                     foreach (var alert in matches)
                     {
                         if (change.HasIncrease(alert.CabinClass))
-                            if (DryRun || !ctx.SentMail.Any(sm => sm.UserId == alert.UserId && sm.Crawl.RouteId == alert.RouteId && sm.Crawl.Return == alert.Return && sm.Crawl.TravelDate == change.TravelDate))
+                            if (dryRun || !ctx.SentMail.Any(sm => sm.UserId == alert.UserId && sm.Crawl.RouteId == alert.RouteId && sm.Crawl.Return == alert.Return && sm.Crawl.TravelDate == change.TravelDate))
                             {
                                 if (!newMails.ContainsKey(alert.UserId))
                                 {
@@ -56,7 +56,7 @@ namespace AwardWeb.Controllers
                     }
                 }
                 var countHash = newMails.Values.SelectMany(m => m.Rows).GroupBy(c => c.Crawl.Id).ToDictionary(g => g.Key, g => g.Count());
-                if (DryRun)
+                if (dryRun)
                 {
                     foreach (var mail in newMails.Values.Take(5))
                     {
