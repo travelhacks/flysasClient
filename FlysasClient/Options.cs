@@ -28,7 +28,7 @@ namespace FlysasClient
                     mySet(option.Key, option.Value);
         }
 
-        private bool mySet(string option,string value)
+        private bool mySet(string option, string value)
         {
             foreach (var prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
@@ -43,11 +43,11 @@ namespace FlysasClient
                     {
                         object enumVal = null;
                         if (Enum.TryParse(prop.PropertyType, value, true, out enumVal))
-                        {
                             prop.SetValue(this, enumVal);
-                            return true;
-                        }
+                        else
+                            return false;
                     }
+                    return true;
                 }
             }
             return false;
