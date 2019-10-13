@@ -13,22 +13,24 @@ namespace AwardWeb.Controllers
 
     public class AlertController : Controller
     {
-        AwardData.AwardContext ctx;        
+        AwardData.AwardContext ctx;
+        AppSettings appSettings;
 
-        public AlertController(AwardData.AwardContext context)
+        public AlertController(AwardData.AwardContext context, Microsoft.Extensions.Options.IOptionsMonitor<AppSettings> settingsAccessor)
         {
-            ctx = context;            
+            ctx = context;
+            appSettings = settingsAccessor.CurrentValue;
         }
       
         public async Task<IActionResult> SendAlerts(
             [FromServices]Services.IViewRenderService render,
-            [FromServices]Services.IEmailSender sender,
-            [FromServices]Models.AppSettings appSettings,
+            [FromServices]Services.IEmailSender sender,            
             bool DryRun = true, string secret = null)
         {
             if (secret == appSettings.Secret)
             {
-                var changes = ctx.AllChanges.Include(c => c.Route).Where(c => c.Route.Crawl && c.Route.Show && c.HasIncrease(BookingClass.All) ).ToList();
+                var changes = ctx.AllChanges.Include(c => c.Route).Where(c => c.Route.Crawl && c.Route.Show && (c.Business > 0 || c.Go > 0 || c.Plus >0))
+                    .ToList().Where(c=>c.HasIncrease(BookingClass.All) ).ToList();
                 var alerts = ctx.Alerts.Where(a => !a.ToDate.HasValue || a.ToDate >= DateTime.Now.Date).ToList();
                 var newMails = new Dictionary<string, AlertMailModel>();
                 foreach (var change in changes)
@@ -104,7 +106,7 @@ namespace AwardWeb.Controllers
         {
             var mail = new AlertMailModel();
             mail.User = new ApplicationUser { UserName = "Test" };
-            mail.Rows = ctx.AllChanges.Include(c => c.Route).Where(c => c.Route.Crawl && c.Route.Show && c.HasIncrease(BookingClass.All)).
+            mail.Rows = ctx.AllChanges.Include(c => c.Route).Where(c => c.Route.Crawl && c.Route.Show).ToList().Where(c=>c.HasIncrease(BookingClass.All)).
                 ToList().OrderByDescending(c => c.CrawlDate).Take(2).Select(c => new MailContainer { Crawl = c, CabinClass = BookingClass.Business, Pax = 1 }).ToList();
             mail.CountHash = mail.Rows.GroupBy(c => c.Crawl.Id).ToDictionary(g => g.Key, g => g.Count());
             return View("/Views/Alerts/AlertMail.cshtml", mail);
