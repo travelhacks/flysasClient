@@ -16,10 +16,10 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit, Calender
         };
 
-        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
+        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export, Commands.Calender };
 
         public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
@@ -148,10 +148,38 @@ namespace FlysasClient
                             client.Logout();
                             Environment.Exit(0);
                             break;
+                        case Commands.Calender:
+                            ReservationsResult.Reservations R = client.MyReservations();
+                            if (R?.ReservationsReservations?.Count > 0)
+                            {
+                                foreach (ReservationsResult.Reservation R1 in R.ReservationsReservations)
+                                {
+                                    txtOut.Write("Booking reference: ");
+                                    txtOut.WriteLine(R1.AirlineBookingReference);
+                                    txtOut.Write("Destination: ");
+                                    txtOut.Write(R1.Connections[0].Destination);
+                                    txtOut.WriteLine("Was written to your desktop as a *.ICS file.");
+                                    txtOut.WriteLine("Just drag it into your calender app.");
+
+
+                                    FlysasLib.CalenderPrinter cp = new CalenderPrinter();
+                                    cp.WriteICal(null, R1);
+
+                                }
+
+                            }
+                            else
+                            {
+                                txtOut.WriteLine("Sorry: No bookings found!");
+                                break;
+                            }
+
+
+                            break;
                     }
                     return true;
                 }
-            }
+            } 
             return false;
         }
 
