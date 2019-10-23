@@ -118,7 +118,7 @@ namespace AwardWeb.Controllers
                         {
                             mail.CountHash = countHash;
                             mail.Rows = mail.Rows.OrderBy(c => c.Crawl.TravelDate).Distinct().ToList();
-                            var html = await render.RenderToStringAsync("Home/AlertMail", mail);
+                            var html = await render.RenderToStringAsync("Alerts/AlertMail", mail);
 
                             foreach (var c in mail.Rows.Select(r => r.Crawl))
                             {
