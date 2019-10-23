@@ -23,31 +23,16 @@ namespace AwardWeb
             var query = ctx.Alerts.Include(a => a.Route).Where(a => a.User.Email == userEmail).OrderByDescending(a => a.Id);
             var list = query.ToList();
 
-            switch (orderField)
+            model.Alerts = orderField switch
             {
-                case AlertOrderField.Id:
-                    list = list.OrderBy(a => a.Id).ToList();
-                    break;
-                case AlertOrderField.To:
-                    list = list.OrderBy(a => a.Destination).ToList();
-                    break;
-                case AlertOrderField.From:
-                    list = list.OrderBy(a => a.Origin).ToList();
-                    break;
-                case AlertOrderField.FromDate:
-                    list = list.OrderBy(a => a.FromDate).ToList();
-                    break;
-                case AlertOrderField.ToDate:
-                    list = list.OrderBy(a => a.ToDate).ToList();
-                    break;
-                case AlertOrderField.BookinClass:
-                    list = list.OrderBy(a => a.CabinClass).ToList();
-                    break;
-                case AlertOrderField.Pax:
-                    list = list.OrderBy(a => a.Passengers).ToList();
-                    break;
-            }
-            model.Alerts = list;
+                AlertOrderField.Id => list.OrderBy(a => a.Id).ToList(),
+                AlertOrderField.To => list.OrderBy(a => a.Destination).ToList(),
+                AlertOrderField.From => list.OrderBy(a => a.Origin).ToList(),
+                AlertOrderField.FromDate => list.OrderBy(a => a.FromDate).ToList(),
+                AlertOrderField.ToDate => list.OrderBy(a => a.ToDate).ToList(),
+                AlertOrderField.BookinClass => list.OrderBy(a => a.CabinClass).ToList(),
+                AlertOrderField.Pax => list.OrderBy(a => a.Passengers).ToList()
+            };             
             model.Descending = descending;
             model.OrderField = orderField;
             if (descending || orderField == AlertOrderField.Id)

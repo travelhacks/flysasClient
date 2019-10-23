@@ -56,14 +56,13 @@ namespace AwardData
 
         public bool HasSpace(int cabinClass, uint passengers)
         {
-            int space = 0;
-            switch (cabinClass)
+            int space = cabinClass switch
             {
-                case 3: space = this.Business; break;
-                case 2: space = this.Plus; break;
-                case 1: space = this.Go; break;
-                default: space = Math.Max(Go, Math.Max(Business, Plus)); break;
-            }
+                (int)BookingClass.Business => this.Business,
+                (int)BookingClass.Plus => this.Plus,
+                (int)BookingClass.Go => this.Go,
+                _ => Math.Max(Go, Math.Max(Business, Plus))
+            };
             return space >= passengers;
         }
     }
