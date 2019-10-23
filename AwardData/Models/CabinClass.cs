@@ -1,6 +1,6 @@
 ﻿namespace AwardData
 {
-    public enum BookingClass
+    public enum CabinClass
     {
         All,
         Go,

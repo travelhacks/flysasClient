@@ -58,9 +58,9 @@ namespace AwardData
         {
             int space = cabinClass switch
             {
-                (int)BookingClass.Business => this.Business,
-                (int)BookingClass.Plus => this.Plus,
-                (int)BookingClass.Go => this.Go,
+                (int)CabinClass.Business => this.Business,
+                (int)CabinClass.Plus => this.Plus,
+                (int)CabinClass.Go => this.Go,
                 _ => Math.Max(Go, Math.Max(Business, Plus))
             };
             return space >= passengers;

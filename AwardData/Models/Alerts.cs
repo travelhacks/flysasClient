@@ -16,7 +16,7 @@ namespace AwardData
         public DateTime? ToDate { get; set; }
         public int Passengers { get; set; }
         [Display(Name = "Class")]
-        public BookingClass CabinClass { get; set; }
+        public CabinClass CabinClass { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual Route Route { get; set; }
         public DateTime Created { get; set; }
@@ -32,9 +32,9 @@ namespace AwardData
             }
         }
 
-        public bool Matches(BookingClass bc, int pax)
+        public bool Matches(CabinClass bc, int pax)
         {
-            return Passengers >= pax && (bc == CabinClass || CabinClass == BookingClass.All);                
+            return Passengers >= pax && (bc == CabinClass || CabinClass == CabinClass.All);                
         }
 
         public bool IsInRange(DateTime date)
