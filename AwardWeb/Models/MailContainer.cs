@@ -6,6 +6,6 @@ namespace AwardWeb.Models
     {
         public AllChanges Crawl { get; set; }
         public uint Pax { get; set; }
-        public BookingClass CabinClass { get; set; }
+        public CabinClass CabinClass { get; set; }
     }
 }
