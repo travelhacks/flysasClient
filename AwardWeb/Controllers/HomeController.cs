@@ -89,16 +89,16 @@ namespace AwardWeb.Controllers
             sasSearch.MinDays = 0U;
             sasSearch.MaxDays = 7U;
             sasSearch.Return = true;
-            sasSearch.CabinClass = (int)BookingClass.Business;
+            sasSearch.CabinClass = (int)CabinClass.Business;
             sasSearch.From = new List<string>(new string[] { "Europe" });
             sasSearch.To = new List<string>(new string[] { "All" });
 
 
             sasSearch.Classes = new List<SelectListItem>();
-            sasSearch.Classes.Add(new SelectListItem { Text = "Business", Value = ((int)BookingClass.Business).ToString() });
-            sasSearch.Classes.Add(new SelectListItem { Text = "Plus (PE)", Value = ((int)BookingClass.Plus).ToString() });
-            sasSearch.Classes.Add(new SelectListItem { Text = "GO (Economy)", Value =  ((int)BookingClass.Go).ToString() });
-            sasSearch.Classes.Add(new SelectListItem { Text = "Any/mixed", Value = ((int)BookingClass.All).ToString() });
+            sasSearch.Classes.Add(new SelectListItem { Text = "Business", Value = ((int)CabinClass.Business).ToString() });
+            sasSearch.Classes.Add(new SelectListItem { Text = "Plus (PE)", Value = ((int)CabinClass.Plus).ToString() });
+            sasSearch.Classes.Add(new SelectListItem { Text = "GO (Economy)", Value =  ((int)CabinClass.Go).ToString() });
+            sasSearch.Classes.Add(new SelectListItem { Text = "Any/mixed", Value = ((int)CabinClass.All).ToString() });
             sasSearch.OutWeekDays = new List<int>();
             sasSearch.InWeekDays = new List<int>();
             sasSearch.EquipmentList = cachedData.EquipmentList.Select(s => new SelectListItem(s,s) ).ToList();

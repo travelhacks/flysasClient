@@ -4,7 +4,7 @@ namespace AwardWeb.Code
 {
     public class Utils
     {
-        public static string CreateUrl(string site,  Crawl outbound, Crawl inbound ,BookingClass bclass, uint pax)
+        public static string CreateUrl(string site,  Crawl outbound, Crawl inbound ,CabinClass bclass, uint pax)
         {
             if(string.IsNullOrWhiteSpace(site))
             {
@@ -25,7 +25,7 @@ namespace AwardWeb.Code
             return hasLink ? url : null;
         }
 
-        public static string CreateUrl(string site, AllChanges outbound, AllChanges inbound, BookingClass bclass, uint pax)
+        public static string CreateUrl(string site, AllChanges outbound, AllChanges inbound, CabinClass bclass, uint pax)
         {
             return CreateUrl(site, clone(outbound), clone(inbound), bclass, pax);
         }
@@ -37,13 +37,13 @@ namespace AwardWeb.Code
             return new Crawl { Id = org.Id, RouteId = org.RouteId, Route = org.Route, CrawlDate = org.CrawlDate, TravelDate = org.TravelDate };
         }
 
-        public static string ClassStringShort(BookingClass cabin)
+        public static string ClassStringShort(CabinClass cabin)
         {
-            if (cabin == BookingClass.All)
+            if (cabin == CabinClass.All)
                 return "";
             return cabin.ToString().ToUpper();
         }
-        public static string ClassStringLong(BookingClass cabin)
+        public static string ClassStringLong(CabinClass cabin)
         {
             var tmp = ClassStringShort(cabin);
             if (!string.IsNullOrEmpty(tmp))

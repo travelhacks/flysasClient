@@ -20,14 +20,14 @@ namespace AwardData
         public int? g2 { get; set; }
         public int? p2 { get; set; }
 
-        public bool HasIncrease(BookingClass cabinClass)
+        public bool HasIncrease(CabinClass cabinClass)
         {
             return cabinClass switch
             {
-                BookingClass.All => HasIncrease(BookingClass.Go)  || HasIncrease(BookingClass.Plus) || HasIncrease(BookingClass.Business),
-                BookingClass.Business => Business > c2.GetValueOrDefault(),
-                BookingClass.Plus => Plus > p2.GetValueOrDefault(),
-                BookingClass.Go => Go > g2.GetValueOrDefault(),
+                CabinClass.All => HasIncrease(CabinClass.Go)  || HasIncrease(CabinClass.Plus) || HasIncrease(CabinClass.Business),
+                CabinClass.Business => Business > c2.GetValueOrDefault(),
+                CabinClass.Plus => Plus > p2.GetValueOrDefault(),
+                CabinClass.Go => Go > g2.GetValueOrDefault(),
                 _ => false
             };
         }

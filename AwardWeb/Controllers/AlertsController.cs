@@ -27,12 +27,12 @@ namespace AwardWeb.Controllers
         {
             var dict = new Dictionary<string, List<string>>();
             var model = new Models.AlertModel();
-            model.NewAlert = new AwardData.Alerts { Passengers = 1, CabinClass = BookingClass.Business };
+            model.NewAlert = new AwardData.Alerts { Passengers = 1, CabinClass = CabinClass.Business };
             model.Json = Newtonsoft.Json.JsonConvert.SerializeObject(ctx.Routes.Where(r => r.Crawl && r.Show));
             model.Classes = new List<SelectListItem>();
-            foreach (var bookingClass in Enum.GetValues(typeof(BookingClass)))
-                if ((int)bookingClass > 0)
-                    model.Classes.Add(new SelectListItem { Text = bookingClass.ToString(), Value = ((int)bookingClass).ToString() });
+            foreach (var cabinClass in Enum.GetValues(typeof(CabinClass)))
+                if ((int)cabinClass > 0)
+                    model.Classes.Add(new SelectListItem { Text = cabinClass.ToString(), Value = ((int)cabinClass).ToString() });
             model.Classes.Reverse();
             model.OrderField = orderField;
             model.Descending = descending;
@@ -75,13 +75,13 @@ namespace AwardWeb.Controllers
             if (secret == appSettings.Secret)
             {
                 var changes = ctx.AllChanges.Include(c => c.Route).Where(c => c.Route.Crawl && c.Route.Show && (c.Business > 0 || c.Go > 0 || c.Plus >0))
-                    .ToList().Where(c=>c.HasIncrease(BookingClass.All) ).ToList();
+                    .ToList().Where(c=>c.HasIncrease(CabinClass.All) ).ToList();
                 var alerts = ctx.Alerts.Where(a => !a.ToDate.HasValue || a.ToDate >= DateTime.Now.Date).ToList();
                 var newMails = new Dictionary<string, AlertMailModel>();
                 foreach (var change in changes)
                 {
                     var matches = alerts.Where(a => a.Created < change.CrawlDate && a.RouteId == change.RouteId && a.Return == change.Return && a.IsInRange(change.TravelDate) );
-                    matches = matches.Where(a => a.Matches(BookingClass.Go, change.Go) || a.Matches(BookingClass.Plus, change.Plus) || a.Matches(BookingClass.Business, change.Business)).ToList();
+                    matches = matches.Where(a => a.Matches(CabinClass.Go, change.Go) || a.Matches(CabinClass.Plus, change.Plus) || a.Matches(CabinClass.Business, change.Business)).ToList();
                     foreach (var alert in matches)
                     {
                         if (change.HasIncrease(alert.CabinClass))
@@ -151,8 +151,8 @@ namespace AwardWeb.Controllers
         {
             var mail = new AlertMailModel();
             mail.User = new ApplicationUser { UserName = "Test" };
-            mail.Rows = ctx.AllChanges.Include(c => c.Route).Where(c => c.Route.Crawl && c.Route.Show).ToList().Where(c=>c.HasIncrease(BookingClass.All)).
-                ToList().OrderByDescending(c => c.CrawlDate).Take(2).Select(c => new MailContainer { Crawl = c, CabinClass = BookingClass.Business, Pax = 1 }).ToList();
+            mail.Rows = ctx.AllChanges.Include(c => c.Route).Where(c => c.Route.Crawl && c.Route.Show).ToList().Where(c=>c.HasIncrease(CabinClass.All)).
+                ToList().OrderByDescending(c => c.CrawlDate).Take(2).Select(c => new MailContainer { Crawl = c, CabinClass = CabinClass.Business, Pax = 1 }).ToList();
             mail.CountHash = mail.Rows.GroupBy(c => c.Crawl.Id).ToDictionary(g => g.Key, g => g.Count());
             return View("/Views/Alerts/AlertMail.cshtml", mail);
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FlysasLib;
-using System.IO;
 
 namespace FlysasClient
 {
@@ -16,7 +15,7 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit
+            Login, History, Logout, Points, Set, Help, Options, Export, Info, Quit
         };
 
         HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
@@ -54,11 +53,11 @@ namespace FlysasClient
                     }
                     catch (ParserException ex)
                     {
-                        txtOut.Write("Syntax error:" + ex.Message);
+                        txtOut.Write($"Parse error: {ex.Message}");
                     }
-                    catch
+                    catch(Exception ex)
                     {
-                        txtOut.Write("Syntax error:");
+                        txtOut.Write($"Exception: {ex.Message}");
                     }
                     if (req != null)
                     {
@@ -129,10 +128,7 @@ namespace FlysasClient
                             break;
                         case Commands.Points:
                             points();
-                            break;
-                        case Commands.Benchmark:
-                            benchMark();
-                            break;
+                            break;                       
                         case Commands.Options:
                             txtOut.Write(options.Help() + Environment.NewLine);
                             break;
@@ -154,23 +150,7 @@ namespace FlysasClient
             }
             return false;
         }
-
-        private void benchMark()
-        {
-            var count = 40;
-            int threads = 6;
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            System.Threading.Tasks.Parallel.For(0, count, new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = threads }, x =>
-            {
-                SASQuery q = new SASQuery { From = "KLR", To = "ARN", OutDate = DateTime.Now.AddDays(1 + x).Date };
-                var w2 = System.Diagnostics.Stopwatch.StartNew();
-                var res = client.Search(q);
-                //txtOut.WriteLine("Got " + res.outboundFlights?.Count + " in " + w2.Elapsed.TotalSeconds);
-
-            });
-            txtOut.WriteLine(watch.Elapsed.TotalSeconds);
-        }
-
+       
         private void points()
         {
             try
@@ -351,9 +331,9 @@ namespace FlysasClient
                 var result = client.Login(userName, passWord);
                 txtOut.WriteLine($"Login for {userName}  {(result ? " success" : "failed")}");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                txtOut.WriteLine("Login failed");
+                txtOut.WriteLine($"Error while trying to login: {ex.Message}");
             }
         }
 
@@ -364,23 +344,20 @@ namespace FlysasClient
             while (true)
             {
                 key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Enter)
+                    break;
                 if (key.Key == ConsoleKey.Backspace)
                 {
                     if (str.Any())
                     {
-                        str = str.Substring(0, str.Length - 1);
+                        str = str.Remove(str.Length - 1);
                         txtOut.Write("\b \b");
                     }
                 }
                 else
                 {
-                    if (key.Key == ConsoleKey.Enter)
-                        break;
-                    else
-                    {
-                        str += key.KeyChar;
-                        txtOut.Write("*");
-                    }
+                    str += key.KeyChar;
+                    txtOut.Write("*");
                 }
             }
             txtOut.WriteLine();
