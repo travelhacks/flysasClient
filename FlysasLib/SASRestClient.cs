@@ -53,6 +53,33 @@ namespace FlysasLib
             }
         }
 
+        public ReservationsResult.Reservations MyReservations()
+        {
+            var url = $"https://api.flysas.com/reservation/reservations?customerID={auth.customerSessionId}";
+            var request = createRequest(url, HttpMethod.Get, auth);
+            request.Headers.Add("Origin", "https://www.sas.dk");
+            request.Headers.Add("Referer", "https://www.sas.dk/managemybooking");
+            request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36");
+            ReservationsResult.Reservations reservations = new ReservationsResult.Reservations() ;
+            //var res = GetResult<ReservationsResult.Reservations>(request);
+            var res = downLoad(request);
+            
+            if (res.Success)
+            {
+                reservations = ReservationsResult.Reservations.FromJson(res.Content);
+            }
+            else
+            {//load blank list so you don't get nullref
+                reservations = new ReservationsResult.Reservations() ;
+                reservations.ReservationsReservations = new List<ReservationsResult.Reservation>();
+                
+                System.Diagnostics.Debug.WriteLine(res.ToString());
+            }
+                
+
+            return reservations;
+        }
+
         public SearchResult Search(SASQuery query)
         {
             var req = createRequest(query.GetUrl(), HttpMethod.Get);

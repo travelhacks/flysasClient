@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FlysasLib;
+using System.IO;
 
 namespace FlysasClient
 {
@@ -15,10 +16,10 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Options, Export, Info, Quit
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit, Calendar
         };
 
-        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export };
+        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export, Commands.Calendar };
 
         public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
@@ -53,11 +54,11 @@ namespace FlysasClient
                     }
                     catch (ParserException ex)
                     {
-                        txtOut.Write($"Parse error: {ex.Message}");
+                        txtOut.Write("Syntax error:" + ex.Message);
                     }
-                    catch(Exception ex)
+                    catch
                     {
-                        txtOut.Write($"Exception: {ex.Message}");
+                        txtOut.Write("Syntax error:");
                     }
                     if (req != null)
                     {
@@ -128,7 +129,10 @@ namespace FlysasClient
                             break;
                         case Commands.Points:
                             points();
-                            break;                       
+                            break;
+                        case Commands.Benchmark:
+                            benchMark();
+                            break;
                         case Commands.Options:
                             txtOut.Write(options.Help() + Environment.NewLine);
                             break;
@@ -144,13 +148,57 @@ namespace FlysasClient
                             client.Logout();
                             Environment.Exit(0);
                             break;
+                        case Commands.Calendar:
+                            ReservationsResult.Reservations reservations = client.MyReservations();
+                            if (reservations?.ReservationsReservations?.Count > 0)
+                            {
+                                foreach (ReservationsResult.Reservation reservation in reservations.ReservationsReservations)
+                                {
+                                    txtOut.Write("Booking reference: ");
+                                    txtOut.WriteLine(reservation.AirlineBookingReference);
+                                    txtOut.Write("Destination: ");
+                                    txtOut.Write(reservation.Connections[0].Destination);
+                                    txtOut.WriteLine($"Was written to your export folder as as {reservation.AirlineBookingReference}.ICS file.");
+                                    txtOut.WriteLine("Just drag it into your calender app.");
+
+
+                                    FlysasLib.CalendarPrinter cp = new CalendarPrinter();
+                                    cp.WriteICal(reservation);
+
+                                }
+
+                            }
+                            else
+                            {
+                                txtOut.WriteLine("Sorry: No bookings found!");
+                                break;
+                            }
+
+
+                            break;
                     }
                     return true;
                 }
-            }
+            } 
             return false;
         }
-       
+
+        private void benchMark()
+        {
+            var count = 40;
+            int threads = 6;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            System.Threading.Tasks.Parallel.For(0, count, new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = threads }, x =>
+            {
+                SASQuery q = new SASQuery { From = "KLR", To = "ARN", OutDate = DateTime.Now.AddDays(1 + x).Date };
+                var w2 = System.Diagnostics.Stopwatch.StartNew();
+                var res = client.Search(q);
+                //txtOut.WriteLine("Got " + res.outboundFlights?.Count + " in " + w2.Elapsed.TotalSeconds);
+
+            });
+            txtOut.WriteLine(watch.Elapsed.TotalSeconds);
+        }
+
         private void points()
         {
             try
@@ -331,9 +379,9 @@ namespace FlysasClient
                 var result = client.Login(userName, passWord);
                 txtOut.WriteLine($"Login for {userName}  {(result ? " success" : "failed")}");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                txtOut.WriteLine($"Error while trying to login: {ex.Message}");
+                txtOut.WriteLine("Login failed");
             }
         }
 
@@ -344,20 +392,23 @@ namespace FlysasClient
             while (true)
             {
                 key = Console.ReadKey(true);
-                if (key.Key == ConsoleKey.Enter)
-                    break;
                 if (key.Key == ConsoleKey.Backspace)
                 {
                     if (str.Any())
                     {
-                        str = str.Remove(str.Length - 1);
+                        str = str.Substring(0, str.Length - 1);
                         txtOut.Write("\b \b");
                     }
                 }
                 else
                 {
-                    str += key.KeyChar;
-                    txtOut.Write("*");
+                    if (key.Key == ConsoleKey.Enter)
+                        break;
+                    else
+                    {
+                        str += key.KeyChar;
+                        txtOut.Write("*");
+                    }
                 }
             }
             txtOut.WriteLine();
