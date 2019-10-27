@@ -16,10 +16,10 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit, Calender
+            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit, Calendar
         };
 
-        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export, Commands.Calender };
+        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export, Commands.Calendar };
 
         public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
@@ -148,7 +148,7 @@ namespace FlysasClient
                             client.Logout();
                             Environment.Exit(0);
                             break;
-                        case Commands.Calender:
+                        case Commands.Calendar:
                             ReservationsResult.Reservations R = client.MyReservations();
                             if (R?.ReservationsReservations?.Count > 0)
                             {
@@ -162,7 +162,7 @@ namespace FlysasClient
                                     txtOut.WriteLine("Just drag it into your calender app.");
 
 
-                                    FlysasLib.CalenderPrinter cp = new CalenderPrinter();
+                                    FlysasLib.CalendarPrinter cp = new CalendarPrinter();
                                     cp.WriteICal(null, R1);
 
                                 }

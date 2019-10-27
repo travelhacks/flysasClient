@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FlysasLib
 {
-    public class CalenderPrinter
+    public class CalendarPrinter
     {
         /// <summary>
         /// Writes out a single reservation to an Ical file
