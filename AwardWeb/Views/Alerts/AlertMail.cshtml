@@ -11,11 +11,11 @@
     <table cellspacing="0" cellpadding="10" border="1">
         <thead>
             <tr>
-                <th width="70">Route</th>                
-                <th width="100">Departure</th>
-                <th width="150">Space</th>
-                <th width="50">#</th>
-                <th width="50">Link</th>
+                <th>Route</th>                
+                <th>Departure</th>
+                <th>Space</th>
+                <th>#</th>
+                <th>Link</th>
             </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
                         @c.TravelDate.ToString("yyyy-MM-dd")
                     </td>
                     <td align="center">
-                        @c.Business / @c.Plus / @c.Go
+                        @c.Business/@c.Plus/@c.Go
                     </td>
                     <td align="right">
                         @(Model.CountHash[c.Id])
