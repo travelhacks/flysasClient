@@ -149,21 +149,21 @@ namespace FlysasClient
                             Environment.Exit(0);
                             break;
                         case Commands.Calendar:
-                            ReservationsResult.Reservations R = client.MyReservations();
-                            if (R?.ReservationsReservations?.Count > 0)
+                            ReservationsResult.Reservations reservations = client.MyReservations();
+                            if (reservations?.ReservationsReservations?.Count > 0)
                             {
-                                foreach (ReservationsResult.Reservation R1 in R.ReservationsReservations)
+                                foreach (ReservationsResult.Reservation reservation in reservations.ReservationsReservations)
                                 {
                                     txtOut.Write("Booking reference: ");
-                                    txtOut.WriteLine(R1.AirlineBookingReference);
+                                    txtOut.WriteLine(reservation.AirlineBookingReference);
                                     txtOut.Write("Destination: ");
-                                    txtOut.Write(R1.Connections[0].Destination);
-                                    txtOut.WriteLine("Was written to your desktop as a *.ICS file.");
+                                    txtOut.Write(reservation.Connections[0].Destination);
+                                    txtOut.WriteLine($"Was written to your export folder as as {reservation.AirlineBookingReference}.ICS file.");
                                     txtOut.WriteLine("Just drag it into your calender app.");
 
 
                                     FlysasLib.CalendarPrinter cp = new CalendarPrinter();
-                                    cp.WriteICal(null, R1);
+                                    cp.WriteICal(reservation);
 
                                 }
 

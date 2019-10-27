@@ -11,24 +11,17 @@ namespace FlysasLib
         /// </summary>
         /// <param name="iCalFolder">Write to Desktop if NULL</param>
         /// <param name="myReservation"></param>
-        public void WriteICal(System.IO.DirectoryInfo  iCalFolder , ReservationsResult.Reservation myReservation)
+        public void WriteICal(ReservationsResult.Reservation myReservation)
         {
-            string s;
-            if (iCalFolder == null)
 
-            {
-                s = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop, Environment.SpecialFolderOption.None);
-                if (string.IsNullOrWhiteSpace(s)) throw new NotImplementedException();
-                iCalFolder = new System.IO.DirectoryInfo(s);
-            }
-                s = System.IO.Path.Combine(iCalFolder.FullName, myReservation.AirlineBookingReference);
-                s = System.IO.Path.ChangeExtension(s, "ics");
-                System.IO.FileInfo iCalPath = new System.IO.FileInfo(s);
-                if (iCalPath.Exists) iCalPath.Delete();
-                System.IO.TextWriter iCwt = System.IO.File.CreateText(iCalPath.FullName);
-                iCwt.WriteLine("BEGIN:VCALENDAR");
-                iCwt.WriteLine("PRODID:Calendar");
-                iCwt.WriteLine("VERSION:2.0");
+            var s = System.IO.Path.Combine(System.IO.Path.Combine(System.AppContext.BaseDirectory, "Export", myReservation.AirlineBookingReference + ".ics"));
+
+            System.IO.FileInfo iCalPath = new System.IO.FileInfo(s);
+            if (iCalPath.Exists) iCalPath.Delete();
+            System.IO.TextWriter iCwt = System.IO.File.CreateText(iCalPath.FullName);
+            iCwt.WriteLine("BEGIN:VCALENDAR");
+            iCwt.WriteLine("PRODID:Calendar");
+            iCwt.WriteLine("VERSION:2.0");
             //for each Connection: a full flight with possible multiple connections
             foreach (ReservationsResult.Connection con in myReservation.Connections)
             {
@@ -132,24 +125,24 @@ namespace FlysasLib
                     catch (Exception)
                     {
 
-                        iCwt.WriteLine(FS.Duration );
+                        iCwt.WriteLine(FS.Duration);
                     }
 
-                    
+
                     iCwt.WriteLine("TRANSP:TRANSPARENT");
                     iCwt.WriteLine("END:VEVENT");
-                    
+
 
 
 
                 }
             }
-                
-                iCwt.WriteLine("END:VCALENDAR");
-                iCwt.Flush();
+
+            iCwt.WriteLine("END:VCALENDAR");
+            iCwt.Flush();
 
 
-                     
+
 
         }
 
