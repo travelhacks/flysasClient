@@ -16,7 +16,7 @@ namespace FlysasClient
 
         enum Commands
         {
-            Login, History, Logout, Points, Set, Help, Benchmark, Options, Export, Info, Quit, Calendar
+            Login, History, Logout, Points, Set, Help, Options, Export, Info, Quit, Calendar
         };
 
         HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export, Commands.Calendar };
