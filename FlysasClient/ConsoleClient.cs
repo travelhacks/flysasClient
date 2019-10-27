@@ -129,10 +129,7 @@ namespace FlysasClient
                             break;
                         case Commands.Points:
                             points();
-                            break;
-                        case Commands.Benchmark:
-                            benchMark();
-                            break;
+                            break;                        
                         case Commands.Options:
                             txtOut.Write(options.Help() + Environment.NewLine);
                             break;
@@ -182,23 +179,6 @@ namespace FlysasClient
             } 
             return false;
         }
-
-        private void benchMark()
-        {
-            var count = 40;
-            int threads = 6;
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            System.Threading.Tasks.Parallel.For(0, count, new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = threads }, x =>
-            {
-                SASQuery q = new SASQuery { From = "KLR", To = "ARN", OutDate = DateTime.Now.AddDays(1 + x).Date };
-                var w2 = System.Diagnostics.Stopwatch.StartNew();
-                var res = client.Search(q);
-                //txtOut.WriteLine("Got " + res.outboundFlights?.Count + " in " + w2.Elapsed.TotalSeconds);
-
-            });
-            txtOut.WriteLine(watch.Elapsed.TotalSeconds);
-        }
-
         private void points()
         {
             try
