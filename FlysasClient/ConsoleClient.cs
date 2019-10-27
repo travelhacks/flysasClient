@@ -146,31 +146,7 @@ namespace FlysasClient
                             Environment.Exit(0);
                             break;
                         case Commands.Calendar:
-                            ReservationsResult.Reservations reservations = client.MyReservations();
-                            if (reservations?.ReservationsReservations?.Count > 0)
-                            {
-                                foreach (ReservationsResult.Reservation reservation in reservations.ReservationsReservations)
-                                {
-                                    txtOut.Write("Booking reference: ");
-                                    txtOut.WriteLine(reservation.AirlineBookingReference);
-                                    txtOut.Write($"Destination: {reservation.Connections[0].Destination.AirportCode}");                                    
-                                    txtOut.WriteLine($" Was written to your export folder as an {reservation.AirlineBookingReference}.ICS file.");
-                                    txtOut.WriteLine("Just drag it into your calender app.");
-
-
-                                    FlysasLib.CalendarPrinter cp = new CalendarPrinter();
-                                    cp.WriteICal(reservation);
-
-                                }
-
-                            }
-                            else
-                            {
-                                txtOut.WriteLine("Sorry: No bookings found!");
-                                break;
-                            }
-
-
+                            Calendar();
                             break;
                     }
                     return true;
@@ -178,6 +154,30 @@ namespace FlysasClient
             } 
             return false;
         }
+
+        private void Calendar()
+        {
+            ReservationsResult.Reservations reservations = client.MyReservations();
+            if (reservations.ReservationsReservations.Any())
+            {
+                foreach (ReservationsResult.Reservation reservation in reservations.ReservationsReservations)
+                {
+                    txtOut.Write("Booking reference: ");
+                    txtOut.WriteLine(reservation.AirlineBookingReference);
+                    txtOut.Write($"Destination: {reservation.Connections[0].Destination.AirportCode}");
+                    txtOut.WriteLine($" Was written to your export folder as {reservation.AirlineBookingReference}.ICS");
+                    txtOut.WriteLine("Just drag it into your calender app.");
+
+                    FlysasLib.CalendarPrinter cp = new CalendarPrinter();
+                    cp.WriteICal(reservation);
+
+                }
+
+            }
+            else
+                txtOut.WriteLine("Sorry: No bookings found!");
+        }
+
         private void points()
         {
             try
