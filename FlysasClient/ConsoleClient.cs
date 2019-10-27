@@ -153,9 +153,8 @@ namespace FlysasClient
                                 {
                                     txtOut.Write("Booking reference: ");
                                     txtOut.WriteLine(reservation.AirlineBookingReference);
-                                    txtOut.Write("Destination: ");
-                                    txtOut.Write(reservation.Connections[0].Destination);
-                                    txtOut.WriteLine($"Was written to your export folder as as {reservation.AirlineBookingReference}.ICS file.");
+                                    txtOut.Write($"Destination: {reservation.Connections[0].Destination.AirportCode}");                                    
+                                    txtOut.WriteLine($" Was written to your export folder as an {reservation.AirlineBookingReference}.ICS file.");
                                     txtOut.WriteLine("Just drag it into your calender app.");
 
 
