@@ -11,8 +11,7 @@
     <table cellspacing="0" cellpadding="10" border="1">
         <thead>
             <tr>
-                <th width="50">From</th>
-                <th width="50">To</th>
+                <th width="70">Route</th>                
                 <th width="100">Departure</th>
                 <th width="150">Space</th>
                 <th width="50">#</th>
@@ -25,10 +24,7 @@
                 var c = row.Crawl;
                 <tr>
                     <td>
-                        @c.Route.GetFrom(c.Return)
-                    </td>
-                    <td>
-                        @c.Route.GetTo(c.Return)
+                        @c.Route.GetFrom(c.Return)-@c.Route.GetTo(c.Return)
                     </td>
                     <td align="right">
                         @c.TravelDate.ToString("yyyy-MM-dd")
