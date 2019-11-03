@@ -11,8 +11,7 @@ namespace AwardWeb
     {
         public static void Seed(AwardData.AwardContext ctx, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
-            var routes = getRoutes();
-            IEnumerable<Crawl> Crawls = null;
+            var routes = getRoutes();            
             ctx.Routes.AddRange(routes);
             ctx.SaveChanges();
             var client = new HttpClient();
