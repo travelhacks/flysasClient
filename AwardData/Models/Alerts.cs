@@ -34,7 +34,7 @@ namespace AwardData
 
         public bool Matches(CabinClass bc, int pax)
         {
-            return Passengers >= pax && (bc == CabinClass || CabinClass == CabinClass.All);                
+            return pax > 0 && Passengers <= pax && (bc == CabinClass || CabinClass == CabinClass.All);
         }
 
         public bool IsInRange(DateTime date)
