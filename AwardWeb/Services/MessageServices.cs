@@ -7,10 +7,8 @@ using System.Net;
 
 namespace AwardWeb.Services
 {
-    // This class is used by the application to send Email and SMS
-    // when you turn on two-factor authentication in ASP.NET Identity.
-    // For more details see this link https://go.microsoft.com/fwlink/?LinkID=532713
-    public class AuthMessageSender : IEmailSender, ISmsSender
+  
+    public class AuthMessageSender : IEmailSender
     {
         private readonly Models.SMTPOptions options;
 
@@ -28,7 +26,7 @@ namespace AwardWeb.Services
             client.UseDefaultCredentials = false;
             client.Port = 587;
             //client.EnableSsl = true;
-            client.Credentials = new NetworkCredential(options.UserName, options.PassWord);//x987%&bvcDF webb passwd
+            client.Credentials = new NetworkCredential(options.UserName, options.PassWord);
             
             mailMessage.To.Add(email);
             mailMessage.Body = message;
@@ -37,12 +35,6 @@ namespace AwardWeb.Services
             client.Send(mailMessage);
             return Task.FromResult(0);
         }
-     
-
-        public Task SendSmsAsync(string number, string message)
-        {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
-        }
+      
     }
 }

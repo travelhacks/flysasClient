@@ -68,8 +68,7 @@ namespace AwardWeb
             services.Configure<Models.AppSettings>(Configuration.GetSection("AppSettings"), (BinderOptions o) => o.BindNonPublicProperties = true);
 
 
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IEmailSender, AuthMessageSender>();            
             services.AddScoped<IViewRenderService, ViewRenderService>();
         }
 
