@@ -58,13 +58,13 @@ namespace AwardWeb
             {
                 services.AddLetsEncrypt();
                 services.AddSingleton<Services.ICachedData, AwardWeb.Services.CachedData>();                
-                services.AddDbContext<AwardContext>(
+                services.AddDbContextPool<AwardContext>(
                     options => options.UseSqlServer(Configuration.GetConnectionString("AwardData"))
                 );
                 services.AddHostedService<HostedDataService>();
             }
                         
-            services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o)=>o.BindNonPublicProperties = true);            
+            services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o) => o.BindNonPublicProperties = true);            
             services.Configure<Models.AppSettings>(Configuration.GetSection("AppSettings"), (BinderOptions o) => o.BindNonPublicProperties = true);
 
 
