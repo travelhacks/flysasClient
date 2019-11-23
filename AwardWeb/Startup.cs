@@ -101,12 +101,7 @@ namespace AwardWeb
                 name:null,
                 pattern: "Changes",
                 defaults: new { controller = "Home", action = nameof(Controllers.HomeController.Changes)});
-
-                routes.MapControllerRoute(
-                    name: null,
-                    pattern: "faq/Home/FAQ",
-                    defaults: new { controller = "Home", action = nameof(Controllers.HomeController.RedirectToFaq) });
-
+                
                 routes.MapControllerRoute(
                     name: null,
                     pattern: "FAQ",
