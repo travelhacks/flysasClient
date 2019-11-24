@@ -14,6 +14,7 @@ namespace AwardWeb
 {
     public class Startup
     {
+        string dbContextName = "AwardData";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,12 +39,12 @@ namespace AwardWeb
           .AddEntityFrameworkStores<AwardData.AwardContext>()
           .AddDefaultTokenProviders();
 
-            var connection = Configuration.GetConnectionString("AwardData");
+            var connection = Configuration.GetConnectionString(dbContextName);
             var useInMemDb = connection.IsNullOrWhiteSpace();
             if (useInMemDb)
             {             
                 services.AddDbContext<AwardContext>(
-                    options => options.UseInMemoryDatabase("AwardData")
+                    options => options.UseInMemoryDatabase(dbContextName)
                 );
                 var provider = services.BuildServiceProvider();
                 var ctx = provider.GetRequiredService<AwardContext>();
@@ -59,7 +60,7 @@ namespace AwardWeb
                 services.AddLetsEncrypt();
                 services.AddSingleton<Services.ICachedData, AwardWeb.Services.CachedData>();                
                 services.AddDbContextPool<AwardContext>(
-                    options => options.UseSqlServer(Configuration.GetConnectionString("AwardData"))
+                    options => options.UseSqlServer(Configuration.GetConnectionString(dbContextName))
                 );
                 services.AddHostedService<HostedDataService>();
             }
