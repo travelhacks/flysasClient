@@ -25,17 +25,17 @@ namespace AwardWeb
         {
             List<SearchResult> result = new List<SearchResult>();
             int limit = 200;
-
+            var origins =  normalizeSearch(search.From);
+            var destinations = normalizeSearch(search.To);
             IEnumerable<Crawl> inBound = data.Crawls;
-            IEnumerable<Crawl> outBound = data.Crawls.Where(c => crawlFilter(search.From, search.To, c));
-            outBound = Filter(outBound, search.OutMin, search.OutMax, search.Passengers, search.CabinClass, search.OutWeekDays, search.Equipment);
-            if (search.Return && search.To != null && search.To.Any(s => s != "All"))
-                inBound = inBound.Where(c => crawlFilter(search.To, search.From, c));
+            IEnumerable<Crawl> outBound = data.Crawls.Where(c => routeFilter(origins, destinations, c));
+            
+
+            outBound = Filter(outBound, search.OutMin, search.OutMax, search.Passengers, search.CabinClass, search.OutWeekDays,search.Equipment);            
             if (search.Return)
-            {
-                if (search.To != null && search.To.Any(s => s != "All"))
-                    inBound = inBound.Where(c => crawlFilter(search.To, search.From, c));
-                inBound = Filter(inBound, search.InMin, search.InMax, search.Passengers, search.CabinClass, search.InWeekDays, search.Equipment);
+            {                
+                inBound = inBound.Where(c => routeFilter(destinations, origins, c));
+                inBound = Filter(inBound, search.InMin, search.InMax, search.Passengers, search.CabinClass, search.InWeekDays,search.Equipment);
                 result = GetResults(outBound, inBound, search.MinDays, search.MaxDays, limit, search.OpenJaw);
             }
             else
@@ -52,24 +52,30 @@ namespace AwardWeb
             return viewResult;
         }
 
-        bool crawlFilter(List<string> FromList, List<string> ToList, Crawl c)
+        private HashSet<string> normalizeSearch(IEnumerable<string> list)
+        {
+            if (list.Contains("All"))
+                return new HashSet<string>();
+            return list.ToHashSet();
+        }
+
+        bool routeFilter(IEnumerable<string> FromList, IEnumerable<string> ToList, Crawl c)
         {
             return
                 c.Departure >= DateTime.Now
-                &&
-               (FromList.Contains("All")
-               || FromList.Contains(c.Return ? c.Route.To : c.Route.From)
-               || FromList.Contains(c.Return ? c.Route.ToAirport.Zone : c.Route.FromAirport.Zone))
-               &&
-               (ToList.Contains("All")
-               || ToList.Contains(c.Return ? c.Route.From : c.Route.To)
-               || ToList.Contains(c.Return ? c.Route.FromAirport.Zone : c.Route.ToAirport.Zone));
+                && (match(FromList,c.Origin) || FromList.Contains(c.Return ? c.Route.ToAirport.Zone : c.Route.FromAirport.Zone))
+                && (match(ToList, c.Destination) ||  ToList.Contains(c.Return ? c.Route.FromAirport.Zone : c.Route.ToAirport.Zone));               
+        }
 
+        bool match(IEnumerable<string> collection, string code)
+        {
+            return !collection.Any() || collection.Contains(code);
         }
 
 
 
-        private List<SearchResult> GetResults(IEnumerable<Crawl> outBound, IEnumerable<Crawl> inBound, uint minDays, uint maxDays, int limit, bool openJaw)
+
+        private List<SearchResult> GetResults(IEnumerable<Crawl> outBound, IEnumerable<Crawl> inBound, uint minDays, uint maxDays,int limit, bool openJaw)
         {
             var scandi = new HashSet<string>(new[] { "CPH", "ARN", "OSL" });
             var res = new List<SearchResult>();
