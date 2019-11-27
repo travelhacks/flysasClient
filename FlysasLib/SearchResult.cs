@@ -62,6 +62,10 @@ namespace FlysasLib
         public PriceList price { get; set; }
         public List<Fare> fares { get; set; }
         public string fareKey { get; set; }
+        public bool isStandardAward { get; set; }
+        public string productType { get; set; }
+        public string productSubtype { get; set; }
+        public bool sasRecommended { get; set; }     
     }
 
     public class Via : KeyValuePair

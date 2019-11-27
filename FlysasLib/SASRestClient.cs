@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Net;
+using System.Linq;
 
 namespace FlysasLib
 {
@@ -77,15 +78,24 @@ namespace FlysasLib
             return reservations;
         }
 
-        public SearchResult Search(SASQuery query)
+        public async Task<SearchResult> SearchAsync(SASQuery query)
         {
             var req = createRequest(query.GetUrl(), HttpMethod.Get);
-            return GetResult<SearchResult>(req);
-        }
-        public Task<SearchResult> SearchAsync(SASQuery query)
-        {
-            var req = createRequest(query.GetUrl(), HttpMethod.Get);
-            return GetResultAsync<SearchResult>(req);
+            var tmp = await GetResultAsync<SearchResult>(req);
+            if (query.Mode == SASQuery.SearhMode.POINTS)
+            {
+                foreach (var collection in new[] { tmp.outboundFlights, tmp.inboundFlights })
+                {
+                    if (collection != null)
+                    {
+                        foreach (var fligth in collection)
+                            foreach (var cabin in new[] { fligth.cabins.go, fligth.cabins.plus, fligth.cabins.business })
+                                cabin.RemoveAll(c => !c.isStandardAward);
+                        collection.RemoveAll(c => !c.cabins.AllProducts.Any());
+                    }
+                }
+            }
+            return tmp;
         }
         public TransactionRoot History(int page)
         {
