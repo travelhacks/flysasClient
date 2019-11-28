@@ -29,7 +29,7 @@ namespace FlysasLib
                     }
                 }
             return list;
-        }        
+        }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
@@ -56,7 +56,7 @@ namespace FlysasLib
                 while (!(reader.Path == start && reader.TokenType == JsonToken.EndObject) && reader.Read())
                 {
                     if (reader.TokenType == JsonToken.StartObject)
-                             if (reader.Depth - startLevel == 3 && regex.IsMatch(reader.Path) )
+                        if (reader.Depth - startLevel == 3 && regex.IsMatch(reader.Path))
                         {
                             var product = serializer.Deserialize<FlightProductBaseClass>(reader);
                             list.Add(product);
@@ -68,7 +68,7 @@ namespace FlysasLib
 
 
         public override bool CanWrite => false;
-        
+
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

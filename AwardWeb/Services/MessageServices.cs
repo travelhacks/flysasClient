@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Net;
+using System.Threading.Tasks;
 
 namespace AwardWeb.Services
 {
-  
+
     public class AuthMessageSender : IEmailSender
     {
         private readonly Models.SMTPOptions options;
@@ -27,7 +24,7 @@ namespace AwardWeb.Services
             client.Port = 587;
             //client.EnableSsl = true;
             client.Credentials = new NetworkCredential(options.UserName, options.PassWord);
-            
+
             mailMessage.To.Add(email);
             mailMessage.Body = message;
             mailMessage.IsBodyHtml = true;
@@ -35,6 +32,6 @@ namespace AwardWeb.Services
             client.Send(mailMessage);
             return Task.FromResult(0);
         }
-      
+
     }
 }

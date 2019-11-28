@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 
 
 namespace FlysasLib
@@ -24,7 +23,7 @@ namespace FlysasLib
         public string To { get; set; }
         public string From { get; set; }
         public string ReturnFrom { get; set; }
-       // public string ReturnTo { get; set; }
+        // public string ReturnTo { get; set; }
         [UrlParameterAttribute("adt")]
         public int Adults { get; set; } = 1;
 
@@ -78,18 +77,18 @@ namespace FlysasLib
             }
         }
 
-        static PropertyInfo[] properties = typeof(SASQuery).GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
+        static PropertyInfo[] properties = typeof(SASQuery).GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
         public string GetUrl() => "https://api.flysas.com/offers/flights?" + String.Join("&", getParams());
-        
+
         IEnumerable<string> getParams()
         {
             foreach (var property in properties)
             {
                 var paramName = property.Name.camelCase();
                 var attr = property.GetCustomAttribute(typeof(UrlParameterAttribute)) as UrlParameterAttribute;
-                if (attr != null)                
-                    paramName = attr.ParameterName;                
+                if (attr != null)
+                    paramName = attr.ParameterName;
 
                 var val = property.GetValue(this);
                 if (val != null)
@@ -98,7 +97,7 @@ namespace FlysasLib
                     if (property.PropertyType == typeof(DateTime?) && ((DateTime?)val).HasValue)
                         sVal = ((DateTime?)val).Value.ToString("yyyyMMddHHmm");
                     else
-                        sVal = val.ToString();                    
+                        sVal = val.ToString();
                     yield return $"{paramName}={sVal}";
                 }
             }

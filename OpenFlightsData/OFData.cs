@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace OpenFlightsData
 {
@@ -14,10 +12,10 @@ namespace OpenFlightsData
         public void LoadData()
         {
             Airlines = new Airline().GetAll();
-            Airports =  new Airport().GetAll();
+            Airports = new Airport().GetAll();
             Routes = new Route().GetAll();
             Planes = new Plane().GetAll();
         }
     }
-    
+
 }

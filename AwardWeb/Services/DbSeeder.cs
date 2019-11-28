@@ -1,5 +1,4 @@
 ﻿using AwardData;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +6,11 @@ using System.Net.Http;
 
 namespace AwardWeb
 {
-    public class DbSeeder 
+    public class DbSeeder
     {
         public static void Seed(AwardData.AwardContext ctx, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
-            var routes = getRoutes();            
+            var routes = getRoutes();
             ctx.Routes.AddRange(routes);
             ctx.SaveChanges();
             var client = new HttpClient();
@@ -68,11 +67,11 @@ namespace AwardWeb
                         ); ;
 
             }
-            ctx.SaveChanges();            
+            ctx.SaveChanges();
             userManager.CreateAsync(new ApplicationUser { Email = "test@award.se", EmailConfirmed = true, UserName = "test@award.se" }, "someweaktestpwd");
             ctx.SaveChanges();
         }
-        
+
 
         private static Route[] getRoutes()
         {
@@ -104,7 +103,7 @@ namespace AwardWeb
 
         public void Set(List<Crawl> crawls)
         {
-           
+
         }
     }
 }

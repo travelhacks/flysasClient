@@ -43,7 +43,7 @@ namespace FlysasLib
         public string bookingClass { get; set; }
         public int avlSeats { get; set; }
     }
-    
+
     public class Error
     {
         public string errorCode;
@@ -65,7 +65,7 @@ namespace FlysasLib
         public bool isStandardAward { get; set; }
         public string productType { get; set; }
         public string productSubtype { get; set; }
-        public bool sasRecommended { get; set; }     
+        public bool sasRecommended { get; set; }
     }
 
     public class Via : KeyValuePair
@@ -111,7 +111,7 @@ namespace FlysasLib
         public int stops { get; set; }
         public List<Via> via { get; set; }
         public List<Segment> segments { get; set; }
-        public LowestFares lowestFares { get; set; }        
+        public LowestFares lowestFares { get; set; }
         public Cabins cabins { get; set; }
     }
 
@@ -146,18 +146,18 @@ namespace FlysasLib
         }
 
     }
-    
 
-   
+
+
 
     public class KeyValuePair
     {
         public string code { get; set; }
         public string name { get; set; }
-    }    
+    }
 
     public class Currency : KeyValuePair
-    {        
+    {
         public string symbol { get; set; }
         public string decimalSeperator { get; set; }
         public string position { get; set; }
@@ -172,7 +172,7 @@ namespace FlysasLib
 
 
 
-    
+
 
 
     public class SearchResult : RootBaseClass
@@ -186,12 +186,12 @@ namespace FlysasLib
         public List<FlightBaseClass> outboundFlights { get; set; }
         [JsonConverter(typeof(FlightBaseClassConverter))]
         public List<FlightBaseClass> inboundFlights { get; set; }
-        
-        
+
+
         public Currency currency { get; set; }
         public List<Link> links { get; set; }
         public string regionName { get; set; }
-        public string offerId { get; set; }       
+        public string offerId { get; set; }
         public bool isOutboundIntercontinental { get; set; }
         public string pricingType { get; set; }
 
@@ -199,11 +199,11 @@ namespace FlysasLib
         public List<Error> errors { get; set; }
     }
 
-    public class BestPrice 
+    public class BestPrice
     {
         public string product { get; set; }
         public string productId { get; set; }
-        public int avlSeats { get; set; }        
+        public int avlSeats { get; set; }
         //Todo: prices / points
     }
 
@@ -221,7 +221,7 @@ namespace FlysasLib
         public string token_type { get; set; }
         public int expires_in { get; set; }
         public string scope { get; set; }
-        public string jti { get; set; }        
+        public string jti { get; set; }
         //for logins
         public string refresh_token;
         public string customerSessionId;
@@ -230,7 +230,7 @@ namespace FlysasLib
     }
 
     public class RootBaseClass
-    {        
+    {
         public string json;
         public bool httpSuccess;
     }
@@ -259,7 +259,7 @@ namespace FlysasLib
 
         public string Origin
         {
-            get{ return description1.Split('-').First();}                 
+            get { return description1.Split('-').First(); }
         }
         public string Destination
         {
@@ -279,10 +279,10 @@ namespace FlysasLib
             get { return getMatch(3); }
         }
         string getMatch(int group)
-        {            
-                if (match != null && match.Success && match.Groups.Count>group)
-                    return match.Groups[group].Captures[0].Value;
-                return "";          
+        {
+            if (match != null && match.Success && match.Groups.Count > group)
+                return match.Groups[group].Captures[0].Value;
+            return "";
         }
     }
 
@@ -294,17 +294,17 @@ namespace FlysasLib
 
     public class EuroBonus
     {
-      public string euroBonusId { get; set; }
-      public string nameOnCard { get; set; }
-      public DateTime dateRegistered { get; set; }
-      public DateTime qualifyingPeriodStartDate { get; set; }
-      public DateTime qualifyingPeriodEndDate { get; set; }
-      public int pointsAvailable { get; set; }
-      public int totalPointsForUse { get; set; }
-      public string currentTierCode { get; set; }
-      public string currentTierName { get; set; }
-        
-      public TransactionHistory transactionHistory { get; set; }      
+        public string euroBonusId { get; set; }
+        public string nameOnCard { get; set; }
+        public DateTime dateRegistered { get; set; }
+        public DateTime qualifyingPeriodStartDate { get; set; }
+        public DateTime qualifyingPeriodEndDate { get; set; }
+        public int pointsAvailable { get; set; }
+        public int totalPointsForUse { get; set; }
+        public string currentTierCode { get; set; }
+        public string currentTierName { get; set; }
+
+        public TransactionHistory transactionHistory { get; set; }
     }
 
     public class AwardProduct

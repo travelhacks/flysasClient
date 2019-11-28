@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Net.Http.Headers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AwardWeb.Code
 {
@@ -31,6 +28,6 @@ namespace AwardWeb.Code
             }
             context.Result = RuleResult.ContinueRules;
             return;
-        }    
+        }
     }
 }

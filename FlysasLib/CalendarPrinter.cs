@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FlysasLib
 {
@@ -155,7 +153,7 @@ namespace FlysasLib
 
             {
                 case "en":
-                r = "CATEGORIES;LANGUAGE=en:Travel";
+                    r = "CATEGORIES;LANGUAGE=en:Travel";
                     break;
                 case "dk":
                     r = "CATEGORIES;LANGUAGE=dk:Rejse";

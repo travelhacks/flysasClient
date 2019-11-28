@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AwardData
 {
     [Table("V_ALLChanges")]
-    public class AllChanges 
+    public class AllChanges
     {
         public int Id { get; set; }
         public int RouteId { get; set; }
@@ -24,13 +24,13 @@ namespace AwardData
         {
             return cabinClass switch
             {
-                CabinClass.All => HasIncrease(CabinClass.Go)  || HasIncrease(CabinClass.Plus) || HasIncrease(CabinClass.Business),
+                CabinClass.All => HasIncrease(CabinClass.Go) || HasIncrease(CabinClass.Plus) || HasIncrease(CabinClass.Business),
                 CabinClass.Business => Business > c2.GetValueOrDefault(),
                 CabinClass.Plus => Plus > p2.GetValueOrDefault(),
                 CabinClass.Go => Go > g2.GetValueOrDefault(),
                 _ => false
             };
         }
-            
+
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using System.IO;
+using System.Linq;
 
 namespace FlysasLib
 {
@@ -17,7 +16,7 @@ namespace FlysasLib
             var map = new Dictionary<string, string>() { { "KF", "SK" } };
             foreach (var r in transactions)
                 if (!r.Origin.IsNullOrEmpty() && !string.IsNullOrEmpty(r.FlightNumber))
-                {                    
+                {
                     var o = OFData.Airports.Where(a => a.City.Equals(r.Origin, StringComparison.OrdinalIgnoreCase)).ToList();
                     var d = OFData.Airports.Where(a => a.City.Equals(r.Destination, StringComparison.OrdinalIgnoreCase)).ToList();
                     var tmp = OFData.Routes.Where(route => o.Any(a => a.IATA == route.FromIATA) && d.Any(a => a.IATA == route.ToIATA)).ToList();
@@ -25,9 +24,9 @@ namespace FlysasLib
                     var airlineId = airline != null ? new int?(airline.ID) : new int?();
                     var matches = tmp.Where(route => route.AirlineCode == r.Airline || map.ContainsKey(route.AirlineCode) && map[route.AirlineCode] == r.Airline).ToList();
                     if (matches.Count == 0)
-                    {                     
-                        if (o.Count == 1 && d.Count == 1)                     
-                            exports.Add(new FlightExport(r, o.First().IATA, d.First().IATA, airlineId, 50));                            
+                    {
+                        if (o.Count == 1 && d.Count == 1)
+                            exports.Add(new FlightExport(r, o.First().IATA, d.First().IATA, airlineId, 50));
                         else
                             exports.Add(new FlightExport(r, r.Origin, r.Destination, airlineId, 0));
                     }
@@ -40,7 +39,7 @@ namespace FlysasLib
         }
 
         public void SaveCSV(List<FlightExport> exportList)
-        {            
+        {
             var folder = System.IO.Path.Combine(System.IO.Path.Combine(System.AppContext.BaseDirectory, "Export"));
             try
             {
@@ -54,14 +53,14 @@ namespace FlysasLib
             var good = exportList.Where(f => f.Score >= 50).ToList();
             var bad = exportList.Where(f => f.Score < 50).ToList();
             if (good.Count > 0)
-                save(Path.Combine(folder, "openflights_export" + DateTime.Now.ToString("yyyy-MM-dd")+ ".csv"), good);
+                save(Path.Combine(folder, "openflights_export" + DateTime.Now.ToString("yyyy-MM-dd") + ".csv"), good);
             if (bad.Count > 0)
-                save(Path.Combine(folder, "openflights_export_failed_flights" + DateTime.Now.ToString("yyyy-MM-dd")+".csv"), bad);            
+                save(Path.Combine(folder, "openflights_export_failed_flights" + DateTime.Now.ToString("yyyy-MM-dd") + ".csv"), bad);
         }
 
         void save(string filename, List<FlightExport> flights)
         {
-            var header =  FlightExport.OpenFlightsHeader();
+            var header = FlightExport.OpenFlightsHeader();
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(new FileStream(filename, FileMode.Create)))
             {
                 file.WriteLine(header);
@@ -95,10 +94,10 @@ namespace FlysasLib
                         }
                     }
                 }
-            }            
+            }
             if (File.Exists(sOpenFlights))
             {
-                foreach (var line in File.ReadAllText(sOpenFlights).Split(new[] { "\r\n" },StringSplitOptions.None).Skip(1))
+                foreach (var line in File.ReadAllText(sOpenFlights).Split(new[] { "\r\n" }, StringSplitOptions.None).Skip(1))
                 {
                     var cols = line.Split(',').ToList();
                     if (cols.Count > 1)
@@ -128,7 +127,7 @@ namespace FlysasLib
         public string CabinClass { get; set; }
         public int? AirlineId;
         public FlightExport() { }
-        public FlightExport(Transaction t,string From, string To, int? airlineId, int score)
+        public FlightExport(Transaction t, string From, string To, int? airlineId, int score)
         {
             Date = t.datePerformed;
             this.From = From;
@@ -148,7 +147,7 @@ namespace FlysasLib
                 c = "P";
             if (CabinClass.Contains("Business"))
                 c = "C";
-                return Date.ToString("yyyy-MM-dd") + $",{From},{To},{Flight},,,,,,{c},,,,,\"\",,,{AirlineId},";
+            return Date.ToString("yyyy-MM-dd") + $",{From},{To},{Flight},,,,,,{c},,,,,\"\",,,{AirlineId},";
         }
         public static string OpenFlightsHeader()
         {

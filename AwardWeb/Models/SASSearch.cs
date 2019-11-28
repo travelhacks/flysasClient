@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AwardWeb.Models
 {
@@ -27,7 +25,7 @@ namespace AwardWeb.Models
         public DateTime? InMax { get; set; }
         [Display(Name = "Days minimum")]
         public uint MinDays { get; set; }
-        [Display(Name = "Days max")]       
+        [Display(Name = "Days max")]
         public uint MaxDays { get; set; }
         [Display(Name = "Equipment")]
         public string Equipment { get; set; } = "";
@@ -50,5 +48,5 @@ namespace AwardWeb.Models
         public List<int> OutWeekDays { get; set; }
         [Display(Name = "Weekdays in")]
         public List<int> InWeekDays { get; set; }
-    }   
+    }
 }

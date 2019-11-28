@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 
 namespace OpenFlightsData
 {
@@ -24,7 +22,7 @@ namespace OpenFlightsData
 
         public List<Airport> GetAll()
         {
-            var list = new List<Airport>();            
+            var list = new List<Airport>();
             var fn = GetPath("airports.dat");
             if (System.IO.File.Exists(fn))
                 foreach (var row in System.IO.File.ReadLines(fn))
@@ -50,6 +48,6 @@ namespace OpenFlightsData
                     list.Add(a);
                 }
             return list;
-        }                
-    }    
+        }
+    }
 }

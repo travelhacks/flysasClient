@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace AwardData
 {
@@ -9,14 +9,14 @@ namespace AwardData
         public AwardContext(DbContextOptions options) : base(options)
         {
         }
-       
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Schedule>().HasKey(table => new { table.RouteId, table.Return, table.Day });
             modelBuilder.Entity<ZoneCosts>().HasKey(table => new { table.origin, table.destination, table.booking_class, table.bonus_program });
             modelBuilder.Entity<Airport>().HasKey(t => t.IATA);
-            modelBuilder.Entity<Route>().HasOne(t => t.FromAirport).WithMany(t2=>t2.RoutesFrom).HasForeignKey(t=>t.From);
+            modelBuilder.Entity<Route>().HasOne(t => t.FromAirport).WithMany(t2 => t2.RoutesFrom).HasForeignKey(t => t.From);
             modelBuilder.Entity<Route>().HasOne(t => t.ToAirport).WithMany(t2 => t2.RoutesTo).HasForeignKey(t => t.To);
         }
 

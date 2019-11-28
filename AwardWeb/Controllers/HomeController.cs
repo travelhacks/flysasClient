@@ -1,38 +1,38 @@
-﻿using System;
+﻿using AwardData;
+using AwardWeb.Models;
+using FlysasLib;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AwardData;
-using AwardWeb.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using FlysasLib;
-using Microsoft.Extensions.Options;
 
 namespace AwardWeb.Controllers
 {
 
     public class HomeController : Controller
     {
-        AwardData.AwardContext ctx;        
-       
+        AwardData.AwardContext ctx;
+
         public HomeController(AwardData.AwardContext context)
         {
-            ctx = context;            
+            ctx = context;
         }
         public IActionResult List([FromServices] Services.ICachedData cachedData)
         {
             var list = cachedData.Crawls.Where(c => c.Business > 0 && c.TravelDate > DateTime.Now && c.Route.Show);
-            return View(list);            
+            return View(list);
         }
 
         public IActionResult List_legacy()
         {
             return RedirectToActionPermanent(nameof(HomeController.List));
         }
-    
-  
+
+
         public IActionResult Console()
         {
             return View();
@@ -42,10 +42,10 @@ namespace AwardWeb.Controllers
         {
             return RedirectToActionPermanent(nameof(HomeController.Console));
         }
-        
+
         public IActionResult Index([FromServices] Services.ICachedData cachedData)
         {
-            SASSearch sasSearch = new SASSearch();            
+            SASSearch sasSearch = new SASSearch();
             sasSearch.Routes = new List<SelectListItem>();
             sasSearch.ReturnRoutes = new List<SelectListItem>();
             sasSearch.Routes.Add(new SelectListItem { Value = "All", Text = "All" });
@@ -84,7 +84,7 @@ namespace AwardWeb.Controllers
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "Europe", Text = "Scandinavia" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "ARN", Text = "Stockholm" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "CPH", Text = "Copenhagen" });
-            sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "OSL", Text = "Oslo" });            
+            sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "OSL", Text = "Oslo" });
             sasSearch.Passengers = 1U;
             sasSearch.MinDays = 0U;
             sasSearch.MaxDays = 7U;
@@ -97,12 +97,12 @@ namespace AwardWeb.Controllers
             sasSearch.Classes = new List<SelectListItem>();
             sasSearch.Classes.Add(new SelectListItem { Text = "Business", Value = ((int)CabinClass.Business).ToString() });
             sasSearch.Classes.Add(new SelectListItem { Text = "Plus (PE)", Value = ((int)CabinClass.Plus).ToString() });
-            sasSearch.Classes.Add(new SelectListItem { Text = "GO (Economy)", Value =  ((int)CabinClass.Go).ToString() });
+            sasSearch.Classes.Add(new SelectListItem { Text = "GO (Economy)", Value = ((int)CabinClass.Go).ToString() });
             sasSearch.Classes.Add(new SelectListItem { Text = "Any/mixed", Value = ((int)CabinClass.All).ToString() });
             sasSearch.OutWeekDays = new List<int>();
             sasSearch.InWeekDays = new List<int>();
-            sasSearch.EquipmentList = cachedData.EquipmentList.Select(s => new SelectListItem(s,s) ).ToList();
-            sasSearch.EquipmentList.Insert(0, new SelectListItem("All",""));
+            sasSearch.EquipmentList = cachedData.EquipmentList.Select(s => new SelectListItem(s, s)).ToList();
+            sasSearch.EquipmentList.Insert(0, new SelectListItem("All", ""));
             return View(sasSearch);
         }
 
@@ -113,11 +113,11 @@ namespace AwardWeb.Controllers
 
         public IActionResult All()
         {
-            return RedirectToActionPermanent(nameof(Index));            
+            return RedirectToActionPermanent(nameof(Index));
         }
         public IActionResult Changes()
         {
-            var crawls = ctx.Changes.Where(c => c.Route.Show).OrderByDescending(c => c.CrawlDate).Include(c=>c.Route).ToList();
+            var crawls = ctx.Changes.Where(c => c.Route.Show).OrderByDescending(c => c.CrawlDate).Include(c => c.Route).ToList();
             return View(crawls);
         }
         public IActionResult FAQ()
@@ -129,8 +129,8 @@ namespace AwardWeb.Controllers
         public async Task<IActionResult> FAQ(
             [FromServices] Services.IEmailSender emailSender,
             [FromServices] IOptionsSnapshot<Models.AppSettings> appSettings,
-            string email, 
-            string message, 
+            string email,
+            string message,
             int hideMe
             )
         {
@@ -163,7 +163,7 @@ namespace AwardWeb.Controllers
         [HttpGet]
         public IActionResult Star()
         {
-            
+
             var search = new StarSearch { OutDate = DateTime.Now.Date.AddDays(1), Pax = 1, SearchDays = 7 };
             return View(search);
         }
@@ -171,7 +171,7 @@ namespace AwardWeb.Controllers
 
         public async Task<IActionResult> StarResult(StarSearch search)
         {
-            
+
             int threads = 4;
             if (ModelState.IsValid)
             {
@@ -182,12 +182,12 @@ namespace AwardWeb.Controllers
                 {
                     var dates = System.Linq.Enumerable.Range(0, search.SearchDays).Select(i => search.OutDate.AddDays(i)).ToList();
                     dates.Shuffle();
-                    var res = new System.Collections.Concurrent.ConcurrentDictionary<DateTime, FlysasLib.SearchResult>();                    
-                    await Dasync.Collections.ParallelForEachExtensions.ParallelForEachAsync<DateTime>( dates, 
+                    var res = new System.Collections.Concurrent.ConcurrentDictionary<DateTime, FlysasLib.SearchResult>();
+                    await Dasync.Collections.ParallelForEachExtensions.ParallelForEachAsync<DateTime>(dates,
                         async date =>
                         {
                             if (!res.ContainsKey(date))//this looks smart, but doesn't realy save a lot of calls...
-                            {                                
+                            {
                                 var q = new SASQuery
                                 {
                                     OutDate = date,
@@ -199,9 +199,9 @@ namespace AwardWeb.Controllers
                                 var c = new FlysasLib.SASRestClient();
                                 FlysasLib.SearchResult searchResult = await c.SearchAsync(q);
 
-                                if (searchResult.tabsInfo != null && searchResult.tabsInfo.outboundInfo != null)                                
-                                    foreach(var dayWithNoSeats in searchResult.tabsInfo.outboundInfo.Where(tab => tab.points == 0))                                    
-                                        res.TryAdd(dayWithNoSeats.date, null);                                
+                                if (searchResult.tabsInfo != null && searchResult.tabsInfo.outboundInfo != null)
+                                    foreach (var dayWithNoSeats in searchResult.tabsInfo.outboundInfo.Where(tab => tab.points == 0))
+                                        res.TryAdd(dayWithNoSeats.date, null);
 
                                 res.TryAdd(date, searchResult);
                             }
@@ -229,4 +229,4 @@ namespace AwardWeb.Controllers
         }
     }
 }
-    
+

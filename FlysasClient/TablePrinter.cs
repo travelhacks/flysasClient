@@ -1,8 +1,6 @@
 ﻿using FlysasLib;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FlysasClient
 {
@@ -35,7 +33,7 @@ namespace FlysasClient
             {
                 headers.Add(c);
                 table.Alignment[headers.Count - 1] = TextAlignment.Right;
-                if(options.Mode == SASQuery.SearhMode.POINTS)
+                if (options.Mode == SASQuery.SearhMode.POINTS)
                     headers.Add("Tax");
                 if (options.OutputBookingClass)
                     headers.Add("");

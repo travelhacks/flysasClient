@@ -1,5 +1,3 @@
-using System;
-
 namespace AwardWeb.Models
 {
     public class ErrorViewModel

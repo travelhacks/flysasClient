@@ -1,5 +1,4 @@
 ﻿using AwardData;
-using AwardWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace AwardWeb
-{    
+{
     public class AlertListViewComponent : ViewComponent
     {
         AwardContext ctx;
@@ -17,7 +16,7 @@ namespace AwardWeb
             this.ctx = ctx;
         }
 
-        public Task<IViewComponentResult> InvokeAsync(string userEmail, AlertOrderField orderField= AlertOrderField.Id, bool descending = false)
+        public Task<IViewComponentResult> InvokeAsync(string userEmail, AlertOrderField orderField = AlertOrderField.Id, bool descending = false)
         {
             var model = new AlertListModel();
             var query = ctx.Alerts.Include(a => a.Route).Where(a => a.User.Email == userEmail).OrderByDescending(a => a.Id);
@@ -32,7 +31,7 @@ namespace AwardWeb
                 AlertOrderField.ToDate => list.OrderBy(a => a.ToDate).ToList(),
                 AlertOrderField.BookinClass => list.OrderBy(a => a.CabinClass).ToList(),
                 AlertOrderField.Pax => list.OrderBy(a => a.Passengers).ToList()
-            };             
+            };
             model.Descending = descending;
             model.OrderField = orderField;
             if (descending || orderField == AlertOrderField.Id)
@@ -54,7 +53,7 @@ namespace AwardWeb
     }
     public class AlertListModel
     {
-     
+
         public AlertOrderField OrderField { get; set; }
         public bool Descending { get; set; }
         public IEnumerable<Alerts> Alerts { get; set; }

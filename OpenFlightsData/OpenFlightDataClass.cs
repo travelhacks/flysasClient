@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -41,7 +40,7 @@ namespace OpenFlightsData
                 }
             return list.ToArray();
         }
-      
+
         protected string GetPath(string fileName)
         {
             return System.IO.Path.Combine(System.IO.Path.Combine(System.AppContext.BaseDirectory, "data"), fileName);

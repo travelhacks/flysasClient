@@ -13,7 +13,7 @@ namespace AwardWeb.Services
 
         public void Set(List<Crawl> crawls)
         {
-            Crawls = crawls.OrderBy(c=>c.Departure).ToList();
+            Crawls = crawls.OrderBy(c => c.Departure).ToList();
             EquipmentList = Crawls.Select(c => c.Equipment).Distinct().OrderBy(s => s).ToList();
         }
     }

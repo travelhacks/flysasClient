@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace OpenFlightsData
 {
@@ -9,7 +7,7 @@ namespace OpenFlightsData
         public string Name { get; private set; }
         public string IATA { get; private set; }
         public string ICAO { get; private set; }
-        
+
         internal IReadOnlyList<Plane> GetAll()
         {
             var list = new List<Plane>();

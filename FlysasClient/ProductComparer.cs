@@ -1,5 +1,4 @@
 ﻿using FlysasLib;
-using System;
 using System.Collections.Generic;
 
 
@@ -18,7 +17,7 @@ namespace FlysasClient
         }
         private int getOrder(FlightProductBaseClass product)
         {
-            return order.IndexOf(product.productCode);                        
-        }   
+            return order.IndexOf(product.productCode);
+        }
     }
 }

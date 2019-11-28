@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AwardData;
+using AwardWeb.Services;
+using FlysasLib;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using AwardWeb.Services;
-using AwardData;
 using Microsoft.Extensions.Hosting;
-using FlysasLib;
 using System.Linq;
 
 namespace AwardWeb
@@ -20,13 +20,13 @@ namespace AwardWeb
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }        
-        
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
-        {                        
+        {
             services.AddControllersWithViews();
             services.AddApplicationInsightsTelemetry(Configuration);
-            
+
             services.AddIdentity<ApplicationUser, IdentityRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = true;
@@ -42,34 +42,34 @@ namespace AwardWeb
             var connection = Configuration.GetConnectionString(dbContextName);
             var useInMemDb = connection.IsNullOrWhiteSpace();
             if (useInMemDb)
-            {             
+            {
                 services.AddDbContext<AwardContext>(
                     options => options.UseInMemoryDatabase(dbContextName)
                 );
                 var provider = services.BuildServiceProvider();
                 var ctx = provider.GetRequiredService<AwardContext>();
                 var userManager = provider.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<ApplicationUser>>();
-                DbSeeder.Seed(ctx,userManager);
+                DbSeeder.Seed(ctx, userManager);
                 var cachedData = new AwardWeb.Services.CachedData();
-                var crawls = ctx.Crawls.Include(c => c.Route).ThenInclude(r => r.FromAirport).Include(c => c.Route).ThenInclude(r => r.ToAirport).ToList();                    
+                var crawls = ctx.Crawls.Include(c => c.Route).ThenInclude(r => r.FromAirport).Include(c => c.Route).ThenInclude(r => r.ToAirport).ToList();
                 cachedData.Set(crawls);
                 services.AddSingleton<Services.ICachedData>(cachedData);
             }
             else
             {
                 services.AddLetsEncrypt();
-                services.AddSingleton<Services.ICachedData, AwardWeb.Services.CachedData>();                
+                services.AddSingleton<Services.ICachedData, AwardWeb.Services.CachedData>();
                 services.AddDbContextPool<AwardContext>(
                     options => options.UseSqlServer(Configuration.GetConnectionString(dbContextName))
                 );
                 services.AddHostedService<HostedDataService>();
             }
-                        
-            services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o) => o.BindNonPublicProperties = true);            
+
+            services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o) => o.BindNonPublicProperties = true);
             services.Configure<Models.AppSettings>(Configuration.GetSection("AppSettings"), (BinderOptions o) => o.BindNonPublicProperties = true);
 
 
-            services.AddTransient<IEmailSender, AuthMessageSender>();            
+            services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
         }
 
@@ -85,7 +85,7 @@ namespace AwardWeb
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();               
+                app.UseHsts();
             }
             var redirOptions = new Microsoft.AspNetCore.Rewrite.RewriteOptions();
             redirOptions.Rules.Add(new Code.RedirectToHttpsNoWWW());
@@ -95,14 +95,14 @@ namespace AwardWeb
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-                       
+
             app.UseEndpoints(routes =>
-            {                
+            {
                 routes.MapControllerRoute(
-                name:null,
+                name: null,
                 pattern: "Changes",
-                defaults: new { controller = "Home", action = nameof(Controllers.HomeController.Changes)});
-                
+                defaults: new { controller = "Home", action = nameof(Controllers.HomeController.Changes) });
+
                 routes.MapControllerRoute(
                     name: null,
                     pattern: "FAQ",

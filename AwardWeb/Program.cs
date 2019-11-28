@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using System.Globalization;
 using Microsoft.Extensions.Hosting;
+using System.Globalization;
 
 namespace AwardWeb
 {

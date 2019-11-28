@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FlysasLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FlysasLib;
 
 namespace FlysasClient
 {
@@ -12,16 +12,16 @@ namespace FlysasClient
     {
         public string OptionName { get; private set; }
         public bool Secret { get; private set; } = false;
-        public OptionParserAttribute(string optionName,bool Secret = false)
+        public OptionParserAttribute(string optionName, bool Secret = false)
         {
             this.OptionName = optionName;
             this.Secret = Secret;
         }
-    }   
+    }
 
     public abstract class OptionsParser
-    {        
-        public OptionsParser(IEnumerable<KeyValuePair<string,string>> options)
+    {
+        public OptionsParser(IEnumerable<KeyValuePair<string, string>> options)
         {
             foreach (var option in options)
                 if (!option.Value.IsNullOrWhiteSpace())
@@ -55,11 +55,11 @@ namespace FlysasClient
 
         public string Help()
         {
-            string s="";
-            foreach(var prop in this.GetType().GetProperties(BindingFlags.Public|BindingFlags.Instance))
+            string s = "";
+            foreach (var prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 var attr = prop.GetCustomAttribute(typeof(OptionParserAttribute)) as OptionParserAttribute;
-                if(attr!=null)
+                if (attr != null)
                 {
                     s += attr.OptionName + ":" + (attr.Secret ? "************" : prop.GetValue(this)?.ToString()) + " ";
                 }
@@ -73,7 +73,7 @@ namespace FlysasClient
             {
                 var allGood = true;
                 while (stack.Count >= 2)
-                   allGood &= mySet(stack.Pop(), stack.Pop());
+                    allGood &= mySet(stack.Pop(), stack.Pop());
                 return allGood;
             }
             return false;
@@ -83,22 +83,22 @@ namespace FlysasClient
         {
             string s = val?.ToLower();
             return s == "on" || s == "true" || s == "1" || s == "yes";
-        }        
+        }
     }
     public class Options : OptionsParser
     {
         [OptionParser("bookingclass")]
         public bool OutputBookingClass { get; private set; } = false;
         [OptionParser("equipment")]
-        public bool OutputEquipment { get; private set; } = false;        
+        public bool OutputEquipment { get; private set; } = false;
         [OptionParser("username")]
         public string UserName { get; set; }
-        [OptionParser( optionName: "passWord",Secret : true)]
-        public string Password { get; set; }        
+        [OptionParser(optionName: "passWord", Secret: true)]
+        public string Password { get; set; }
         [OptionParser("flightnumber")]
         public bool OutputFlightNumber { get; private set; } = false;
         [OptionParser("mode")]
         public SASQuery.SearhMode Mode { get; private set; } = SASQuery.SearhMode.REVENUE;
-        public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options) { }        
+        public Options(IEnumerable<KeyValuePair<string, string>> options) : base(options) { }
     }
 }

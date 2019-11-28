@@ -1,12 +1,12 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Linq;
 
 namespace FlysasClient
 {
     class Program
-    {        
+    {
         public static async System.Threading.Tasks.Task<int> Main(string[] args = null)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -19,7 +19,7 @@ namespace FlysasClient
             {
                 data.LoadData();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Error loading Openfligts data:" + ex.Message);
             }
@@ -27,13 +27,13 @@ namespace FlysasClient
                  .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true);
             var config = builder.Build();
-            Options options = new Options(config.AsEnumerable());                                  
-            var client = new ConsoleClient(options,data);
+            Options options = new Options(config.AsEnumerable());
+            var client = new ConsoleClient(options, data);
             if (args.Any())
-                await client.Run(string.Join(" ", args ));
+                await client.Run(string.Join(" ", args));
             else
                 await client.InputLoop();
             return 0;
-        }       
+        }
     }
 }

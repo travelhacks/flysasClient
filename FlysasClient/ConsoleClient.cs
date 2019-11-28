@@ -1,8 +1,7 @@
-﻿using System;
+﻿using FlysasLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FlysasLib;
-using System.IO;
 
 namespace FlysasClient
 {
@@ -129,7 +128,7 @@ namespace FlysasClient
                             break;
                         case Commands.Points:
                             points();
-                            break;                        
+                            break;
                         case Commands.Options:
                             txtOut.Write(options.Help() + Environment.NewLine);
                             break;
@@ -151,7 +150,7 @@ namespace FlysasClient
                     }
                     return true;
                 }
-            } 
+            }
             return false;
         }
 
@@ -205,7 +204,7 @@ namespace FlysasClient
                 if (airport != null)
                 {
                     txtOut.WriteLine($"Airport: {airport.IATA}/{airport.ICAO}");
-                    txtOut.WriteLine($"Name: {airport.Name}" );
+                    txtOut.WriteLine($"Name: {airport.Name}");
                     txtOut.WriteLine($"City: {airport.City}");
                     txtOut.WriteLine($"Country: {airport.Country}");
                     txtOut.WriteLine($"Type: {airport.Type}");
@@ -299,11 +298,11 @@ namespace FlysasClient
                 var list = exporter.Convert(all);
                 txtOut.WriteLine($"Found {list.Count} flights");
                 if (list.Any())
-					exporter.SaveCSV(list);
-				    txtOut.WriteLine("Files saved");
-	        }
-			else
-			{
+                    exporter.SaveCSV(list);
+                txtOut.WriteLine("Files saved");
+            }
+            else
+            {
                 Table t = new Table();
                 foreach (var r in all)
                 {
@@ -344,9 +343,9 @@ namespace FlysasClient
                     txtOut.WriteLine("User: ");
                     userName = txtIn.ReadLine();
                 }
-                
+
             if (passWord.IsNullOrWhiteSpace())
-                if(stack.Any())
+                if (stack.Any())
                     passWord = stack.Pop();
                 else
                 {

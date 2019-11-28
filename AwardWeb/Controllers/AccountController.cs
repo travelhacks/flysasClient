@@ -1,15 +1,12 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using AwardData;
+using AwardWeb.Models.AccountViewModels;
+using AwardWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using AwardWeb.Models.AccountViewModels;
-using AwardWeb.Services;
-using AwardData;
+using System.Threading.Tasks;
 
 namespace AwardWeb.Controllers
 {
@@ -18,18 +15,18 @@ namespace AwardWeb.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;        
+        private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,            
+            IEmailSender emailSender,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;            
+            _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
@@ -72,10 +69,10 @@ namespace AwardWeb.Controllers
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
-                {                  
-                        _logger.LogInformation(1, "User logged in.");
-                        return RedirectToLocal(returnUrl);                   
-                }                
+                {
+                    _logger.LogInformation(1, "User logged in.");
+                    return RedirectToLocal(returnUrl);
+                }
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
@@ -157,11 +154,11 @@ namespace AwardWeb.Controllers
                         $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     return View("ResendConfirmationEmailConfirmation");
                 }
-            }            
+            }
             return View();
-            
+
         }
-        
+
 
         //
         // POST: /Account/Logout
@@ -174,7 +171,7 @@ namespace AwardWeb.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-      
+
         // GET: /Account/ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
@@ -247,7 +244,7 @@ namespace AwardWeb.Controllers
         public async Task<IActionResult> ResetPassword(string code = null, string userId = null)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            return code == null ? View("Error") : View(new ResetPasswordViewModel { Email = user.Email } );
+            return code == null ? View("Error") : View(new ResetPasswordViewModel { Email = user.Email });
         }
 
         //
@@ -284,7 +281,7 @@ namespace AwardWeb.Controllers
         {
             return View();
         }
-        
+
         //
         // GET: /Account/AccessDenied
         [HttpGet]

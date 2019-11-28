@@ -5,7 +5,7 @@ using System.Linq;
 namespace FlysasClient
 {
     public static class ExtensionMethods
-    {     
+    {
         static IEnumerable<string> simplify(IEnumerable<string> list)
         {
             if (list.Distinct().Count() == 1)

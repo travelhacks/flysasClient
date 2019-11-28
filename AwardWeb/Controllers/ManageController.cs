@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using AwardData;
+using AwardWeb.Models.ManageViewModels;
+using AwardWeb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using AwardWeb.Services;
-using AwardWeb.Models.ManageViewModels;
-using AwardData;
+using System.Threading.Tasks;
 
 namespace AwardWeb.Controllers
 {
@@ -16,18 +14,18 @@ namespace AwardWeb.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;        
+        private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
-          IEmailSender emailSender,          
+          IEmailSender emailSender,
           ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;            
+            _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
         }
 
@@ -61,18 +59,18 @@ namespace AwardWeb.Controllers
             };
             return View(model);
         }
-             
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetSite(string site)
-        {            
+        {
             var user = await GetCurrentUserAsync();
             user.Site = site;
             await _userManager.UpdateAsync(user);
             return RedirectToAction(nameof(this.Index));
         }
 
-        
+
         //
         // GET: /Manage/ChangePassword
         [HttpGet]

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FlysasLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using FlysasLib;
 
 
 namespace FlysasClient
@@ -14,10 +14,10 @@ namespace FlysasClient
 
     public class CommandStack : Stack<string>
     {
-        public CommandStack(string input) : this(input, new []{ ' ' })
-        {            
+        public CommandStack(string input) : this(input, new[] { ' ' })
+        {
         }
-        public CommandStack(string input,char[] splitChars) : base(input.Split(splitChars).Reverse())
+        public CommandStack(string input, char[] splitChars) : base(input.Split(splitChars).Reverse())
         {
         }
     }
@@ -27,8 +27,8 @@ namespace FlysasClient
         Regex airportExp = new Regex("[a-zA-Z]+");
         public SASQuery Parse(string input)
         {
-            var splitChars = new[] { ' ', ',', '-' };            
-            var stack = new CommandStack(input,splitChars);
+            var splitChars = new[] { ' ', ',', '-' };
+            var stack = new CommandStack(input, splitChars);
             SASQuery request = null;
             if (stack.Count > 2)
             {
@@ -93,7 +93,7 @@ namespace FlysasClient
             {
 
                 try
-                {                    
+                {
                     dt = new DateTime(DateTime.Now.Year, (int)m, (int)d);
                 }
                 catch
