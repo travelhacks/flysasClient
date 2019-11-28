@@ -53,6 +53,31 @@ namespace FlysasLib
             }
         }
 
+        public string FilterType
+        {
+            get
+            {
+                if (Mode == SearhMode.POINTS)
+                    return "StandardAward";
+                return null;
+            }
+        }
+
+        public string FilterOn
+        {
+            get
+            {
+                if (Mode == SearhMode.POINTS)
+                {
+                    var str = "outbound";
+                    if (InDate.HasValue)
+                        str += ",inbound";
+                    return str;
+                }
+                return null;
+            }
+        }
+
         static PropertyInfo[] properties = typeof(SASQuery).GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
 
         public string GetUrl() => "https://api.flysas.com/offers/flights?" + String.Join("&", getParams());
