@@ -4,11 +4,12 @@ using System;
 namespace AwardWeb.Code
 {
     public class Utils
-    {
+    {        
         public static string CreateUrl(string site, Crawl outbound, Crawl inbound, CabinClass bclass, uint pax)
         {
             if (site.IsNullOrWhiteSpace())
                 site = "https://sas.se";
+            string dtFormat = "yyyyMMdd";
             var lang = site.Contains("flysas.com", StringComparison.InvariantCultureIgnoreCase) ? "gb-en" : "en";
             var shortClass = ClassStringShort(bclass);
             var longClass = ClassStringLong(bclass);
@@ -16,12 +17,12 @@ namespace AwardWeb.Code
             bool destinationOpenJaw = roundtrip && outbound.Destination != inbound.Origin && outbound.Origin == inbound.Destination;
             var url = new System.Text.StringBuilder(site + $"/{lang}/book/flights?search=");
             url.Append(roundtrip ? destinationOpenJaw ? "OJ" : "RT" : "OW");
-            url.Append($"_{outbound.Origin}-{outbound.Destination}-{outbound.TravelDate.ToString("yyyyMMdd")}");
+            url.Append($"_{outbound.Origin}-{outbound.Destination}-{outbound.TravelDate.ToString(dtFormat)}");
             if (roundtrip)
             {
                 if (destinationOpenJaw)
                     url.Append($"_{inbound.Origin}-{inbound.Destination}");
-                url.Append($"-{inbound.TravelDate.ToString("yyyyMMdd")}");
+                url.Append($"-{inbound.TravelDate.ToString(dtFormat)}");
             }
             url.Append($"_a{pax}c0i0y0&view=upsell&bookingFlow=points&out_flight_number={outbound.Flight}&out_sub_class={longClass}&out_class={shortClass}");
             if (roundtrip)

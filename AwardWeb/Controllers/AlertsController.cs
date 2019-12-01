@@ -30,8 +30,8 @@ namespace AwardWeb.Controllers
             model.NewAlert = new AwardData.Alerts { Passengers = 1, CabinClass = CabinClass.Business };
             model.Json = Newtonsoft.Json.JsonConvert.SerializeObject(ctx.Routes.Where(r => r.Crawl && r.Show));
             model.Classes = new List<SelectListItem>();
-            foreach (var cabinClass in Enum.GetValues(typeof(CabinClass)))
-                if ((int)cabinClass > 0)
+            foreach (var cabinClass in Enum.GetValues(typeof(CabinClass)).Cast<CabinClass>())
+                if (cabinClass != CabinClass.All)
                     model.Classes.Add(new SelectListItem { Text = cabinClass.ToString(), Value = ((int)cabinClass).ToString() });
             model.Classes.Reverse();
             model.OrderField = orderField;
