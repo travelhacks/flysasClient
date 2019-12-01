@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 namespace AwardWeb.Services
 {
 
-    public class AuthMessageSender : IEmailSender
+    public class EmailSender : IEmailSender
     {
         private readonly Models.SMTPOptions options;
 
-        public AuthMessageSender(Microsoft.Extensions.Options.IOptions<Models.SMTPOptions> options)
+        public EmailSender(Microsoft.Extensions.Options.IOptionsSnapshot<Models.SMTPOptions> options)
         {
             this.options = options.Value;
         }
