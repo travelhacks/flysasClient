@@ -7,27 +7,23 @@ namespace AwardWeb.Code
     {        
         public static string CreateUrl(string site, Crawl outbound, Crawl inbound, CabinClass bclass, uint pax)
         {
+            //Todo: handle citycodes
             if (site.IsNullOrWhiteSpace())
                 site = "https://sas.se";
             string dtFormat = "yyyyMMdd";
             var lang = site.Contains("flysas.com", StringComparison.InvariantCultureIgnoreCase) ? "gb-en" : "en";
             var shortClass = ClassStringShort(bclass);
             var longClass = ClassStringLong(bclass);
-            bool roundtrip = inbound != null;
-            bool destinationOpenJaw = roundtrip && outbound.Destination != inbound.Origin && outbound.Origin == inbound.Destination;
-            var url = new System.Text.StringBuilder(site + $"/{lang}/book/flights?search=");
-            url.Append(roundtrip ? destinationOpenJaw ? "OJ" : "RT" : "OW");
+            bool roundtrip = inbound != null;            
+            var url = new System.Text.StringBuilder(site + $"/{lang}/book/flights?search=");            
+            url.Append(roundtrip ? "RT" : "OW");
             url.Append($"_{outbound.Origin}-{outbound.Destination}-{outbound.TravelDate.ToString(dtFormat)}");
-            if (roundtrip)
-            {
-                if (destinationOpenJaw)
-                    url.Append($"_{inbound.Origin}-{inbound.Destination}");
-                url.Append($"-{inbound.TravelDate.ToString(dtFormat)}");
-            }
+            if (roundtrip)            
+                url.Append($"-{inbound.TravelDate.ToString(dtFormat)}");            
             url.Append($"_a{pax}c0i0y0&view=upsell&bookingFlow=points&out_flight_number={outbound.Flight}&out_sub_class={longClass}&out_class={shortClass}");
             if (roundtrip)
                 url.Append($"&in_flight_number={inbound.Flight}&in_sub_class={longClass}&in_class={shortClass}");
-            bool hasLink = !roundtrip || outbound.Origin == inbound.Destination;
+            bool hasLink = !roundtrip || outbound.Origin == inbound.Destination && outbound.Destination == inbound.Origin;
             return hasLink ? url.ToString() : null;
         }
 
