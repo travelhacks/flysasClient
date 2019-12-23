@@ -39,6 +39,14 @@ namespace FlysasClient
                         prop.SetValue(this, myBool(value));
                     if (prop.PropertyType == typeof(string))
                         prop.SetValue(this, value);
+                    if (prop.PropertyType == typeof(int))
+                    {
+                        int intVal;
+                        if (int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out intVal))
+                            prop.SetValue(this, intVal);
+                        else
+                            return false;
+                    }
                     if (prop.PropertyType.IsEnum)
                     {
                         object enumVal = null;
@@ -87,6 +95,8 @@ namespace FlysasClient
     }
     public class Options : OptionsParser
     {
+        [OptionParser("days")]
+        public int days { get; private set; } = 1;
         [OptionParser("bookingclass")]
         public bool OutputBookingClass { get; private set; } = false;
         [OptionParser("equipment")]
