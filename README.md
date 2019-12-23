@@ -1,7 +1,6 @@
 # flysasClient
 Console app for searching tickets with Scandinavian Airlines. Both reward and revenue are supported.
 
-More info @ https://travelhacks.azurewebsites.net/Console
+Fix for running on Mac and added an option to specify number of days to search for (default 1):
 
-# AwardWeb
-Site for searching award tickets with SAS and Star Alliance. Its running at https://awardhacks.se
+set mode days 7
