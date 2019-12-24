@@ -33,8 +33,11 @@ namespace FlysasClient
             while (!nameof(Commands.Quit).Equals(input, StringComparison.OrdinalIgnoreCase))
             {
                 input = ReadLine.Read("FS> ");
-                ReadLine.AddHistory(input);
-                await Run(input);
+                if (input != "")
+                {
+                    ReadLine.AddHistory(input);
+                    await Run(input);
+                }
             }
         }
 
