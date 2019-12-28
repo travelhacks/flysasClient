@@ -36,7 +36,14 @@ namespace AwardWeb.Code
         {
             if (org == null)
                 return null;
-            return new Crawl { Id = org.Id, RouteId = org.RouteId, Route = org.Route, CrawlDate = org.CrawlDate, TravelDate = org.TravelDate };
+            return new Crawl { 
+                Id = org.Id, 
+                RouteId = org.RouteId,
+                Route = org.Route, 
+                CrawlDate = org.CrawlDate,
+                TravelDate = org.TravelDate, 
+                Return = org.Return
+            };
         }
 
         public static string ClassStringShort(CabinClass cabin)
