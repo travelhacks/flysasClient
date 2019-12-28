@@ -1,23 +1,33 @@
 ﻿@model IEnumerable<AwardData.Crawl>
+@inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
 @{
     ViewData["Title"] = "SAS business award availability";
     ViewData["Canonical"] = Url.Action("List");
+    string site = "";
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = await userManager.GetUserAsync(Context.User);
+        site = user.Site;
+    }
+
 }
 
 <div class="container">
-    <div>       
-        @foreach (var kvp in Model.GroupBy(c => c.Route.ToString(false)+ (c.Return?"b":"a")).ToDictionary(g => g.Key, g => g.ToList()).OrderBy(g => g.Key))
+    <div>
+        @foreach (var kvp in Model.GroupBy(c => c.Route.ToString(false) + (c.Return ? "b" : "a")).ToDictionary(g => g.Key, g => g.ToList()).OrderBy(g => g.Key))
         {
             var flights = kvp.Value;
             var first = kvp.Value.First();
 
             <h3>@first.Route.ToString(first.Return) </h3>
             <div>@flights.Sum(f => f.Business) business seats on @flights.Count flights</div>
-                        @foreach (var f in flights.OrderBy(fl => fl.TravelDate))
-                        {
+            @foreach (var f in flights.OrderBy(fl => fl.TravelDate))
+            {
 
-                                <div data-toggle="tooltip" title="Checked on @f.CrawlDate.ToString("yyyy-MM-dd HH:mm:ss") UTC">@f.TravelDate.ToString("yyyy-MM-dd"): @f.Business </div>
-                        }
+                <div data-toggle="tooltip" title="Checked on @f.CrawlDate.ToString("yyyy-MM-dd HH:mm:ss") UTC">
+                    <a href="@AwardWeb.Code.Utils.CreateUrl(site,f,null,CabinClass.Business,1)">@f.TravelDate.ToString("yyyy-MM-dd"): @f.Business</a> 
+                </div>
+            }
         }
     </div>
 </div>
