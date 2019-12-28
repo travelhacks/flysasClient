@@ -26,7 +26,7 @@ namespace OpenFlightsData
                     var cols = mySplit(row);
                     var a = new Airline
                     {
-                        ID = int.Parse(cols[0]),
+                        ID = int.Parse(cols[0], System.Globalization.CultureInfo.InvariantCulture),
                         Name = cols[1],
                         Alias = cols[2],
                         IATA = cols[3],

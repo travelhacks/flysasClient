@@ -29,12 +29,15 @@ namespace FlysasClient
         public async System.Threading.Tasks.Task InputLoop()
         {
             string input = null;
+            txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
             while (!nameof(Commands.Quit).Equals(input, StringComparison.OrdinalIgnoreCase))
             {
-                txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
-                txtOut.Write(">>");
-                input = txtIn.ReadLine();
-                await Run(input);
+                input = ReadLine.Read("FS> ");
+                if (input != "")
+                {
+                    ReadLine.AddHistory(input);
+                    await Run(input);
+                }
             }
         }
 
@@ -53,40 +56,56 @@ namespace FlysasClient
                     }
                     catch (ParserException ex)
                     {
-                        txtOut.Write("Syntax error:" + ex.Message);
+                        txtOut.WriteLine("Syntax error:" + ex.Message);
                     }
                     catch
                     {
-                        txtOut.Write("Syntax error:");
+                        txtOut.WriteLine("Syntax error:");
                     }
                     if (req != null)
                     {
-                        SearchResult result = null;
-                        try
+                        DateTime OutDate = (DateTime)req.OutDate;
+                        var outDates = System.Linq.Enumerable.Range(0, options.Days).Select(i => OutDate.AddDays(i)).ToList();
+                        List<DateTime> inDates = null;
+                        if (req.InDate.HasValue)
                         {
-                            result = await client.SearchAsync(req);
+                            DateTime InDate = (DateTime)req.InDate;
+                            inDates = System.Linq.Enumerable.Range(0, options.Days).Select(i => InDate.AddDays(i)).ToList();
                         }
-                        catch
+                        for (var idx = 0; idx < options.Days; idx++)
                         {
-                            txtOut.WriteLine("Error");
-                        }
-                        if (result != null)
-                        {
-                            if (result.errors != null && result.errors.Any())
-                                txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
-                            else
+                            req.OutDate = outDates[idx];
+                            if (req.InDate.HasValue)
                             {
-                                var printer = new TablePrinter(txtOut);
-                                txtOut.WriteLine("*********Outbound*******");
-                                printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
-                                if (req.InDate.HasValue)
+                                req.InDate = inDates[idx];
+                            }
+                            SearchResult result = null;
+                            try
+                            {
+                                result = await client.SearchAsync(req);
+                            }
+                            catch
+                            {
+                                txtOut.WriteLine("Error");
+                            }
+                            if (result != null)
+                            {
+                                if (result.errors != null && result.errors.Any())
+                                    txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
+                                else
                                 {
-                                    txtOut.WriteLine("*********Inbound*******");
-                                    printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
+                                    var printer = new TablePrinter(txtOut);
+                                    txtOut.WriteLine("********* Outbound " + outDates[idx].ToShortDateString() + " *******");
+                                    printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
+                                    if (req.InDate.HasValue)
+                                    {
+                                        txtOut.WriteLine("********* Inbound " + inDates[idx].ToShortDateString() + " *******");
+                                        printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
+                                    }
                                 }
                             }
+                            txtOut.Write(Environment.NewLine + Environment.NewLine);
                         }
-                        txtOut.Write(Environment.NewLine + Environment.NewLine);
                     }
                 }
             }
