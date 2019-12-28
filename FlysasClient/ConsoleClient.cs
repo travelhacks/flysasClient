@@ -64,21 +64,14 @@ namespace FlysasClient
                     }
                     if (req != null)
                     {
-                        DateTime OutDate = (DateTime)req.OutDate;
-                        var outDates = System.Linq.Enumerable.Range(0, options.Days).Select(i => OutDate.AddDays(i)).ToList();
-                        List<DateTime> inDates = null;
-                        if (req.InDate.HasValue)
+                        var outDateStart = req.OutDate.Value;
+                        var inDateStart = req.InDate;
+                        for (var i = 0; i < options.Days; i++)
                         {
-                            DateTime InDate = (DateTime)req.InDate;
-                            inDates = System.Linq.Enumerable.Range(0, options.Days).Select(i => InDate.AddDays(i)).ToList();
-                        }
-                        for (var idx = 0; idx < options.Days; idx++)
-                        {
-                            req.OutDate = outDates[idx];
-                            if (req.InDate.HasValue)
-                            {
-                                req.InDate = inDates[idx];
-                            }
+                            req.OutDate = outDateStart.AddDays(i);
+                            if (inDateStart.HasValue)
+                                req.InDate = inDateStart.Value.AddDays(i);
+                            
                             SearchResult result = null;
                             try
                             {
@@ -95,11 +88,11 @@ namespace FlysasClient
                                 else
                                 {
                                     var printer = new TablePrinter(txtOut);
-                                    txtOut.WriteLine("********* Outbound " + outDates[idx].ToShortDateString() + " *******");
+                                    txtOut.WriteLine("********* Outbound " + req.OutDate.Value.ToShortDateString() + " *******");
                                     printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
                                     if (req.InDate.HasValue)
                                     {
-                                        txtOut.WriteLine("********* Inbound " + inDates[idx].ToShortDateString() + " *******");
+                                        txtOut.WriteLine("********* Inbound " + req.InDate.Value.ToShortDateString() + " *******");
                                         printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
                                     }
                                 }
