@@ -88,11 +88,11 @@ namespace FlysasClient
                                 else
                                 {
                                     var printer = new TablePrinter(txtOut);
-                                    txtOut.WriteLine("********* Outbound " + req.OutDate.Value.ToShortDateString() + " *******");
+                                    txtOut.WriteLine("********* Outbound " + req.OutDate.Value.ToString("yyyy-MM-dd") + " *******");
                                     printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
                                     if (req.InDate.HasValue)
                                     {
-                                        txtOut.WriteLine("********* Inbound " + req.InDate.Value.ToShortDateString() + " *******");
+                                        txtOut.WriteLine("********* Inbound " + req.InDate.Value.ToString("yyyy-MM-dd") + " *******");
                                         printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
                                     }
                                 }
