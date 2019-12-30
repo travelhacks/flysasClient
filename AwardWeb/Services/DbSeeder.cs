@@ -13,7 +13,6 @@ namespace AwardWeb
             var routes = getRoutes();
             ctx.Routes.AddRange(routes);
             ctx.SaveChanges();
-            return;
             var client = new HttpClient();
             using (HttpResponseMessage response = client.GetAsync("https://awardhacks.se/export/flights").Result)
             {
