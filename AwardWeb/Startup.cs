@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Net.Http;
 
 namespace AwardWeb
 {
@@ -36,7 +37,7 @@ namespace AwardWeb
                 config.Password.RequireDigit = false;
                 //config.Password.RequiredLength = 8;
             })
-          .AddEntityFrameworkStores<AwardData.AwardContext>()
+          .AddEntityFrameworkStores<AwardContext>()
           .AddDefaultTokenProviders();
 
             var connection = Configuration.GetConnectionString(dbContextName);
@@ -48,23 +49,30 @@ namespace AwardWeb
                 );
                 var provider = services.BuildServiceProvider();
                 var ctx = provider.GetRequiredService<AwardContext>();
-                var userManager = provider.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<ApplicationUser>>();
+                var userManager = provider.GetRequiredService<UserManager<ApplicationUser>>();
                 DbSeeder.Seed(ctx, userManager);
-                var cachedData = new AwardWeb.Services.CachedData();
+                var cachedData = new CachedData();
                 var crawls = ctx.Crawls.Include(c => c.Route).ThenInclude(r => r.FromAirport).Include(c => c.Route).ThenInclude(r => r.ToAirport).ToList();
                 cachedData.Set(crawls);
-                services.AddSingleton<Services.ICachedData>(cachedData);
+                services.AddSingleton<ICachedData>(cachedData);
             }
             else
             {
                 services.AddLetsEncrypt();
-                services.AddSingleton<Services.ICachedData, AwardWeb.Services.CachedData>();
+                services.AddSingleton<ICachedData, CachedData>();
                 services.AddDbContextPool<AwardContext>(
                     options => options.UseSqlServer(Configuration.GetConnectionString(dbContextName))
                 );
                 services.AddHostedService<HostedDataService>();
             }
 
+            services.AddHttpClient<SASRestClient>().ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                return new HttpClientHandler()
+                {
+                    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+                };
+            });
             services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o) => o.BindNonPublicProperties = true);
             services.Configure<Models.AppSettings>(Configuration.GetSection("AppSettings"), (BinderOptions o) => o.BindNonPublicProperties = true);
 

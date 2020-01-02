@@ -7,37 +7,35 @@ namespace FlysasClient
 {
     public class ConsoleClient
     {
-        SASRestClient client = new SASRestClient();
-        Options options;
-        System.IO.TextWriter txtOut = Console.Out;
-        System.IO.TextReader txtIn = Console.In;
-        OpenFlightsData.OFData data;
+        private readonly SASRestClient _client;
+        private readonly Options _options;
+        private readonly System.IO.TextWriter _txtOut = Console.Out;
+        private readonly System.IO.TextReader _txtIn = Console.In;
+        private readonly OpenFlightsData.OFData _data;
 
         enum Commands
         {
             Login, History, Logout, Points, Set, Help, Options, Export, Info, Quit, Calendar
         };
 
-        HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export, Commands.Calendar };
+        readonly HashSet<Commands> requiresLogin = new HashSet<Commands>() { Commands.History, Commands.Points, Commands.Export, Commands.Calendar };
 
-        public ConsoleClient(Options options, OpenFlightsData.OFData data)
+        public ConsoleClient(Options options, OpenFlightsData.OFData data, SASRestClient sasRestClient)
         {
-            this.options = options;
-            this.data = data;
+            _options = options;
+            _data = data;
+            _client = sasRestClient;
         }
 
         public async System.Threading.Tasks.Task InputLoop()
         {
             string input = null;
-            txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
             while (!nameof(Commands.Quit).Equals(input, StringComparison.OrdinalIgnoreCase))
             {
-                input = ReadLine.Read("FS> ");
-                if (input != "")
-                {
-                    ReadLine.AddHistory(input);
-                    await Run(input);
-                }
+                _txtOut.WriteLine("Syntax: Origin-Destination outDate [inDate]");
+                _txtOut.Write(">>");
+                input = _txtIn.ReadLine();
+                await Run(input);
             }
         }
 
@@ -52,53 +50,44 @@ namespace FlysasClient
                     try
                     {
                         req = parser.Parse(query.Trim());
-                        req.Mode = options.Mode;
+                        req.Mode = _options.Mode;
                     }
                     catch (ParserException ex)
                     {
-                        txtOut.WriteLine("Syntax error:" + ex.Message);
+                        _txtOut.Write("Syntax error:" + ex.Message);
                     }
                     catch
                     {
-                        txtOut.WriteLine("Syntax error:");
+                        _txtOut.Write("Syntax error:");
                     }
                     if (req != null)
                     {
-                        var outDateStart = req.OutDate.Value;
-                        var inDateStart = req.InDate;
-                        for (var i = 0; i < options.Days; i++)
+                        SearchResult result = null;
+                        try
                         {
-                            req.OutDate = outDateStart.AddDays(i);
-                            if (inDateStart.HasValue)
-                                req.InDate = inDateStart.Value.AddDays(i);
-                            
-                            SearchResult result = null;
-                            try
+                            result = await _client.SearchAsync(req);
+                        }
+                        catch
+                        {
+                            _txtOut.WriteLine("Error");
+                        }
+                        if (result != null)
+                        {
+                            if (result.errors != null && result.errors.Any())
+                                _txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
+                            else
                             {
-                                result = await client.SearchAsync(req);
-                            }
-                            catch
-                            {
-                                txtOut.WriteLine("Error");
-                            }
-                            if (result != null)
-                            {
-                                if (result.errors != null && result.errors.Any())
-                                    txtOut.WriteLine("flysas.com says: " + result.errors.First().errorMessage);
-                                else
+                                var printer = new TablePrinter(_txtOut);
+                                _txtOut.WriteLine("*********Outbound*******");
+                                printer.PrintFlights(result.outboundFlights, _options, req.From, req.To);
+                                if (req.InDate.HasValue)
                                 {
-                                    var printer = new TablePrinter(txtOut);
-                                    txtOut.WriteLine("********* Outbound " + req.OutDate.Value.ToString("yyyy-MM-dd") + " *******");
-                                    printer.PrintFlights(result.outboundFlights, options, req.From, req.To);
-                                    if (req.InDate.HasValue)
-                                    {
-                                        txtOut.WriteLine("********* Inbound " + req.InDate.Value.ToString("yyyy-MM-dd") + " *******");
-                                        printer.PrintFlights(result.inboundFlights, options, req.To, req.From);
-                                    }
+                                    _txtOut.WriteLine("*********Inbound*******");
+                                    printer.PrintFlights(result.inboundFlights, _options, req.To, req.From);
                                 }
                             }
-                            txtOut.Write(Environment.NewLine + Environment.NewLine);
                         }
+                        _txtOut.Write(Environment.NewLine + Environment.NewLine);
                     }
                 }
             }
@@ -115,16 +104,16 @@ namespace FlysasClient
                 if (name != null)
                 {
                     Commands cmd = (Commands)Enum.Parse(typeof(Commands), name);
-                    if (!client.LoggedIn && requiresLogin.Contains(cmd))
+                    if (!_client.LoggedIn && requiresLogin.Contains(cmd))
                     {
-                        txtOut.WriteLine("This feature requires login");
+                        _txtOut.WriteLine("This feature requires login");
                         return true;
                     }
                     switch (cmd)
                     {
                         case Commands.Set:
-                            if (!options.Set(stack))
-                                txtOut.WriteLine("Error: Unknown settings");
+                            if (!_options.Set(stack))
+                                _txtOut.WriteLine("Error: Unknown settings");
                             break;
                         case Commands.Info:
                             info(stack);
@@ -142,18 +131,18 @@ namespace FlysasClient
                             points();
                             break;
                         case Commands.Options:
-                            txtOut.Write(options.Help() + Environment.NewLine);
+                            _txtOut.Write(_options.Help() + Environment.NewLine);
                             break;
                         case Commands.Help:
-                            txtOut.WriteLine("Commands:");
+                            _txtOut.WriteLine("Commands:");
                             foreach (var s in names)
-                                txtOut.WriteLine("\t" + s);
+                                _txtOut.WriteLine("\t" + s);
                             break;
                         case Commands.Logout:
-                            client.Logout();
+                            _client.Logout();
                             break;
                         case Commands.Quit:
-                            client.Logout();
+                            _client.Logout();
                             Environment.Exit(0);
                             break;
                         case Commands.Calendar:
@@ -168,16 +157,16 @@ namespace FlysasClient
 
         private void Calendar()
         {
-            ReservationsResult.Reservations reservations = client.MyReservations();
+            ReservationsResult.Reservations reservations = _client.MyReservations();
             if (reservations.ReservationsReservations.Any())
             {
                 foreach (ReservationsResult.Reservation reservation in reservations.ReservationsReservations)
                 {
-                    txtOut.Write("Booking reference: ");
-                    txtOut.WriteLine(reservation.AirlineBookingReference);
-                    txtOut.Write($"Destination: {reservation.Connections[0].Destination.AirportCode}");
-                    txtOut.WriteLine($" Was written to your export folder as {reservation.AirlineBookingReference}.ICS");
-                    txtOut.WriteLine("Just drag it into your calender app.");
+                    _txtOut.Write("Booking reference: ");
+                    _txtOut.WriteLine(reservation.AirlineBookingReference);
+                    _txtOut.Write($"Destination: {reservation.Connections[0].Destination.AirportCode}");
+                    _txtOut.WriteLine($" Was written to your export folder as {reservation.AirlineBookingReference}.ICS");
+                    _txtOut.WriteLine("Just drag it into your calender app.");
 
                     FlysasLib.CalendarPrinter cp = new CalendarPrinter();
                     cp.WriteICal(reservation);
@@ -186,22 +175,22 @@ namespace FlysasClient
 
             }
             else
-                txtOut.WriteLine("Sorry: No bookings found!");
+                _txtOut.WriteLine("Sorry: No bookings found!");
         }
 
         private void points()
         {
             try
             {
-                var res = client.History(1);
-                txtOut.WriteLine("Status: " + res.eurobonus.currentTierName);
-                txtOut.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
-                txtOut.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");
+                var res = _client.History(1);
+                _txtOut.WriteLine("Status: " + res.eurobonus.currentTierName);
+                _txtOut.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
+                _txtOut.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
-                txtOut.WriteLine("Error getting info");
-                txtOut.WriteLine(ex.Message);
+                _txtOut.WriteLine("Error getting info");
+                _txtOut.WriteLine(ex.Message);
             }
         }
 
@@ -212,51 +201,51 @@ namespace FlysasClient
 
                 var arglist = stack.ToList();
                 var s = string.Join(" ", arglist);
-                var airport = data.Airports.FirstOrDefault(ap => ap.IATA == s.ToUpper());
+                var airport = _data.Airports.FirstOrDefault(ap => ap.IATA == s.ToUpper());
                 if (airport != null)
                 {
-                    txtOut.WriteLine($"Airport: {airport.IATA}/{airport.ICAO}");
-                    txtOut.WriteLine($"Name: {airport.Name}");
-                    txtOut.WriteLine($"City: {airport.City}");
-                    txtOut.WriteLine($"Country: {airport.Country}");
-                    txtOut.WriteLine($"Type: {airport.Type}");
-                    txtOut.WriteLine($"Timezone {airport.Timezone}");
-                    txtOut.WriteLine($"Daylight saving time: {airport.DST}");
+                    _txtOut.WriteLine($"Airport: {airport.IATA}/{airport.ICAO}");
+                    _txtOut.WriteLine($"Name: {airport.Name}");
+                    _txtOut.WriteLine($"City: {airport.City}");
+                    _txtOut.WriteLine($"Country: {airport.Country}");
+                    _txtOut.WriteLine($"Type: {airport.Type}");
+                    _txtOut.WriteLine($"Timezone {airport.Timezone}");
+                    _txtOut.WriteLine($"Daylight saving time: {airport.DST}");
                 }
-                var cities = data.Airports.Where(ap => s.Equals(ap.City, StringComparison.OrdinalIgnoreCase)).ToList();
+                var cities = _data.Airports.Where(ap => s.Equals(ap.City, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (cities.Any())
                 {
-                    txtOut.WriteLine("Airports in " + s);
+                    _txtOut.WriteLine("Airports in " + s);
                     foreach (var c in cities)
-                        txtOut.WriteLine("\t" + c.IATA + ": " + c.Name);
+                        _txtOut.WriteLine("\t" + c.IATA + ": " + c.Name);
                 }
-                var airline = data.Airlines.FirstOrDefault(al => s.Equals(al.Name, StringComparison.OrdinalIgnoreCase) || s.ToUpper() == al.IATA || s.ToUpper() == al.ICAO);
+                var airline = _data.Airlines.FirstOrDefault(al => s.Equals(al.Name, StringComparison.OrdinalIgnoreCase) || s.ToUpper() == al.IATA || s.ToUpper() == al.ICAO);
                 if (airline != null)
                 {
-                    txtOut.WriteLine("Airline info for " + s);
-                    txtOut.WriteLine($"\t{airline.IATA}/{airline.ICAO}");
-                    txtOut.WriteLine($"\tName: {airline.Name}");
-                    txtOut.WriteLine($"\tCallsign: {airline.Callsign}");
-                    txtOut.WriteLine($"\tCountry: {airline.Country}");
+                    _txtOut.WriteLine("Airline info for " + s);
+                    _txtOut.WriteLine($"\t{airline.IATA}/{airline.ICAO}");
+                    _txtOut.WriteLine($"\tName: {airline.Name}");
+                    _txtOut.WriteLine($"\tCallsign: {airline.Callsign}");
+                    _txtOut.WriteLine($"\tCountry: {airline.Country}");
                 }
-                var plane = data.Planes.FirstOrDefault(p => s.ToUpper() == p.IATA || s.ToUpper() == p.ICAO);
+                var plane = _data.Planes.FirstOrDefault(p => s.ToUpper() == p.IATA || s.ToUpper() == p.ICAO);
                 if (plane != null)
                 {
-                    txtOut.WriteLine("Airplane info for " + s);
-                    txtOut.WriteLine($"\t{plane.IATA}/{plane.ICAO}");
-                    txtOut.WriteLine($"\tName: {plane.Name}");
+                    _txtOut.WriteLine("Airplane info for " + s);
+                    _txtOut.WriteLine($"\t{plane.IATA}/{plane.ICAO}");
+                    _txtOut.WriteLine($"\tName: {plane.Name}");
                 }
                 if (arglist.Count >= 2)
                 {
 
                     var orig = arglist[0];
                     var dest = arglist[1] == "-" && arglist.Count > 2 ? arglist[2] : arglist[1];
-                    var routeList = data.Routes.Where(r => r.FromIATA == orig.ToUpper() && r.ToIATA == dest.ToUpper()).ToList();
+                    var routeList = _data.Routes.Where(r => r.FromIATA == orig.ToUpper() && r.ToIATA == dest.ToUpper()).ToList();
                     if (routeList.Any())
                     {
-                        txtOut.WriteLine($"Routes from {orig} to {dest}");
+                        _txtOut.WriteLine($"Routes from {orig} to {dest}");
                         foreach (var r in routeList)
-                            txtOut.WriteLine("\t" + r.AirlineCode + (r.CodeShare ? " codeshare " : ""));
+                            _txtOut.WriteLine("\t" + r.AirlineCode + (r.CodeShare ? " codeshare " : ""));
                     }
                 }
             }
@@ -276,26 +265,26 @@ namespace FlysasClient
                     fetchAll = false;
                 else
                 {
-                    txtOut.WriteLine("Parser error");
+                    _txtOut.WriteLine("Parser error");
                     return;
                 }
             }
-            txtOut.WriteLine("");
+            _txtOut.WriteLine("");
             do
             {
-                txtOut.Write($"\rFetching page { page}{(pages > 1 ? " of " + pages : "")}");
+                _txtOut.Write($"\rFetching page { page}{(pages > 1 ? " of " + pages : "")}");
                 try
                 {
-                    res = client.History(page);
+                    res = _client.History(page);
                 }
                 catch (Exception ex)
                 {
-                    txtOut.WriteLine($"Error getting page {page}");
-                    txtOut.WriteLine(ex.Message);
+                    _txtOut.WriteLine($"Error getting page {page}");
+                    _txtOut.WriteLine(ex.Message);
                 }
                 if (res.errors != null)
                 {
-                    txtOut.WriteLine($"Error getting page {page} {res.errors.First().errorMessage}");
+                    _txtOut.WriteLine($"Error getting page {page} {res.errors.First().errorMessage}");
                 }
                 page++;
                 if (fetchAll)
@@ -303,15 +292,15 @@ namespace FlysasClient
                 if (res.errors == null && res.eurobonus != null && res.eurobonus.transactionHistory.transaction != null)
                     all.AddRange(res.eurobonus.transactionHistory.transaction);
             } while (page <= pages);
-            txtOut.Write("\r");
+            _txtOut.Write("\r");
             if (export)
             {
                 var exporter = new FlightExporter();
                 var list = exporter.Convert(all);
-                txtOut.WriteLine($"Found {list.Count} flights");
+                _txtOut.WriteLine($"Found {list.Count} flights");
                 if (list.Any())
                     exporter.SaveCSV(list);
-                txtOut.WriteLine("Files saved");
+                _txtOut.WriteLine("Files saved");
             }
             else
             {
@@ -330,30 +319,30 @@ namespace FlysasClient
                 }
 
                 t.Alignment[3] = TextAlignment.Right;
-                t.Print(txtOut);
+                t.Print(_txtOut);
                 if (fetchAll)
                 {
-                    txtOut.WriteLine("Summary");
+                    _txtOut.WriteLine("Summary");
                     t = new Table();
                     foreach (var g in all.GroupBy(trans => trans.typeOfTransaction))
                         t.Rows.Add(new List<string>(new[] { g.Key, g.Sum(trans => trans.availablePointsAfterTransaction).ToString() }));
                     t.Alignment[1] = TextAlignment.Right;
-                    t.Print(txtOut);
+                    t.Print(_txtOut);
                 }
             }
         }
 
         private void login(CommandStack stack)
         {
-            var userName = options.UserName;
-            var passWord = options.Password;
+            var userName = _options.UserName;
+            var passWord = _options.Password;
             if (userName.IsNullOrWhiteSpace())
                 if (stack.Any())
                     userName = stack.Pop();
                 else
                 {
-                    txtOut.WriteLine("User: ");
-                    userName = txtIn.ReadLine();
+                    _txtOut.WriteLine("User: ");
+                    userName = _txtIn.ReadLine();
                 }
 
             if (passWord.IsNullOrWhiteSpace())
@@ -361,17 +350,17 @@ namespace FlysasClient
                     passWord = stack.Pop();
                 else
                 {
-                    txtOut.WriteLine("Enter password: ");
+                    _txtOut.WriteLine("Enter password: ");
                     passWord = getPassword();
                 }
             try
             {
-                var result = client.Login(userName, passWord);
-                txtOut.WriteLine($"Login for {userName}  {(result ? " success" : "failed")}");
+                var result = _client.Login(userName, passWord);
+                _txtOut.WriteLine($"Login for {userName}  {(result ? " success" : "failed")}");
             }
             catch (Exception)
             {
-                txtOut.WriteLine("Login failed");
+                _txtOut.WriteLine("Login failed");
             }
         }
 
@@ -387,7 +376,7 @@ namespace FlysasClient
                     if (str.Any())
                     {
                         str = str.Substring(0, str.Length - 1);
-                        txtOut.Write("\b \b");
+                        _txtOut.Write("\b \b");
                     }
                 }
                 else
@@ -397,11 +386,11 @@ namespace FlysasClient
                     else
                     {
                         str += key.KeyChar;
-                        txtOut.Write("*");
+                        _txtOut.Write("*");
                     }
                 }
             }
-            txtOut.WriteLine();
+            _txtOut.WriteLine();
             return str;
         }
     }

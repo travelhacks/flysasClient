@@ -9,21 +9,18 @@ namespace FlysasLib
 {
     public class SASRestClient
     {
-        AuthResponse auth = null;
-        HttpClient client = new HttpClient(
-             new HttpClientHandler
-             {
-                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-             });
+        private AuthResponse auth = null;
+        private readonly HttpClient _client;
 
         string apiDomain = "https://api.flysas.com";
-        public SASRestClient()
+        public SASRestClient(HttpClient client)
         {
-            client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-            client.DefaultRequestHeaders.Connection.Add("keep-alive");
-            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"));
-            client.DefaultRequestHeaders.Host = "api.flysas.com";
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible)");
+            _client = client;
+            _client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+            _client.DefaultRequestHeaders.Connection.Add("keep-alive");
+            _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"));
+            _client.DefaultRequestHeaders.Host = "api.flysas.com";
+            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible)");
         }
 
         public bool Login(string userName, string pwd)
@@ -82,11 +79,13 @@ namespace FlysasLib
             var req = createRequest(query.GetUrl(), HttpMethod.Get);
             return GetResult<SearchResult>(req);
         }
+
         public Task<SearchResult> SearchAsync(SASQuery query)
         {
             var req = createRequest(query.GetUrl(), HttpMethod.Get);
             return GetResultAsync<SearchResult>(req);
         }
+
         public TransactionRoot History(int page)
         {
             var url = apiDomain + $"/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={auth.customerSessionId}";
@@ -110,7 +109,7 @@ namespace FlysasLib
         DownloadResult downLoad(HttpRequestMessage request)
         {
             var res = new DownloadResult();
-            var task = client.SendAsync(request);
+            var task = _client.SendAsync(request);
             task.Wait();
             task.Result.Content.ReadAsStringAsync().ContinueWith(t =>
             {
@@ -125,7 +124,7 @@ namespace FlysasLib
         async Task<DownloadResult> downLoadAsync(HttpRequestMessage request)
         {
             var res = new DownloadResult();
-            var task = await client.SendAsync(request);
+            var task = await _client.SendAsync(request);
             res.Content = await task.Content.ReadAsStringAsync();
             res.Success = task.IsSuccessStatusCode;
             task.Content.Dispose();
@@ -139,10 +138,12 @@ namespace FlysasLib
             o.httpSuccess = res.Success;
             return o;
         }
+
         T GetResult<T>(HttpRequestMessage req) where T : FlysasLib.RootBaseClass
         {
             return Deserialize<T>(downLoad(req));
         }
+
         async Task<T> GetResultAsync<T>(HttpRequestMessage req) where T : FlysasLib.RootBaseClass
         {
             var res = await downLoadAsync(req);
