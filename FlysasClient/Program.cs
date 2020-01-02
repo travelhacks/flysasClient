@@ -58,7 +58,6 @@ namespace FlysasClient
                     await client.InputLoop();
                 return 0;
             }
-            return 0;
         }
     }
 }
