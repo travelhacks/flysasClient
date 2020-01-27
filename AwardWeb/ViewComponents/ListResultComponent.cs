@@ -67,33 +67,41 @@ namespace AwardWeb
                 && (match(ToList, c.Destination) ||  ToList.Contains(c.Return ? c.Route.FromAirport.Zone : c.Route.ToAirport.Zone));               
         }
 
+        Dictionary<string, IEnumerable<string>> metroCodeDictionary = new Dictionary<string, IEnumerable<string>>()
+        {
+            { "TYO", new []{ "HND","NRT"  } }
+        };
+
         bool match(IEnumerable<string> collection, string code)
         {
-            return !collection.Any() || collection.Contains(code);
+            if (!collection.Any() || collection.Contains(code))
+                return true;
+            var metros = metroCodeDictionary.Where(kvp => kvp.Value.Contains(code)).Select(kvp=>kvp.Key).ToList();
+            return collection.Any(s=> metros.Contains(s));                
         }
 
 
 
 
-        private List<SearchResult> GetResults(IEnumerable<Crawl> outBound, IEnumerable<Crawl> inBound, uint minDays, uint maxDays,int limit, bool openJaw)
+        private List<SearchResult> GetResults(IEnumerable<Crawl> outBoundList, IEnumerable<Crawl> inBoundList, uint minDays, uint maxDays,int limit, bool openJaw)
         {
             var scandi = new HashSet<string>(new[] { "CPH", "ARN", "OSL" });
             var res = new List<SearchResult>();
-            var hash = inBound.GroupBy(c => c.Origin).ToDictionary(g => g.Key, g => g.ToList());
-            hash["Scandinavia"] = inBound.Where(c => scandi.Contains(c.Origin)).ToList();
+            var destinationHash = inBoundList.GroupBy(c =>  c.Origin).ToDictionary(g => g.Key, g => g.ToList());
+            destinationHash["Scandinavia"] = inBoundList.Where(c => scandi.Contains(c.Origin)).ToList();
 
-            foreach (var ob in outBound.OrderBy(f => f.Departure.Value))
+            foreach (var outBound in outBoundList.OrderBy(f => f.Departure.Value))
             {
-                var key = openJaw && !scandi.Contains(ob.Origin) ? "Scandinavia" : ob.Destination;
-                if (hash.ContainsKey(key))
-                    foreach (var ib in hash[key].OrderBy(f => f.Departure.Value))
+                var key = openJaw && !scandi.Contains(outBound.Origin) ? "Scandinavia" : outBound.Destination;
+                if (destinationHash.ContainsKey(key))
+                    foreach (var inbound in destinationHash[key].OrderBy(f => f.Departure.Value))
                     {
-                        var diff = ib.Departure.Value.Subtract(ob.Arrival.Value);
-                        if (ob.Origin == ib.Destination || openJaw
-                            && (scandi.Contains(ob.Origin) && scandi.Contains(ib.Destination)))
+                        var diff = inbound.Departure.Value.Subtract(outBound.Arrival.Value);
+                        if (outBound.Origin == inbound.Destination || openJaw
+                            && (scandi.Contains(outBound.Origin) && scandi.Contains(inbound.Destination)))
                             if (diff.TotalDays >= minDays && diff.TotalDays <= maxDays)
                             {
-                                res.Add(new SearchResult { Out = ob, In = ib });
+                                res.Add(new SearchResult { Out = outBound, In = inbound });
                                 if (res.Count == limit)
                                     return res;
                             }

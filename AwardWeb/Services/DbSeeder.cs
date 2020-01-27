@@ -93,7 +93,8 @@ namespace AwardWeb
                 new Route { Crawl = true, Show = true, To = "EWR", From = "OSL", Id = 16 },
                 new Route { Crawl = true, Show = true, To = "MIA", From = "ARN", Id = 277 },
                 new Route { Crawl = true, Show = true, To = "HKG", From = "CPH", Id = 279 },
-                new Route { Crawl = true, Show = true, To = "LAX", From = "CPH", Id = 280 }
+                new Route { Crawl = true, Show = true, To = "LAX", From = "CPH", Id = 280 },
+                new Route { Crawl = true, Show = true, To = "HND", From = "CPH", Id = 281 }
             };
         }
 

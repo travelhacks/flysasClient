@@ -65,7 +65,7 @@ namespace AwardWeb.Controllers
             sasSearch.Routes.Add(new SelectListItem { Value = "PEK", Text = "Beijing" });
             sasSearch.Routes.Add(new SelectListItem { Value = "HKG", Text = "Hong Kong" });
             sasSearch.Routes.Add(new SelectListItem { Value = "PVG", Text = "Shanghai" });
-            sasSearch.Routes.Add(new SelectListItem { Value = "NRT", Text = "Tokyo" });
+            sasSearch.Routes.Add(new SelectListItem { Value = "TYO", Text = "Tokyo" });
 
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "All", Text = "All" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "Central Asia & Far East Asia", Text = "Asia" });
@@ -80,7 +80,7 @@ namespace AwardWeb.Controllers
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "PEK", Text = "Beijing" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "HKG", Text = "Hong Kong" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "PVG", Text = "Shanghai" });
-            sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "NRT", Text = "Tokyo" });
+            sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "TYO", Text = "Tokyo" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "Europe", Text = "Scandinavia" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "ARN", Text = "Stockholm" });
             sasSearch.ReturnRoutes.Add(new SelectListItem { Value = "CPH", Text = "Copenhagen" });
