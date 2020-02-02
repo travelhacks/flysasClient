@@ -81,18 +81,22 @@ namespace AwardWeb
         }
 
 
-
+        private string GetMetroOrAirportCode(string airport)
+        {
+            var metro = metroCodeDictionary.Where(kvp => kvp.Value.Contains(airport)).Select(kvp=>kvp.Key).FirstOrDefault();            
+            return metro ?? airport;
+        }
 
         private List<SearchResult> GetResults(IEnumerable<Crawl> outBoundList, IEnumerable<Crawl> inBoundList, uint minDays, uint maxDays,int limit, bool openJaw)
         {
             var scandi = new HashSet<string>(new[] { "CPH", "ARN", "OSL" });
             var res = new List<SearchResult>();
-            var destinationHash = inBoundList.GroupBy(c =>  c.Origin).ToDictionary(g => g.Key, g => g.ToList());
+            var destinationHash = inBoundList.GroupBy(c => GetMetroOrAirportCode(c.Origin) ).ToDictionary(g => g.Key, g => g.ToList());
             destinationHash["Scandinavia"] = inBoundList.Where(c => scandi.Contains(c.Origin)).ToList();
 
             foreach (var outBound in outBoundList.OrderBy(f => f.Departure.Value))
             {
-                var key = openJaw && !scandi.Contains(outBound.Origin) ? "Scandinavia" : outBound.Destination;
+                var key = openJaw && !scandi.Contains(outBound.Origin) ? "Scandinavia" : GetMetroOrAirportCode(outBound.Destination);
                 if (destinationHash.ContainsKey(key))
                     foreach (var inbound in destinationHash[key].OrderBy(f => f.Departure.Value))
                     {
