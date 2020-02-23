@@ -24,12 +24,7 @@ namespace FlysasClient
 
         public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
-            var httpClient = new HttpClient(
-                new HttpClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-                }
-                );
+            var httpClient = FlysasLib.HttpClientFactory.CreateClient();
             this.client = new SASRestClient(httpClient);
             this.options = options;
             this.data = data;

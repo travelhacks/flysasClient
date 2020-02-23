@@ -68,10 +68,7 @@ namespace AwardWeb
 
             services.AddHttpClient<SASRestClient>().ConfigurePrimaryHttpMessageHandler(() =>
             {
-                return new HttpClientHandler()
-                {
-                    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
-                };
+                return FlysasLib.HttpClientFactory.CreateHandler();                
             });
             services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o) => o.BindNonPublicProperties = true);
             services.Configure<Models.AppSettings>(Configuration.GetSection("AppSettings"), (BinderOptions o) => o.BindNonPublicProperties = true);
