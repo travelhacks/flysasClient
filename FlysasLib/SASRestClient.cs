@@ -9,7 +9,7 @@ namespace FlysasLib
 {
     public class SASRestClient
     {
-        private AuthResponse auth = null;
+        private AuthResponse _auth = null;
         private readonly HttpClient _client;
 
         string apiDomain = "https://api.flysas.com";
@@ -27,33 +27,33 @@ namespace FlysasLib
         {
             var request = createRequest(apiDomain + "/authorize/oauth/token", HttpMethod.Post);
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "U0FTLVVJOg==");
-            var dict = new Dictionary<string, string> { { "username", userName }, { "password", pwd }, { "grant_type", "password" } };
-            request.Content = new FormUrlEncodedContent(dict);
+            var formValues = new Dictionary<string, string> { { "username", userName }, { "password", pwd }, { "grant_type", "password" } };
+            request.Content = new FormUrlEncodedContent(formValues);
 
             var res = downLoad(request);
             var response = Deserialize<AuthResponse>(res);
-            auth = response;
-            return response.error.IsNullOrEmpty();
+            _auth = response.error.IsNullOrEmpty() ? response : null;
+            return _auth != null;         
         }
 
-        public bool LoggedIn => auth != null && auth.customerSessionId.IsNullOrEmpty() == false;
+        public bool LoggedIn => _auth != null;
 
         public void Logout()
         {
             if (LoggedIn)
             {
-                var request = createRequest(apiDomain + "/customer/signout", HttpMethod.Post, auth);
-                string cont = JsonConvert.SerializeObject(new { customerSessionId = auth.customerSessionId });
+                var request = createRequest(apiDomain + "/customer/signout", HttpMethod.Post, _auth);
+                string cont = JsonConvert.SerializeObject(new { customerSessionId = _auth.customerSessionId });
                 request.Content = new StringContent(cont, System.Text.Encoding.UTF8, "application/json");
                 var res = downLoad(request);
-                auth = null;
+                _auth = null;
             }
         }
 
         public ReservationsResult.Reservations MyReservations()
         {
-            var url = apiDomain + $"/reservation/reservations?customerID={auth.customerSessionId}";
-            var request = createRequest(url, HttpMethod.Get, auth);
+            var url = apiDomain + $"/reservation/reservations?customerID={_auth.customerSessionId}";
+            var request = createRequest(url, HttpMethod.Get, _auth);
             ReservationsResult.Reservations reservations = new ReservationsResult.Reservations();
             //var res = GetResult<ReservationsResult.Reservations>(request);
             var res = downLoad(request);
@@ -88,8 +88,8 @@ namespace FlysasLib
 
         public TransactionRoot History(int page)
         {
-            var url = apiDomain + $"/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={auth.customerSessionId}";
-            var request = createRequest(url, HttpMethod.Get, auth);
+            var url = apiDomain + $"/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={_auth.customerSessionId}";
+            var request = createRequest(url, HttpMethod.Get, _auth);
             var res = GetResult<TransactionRoot>(request);
             return res;
         }
