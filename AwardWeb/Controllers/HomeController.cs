@@ -15,12 +15,15 @@ namespace AwardWeb.Controllers
 
     public class HomeController : Controller
     {
-        AwardData.AwardContext ctx;
+        private readonly AwardContext _ctx;
+        private readonly SASRestClient _client;
 
-        public HomeController(AwardData.AwardContext context)
+        public HomeController(AwardContext context, SASRestClient client)
         {
-            ctx = context;
+            _client = client;
+            _ctx = context;
         }
+
         public IActionResult List([FromServices] Services.ICachedData cachedData)
         {
             var list = cachedData.Crawls.Where(c => c.Business > 0 && c.TravelDate > DateTime.Now && c.Route.Show);
@@ -117,7 +120,7 @@ namespace AwardWeb.Controllers
         }
         public IActionResult Changes()
         {
-            var crawls = ctx.Changes.Where(c => c.Route.Show).OrderByDescending(c => c.CrawlDate).Include(c => c.Route).ToList();
+            var crawls = _ctx.Changes.Where(c => c.Route.Show).OrderByDescending(c => c.CrawlDate).Include(c => c.Route).ToList();
             return View(crawls);
         }
         public IActionResult FAQ()
@@ -137,13 +140,13 @@ namespace AwardWeb.Controllers
             string str = "";
             if (hideMe == 4)
             {
-                this.ctx.Messages.Add(new Message()
+                this._ctx.Messages.Add(new Message()
                 {
                     Msg = message,
                     Email = email,
                     TimeStamp = DateTime.UtcNow
                 });
-                this.ctx.SaveChanges();
+                this._ctx.SaveChanges();
                 str = "Thanks!";
                 try
                 {
@@ -196,8 +199,7 @@ namespace AwardWeb.Controllers
                                     Adults = search.Pax,
                                     Mode = SASQuery.SearhMode.STAR
                                 };
-                                var c = new FlysasLib.SASRestClient();
-                                FlysasLib.SearchResult searchResult = await c.SearchAsync(q);
+                                FlysasLib.SearchResult searchResult = await _client.SearchAsync(q);
 
                                 if (searchResult.tabsInfo != null && searchResult.tabsInfo.outboundInfo != null)
                                     foreach (var dayWithNoSeats in searchResult.tabsInfo.outboundInfo.Where(tab => tab.points == 0))
@@ -229,4 +231,3 @@ namespace AwardWeb.Controllers
         }
     }
 }
-

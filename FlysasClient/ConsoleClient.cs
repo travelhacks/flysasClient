@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 
 namespace FlysasClient
 {
     public class ConsoleClient
     {
-        SASRestClient client = new SASRestClient();
+        SASRestClient client;
         Options options;
         System.IO.TextWriter txtOut = Console.Out;
         System.IO.TextReader txtIn = Console.In;
@@ -22,6 +24,13 @@ namespace FlysasClient
 
         public ConsoleClient(Options options, OpenFlightsData.OFData data)
         {
+            var httpClient = new HttpClient(
+                new HttpClientHandler
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                }
+                );
+            this.client = new SASRestClient(httpClient);
             this.options = options;
             this.data = data;
         }
