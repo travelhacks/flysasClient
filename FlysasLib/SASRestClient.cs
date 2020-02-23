@@ -15,12 +15,7 @@ namespace FlysasLib
         string apiDomain = "https://api.flysas.com";
         public SASRestClient(HttpClient client)
         {
-            _client = client;
-            _client.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-            _client.DefaultRequestHeaders.Connection.Add("keep-alive");
-            _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"));
-            _client.DefaultRequestHeaders.Host = "api.flysas.com";
-            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible)");
+            _client = client;           
         }
 
         public bool Login(string userName, string pwd)

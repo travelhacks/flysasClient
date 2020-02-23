@@ -66,10 +66,9 @@ namespace AwardWeb
                 services.AddHostedService<HostedDataService>();
             }
 
-            services.AddHttpClient<SASRestClient>().ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                return FlysasLib.HttpClientFactory.CreateHandler();                
-            });
+            services.AddHttpClient<SASRestClient>()
+                .ConfigurePrimaryHttpMessageHandler(() => FlysasLib.HttpClientFactory.CreateHandler())
+                .ConfigureHttpClient(client => FlysasLib.HttpClientFactory.SetDefaultHeaders(client));            
             services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o) => o.BindNonPublicProperties = true);
             services.Configure<Models.AppSettings>(Configuration.GetSection("AppSettings"), (BinderOptions o) => o.BindNonPublicProperties = true);
 
