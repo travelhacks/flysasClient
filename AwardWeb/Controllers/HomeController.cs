@@ -26,7 +26,7 @@ namespace AwardWeb.Controllers
 
         public IActionResult List([FromServices] Services.ICachedData cachedData)
         {
-            var list = cachedData.Crawls.Where(c => c.Business > 0 && c.TravelDate > DateTime.Now && c.Route.Show);
+            var list = cachedData.Crawls.Where(c => c.Business > 0 && c.Departure.Value.ToUniversalTime() > DateTimeOffset.UtcNow && c.Route.Show);
             return View(list);
         }
 
@@ -34,7 +34,7 @@ namespace AwardWeb.Controllers
         {
             return RedirectToActionPermanent(nameof(HomeController.List));
         }
-
+        l
 
         public IActionResult Console()
         {
@@ -186,6 +186,7 @@ namespace AwardWeb.Controllers
                     var dates = System.Linq.Enumerable.Range(0, search.SearchDays).Select(i => search.OutDate.AddDays(i)).ToList();
                     dates.Shuffle();
                     var res = new System.Collections.Concurrent.ConcurrentDictionary<DateTime, FlysasLib.SearchResult>();
+
                     await Dasync.Collections.ParallelForEachExtensions.ParallelForEachAsync<DateTime>(dates,
                         async date =>
                         {
@@ -201,7 +202,7 @@ namespace AwardWeb.Controllers
                                 };
                                 FlysasLib.SearchResult searchResult = await _client.SearchAsync(q);
 
-                                if (searchResult.tabsInfo != null && searchResult.tabsInfo.outboundInfo != null)
+                                if (searchResult.tabsInfo?.outboundInfo != null)
                                     foreach (var dayWithNoSeats in searchResult.tabsInfo.outboundInfo.Where(tab => tab.points == 0))
                                         res.TryAdd(dayWithNoSeats.date, null);
 
