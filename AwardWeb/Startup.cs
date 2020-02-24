@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using System.Net.Http;
 
 namespace AwardWeb
 {
@@ -60,18 +59,16 @@ namespace AwardWeb
             {
                 services.AddLetsEncrypt();
                 services.AddSingleton<ICachedData, CachedData>();
-                services.AddDbContextPool<AwardContext>(
-                    options => options.UseSqlServer(Configuration.GetConnectionString(dbContextName))
-                );
+                services.AddDbContextPool<AwardContext>(options => options.UseSqlServer(Configuration.GetConnectionString(dbContextName)));
                 services.AddHostedService<HostedDataService>();
             }
 
             services.AddHttpClient<SASRestClient>()
                 .ConfigurePrimaryHttpMessageHandler(() => FlysasLib.HttpClientFactory.CreateHandler())
                 .ConfigureHttpClient(client => FlysasLib.HttpClientFactory.SetDefaultHeaders(client));            
+            
             services.Configure<Models.SMTPOptions>(Configuration.GetSection("SMTPOptions"), (BinderOptions o) => o.BindNonPublicProperties = true);
             services.Configure<Models.AppSettings>(Configuration.GetSection("AppSettings"), (BinderOptions o) => o.BindNonPublicProperties = true);
-
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
