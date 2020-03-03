@@ -8,7 +8,7 @@
 <form asp-action="ListResult" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#result">
     <div class="row">
         <div class="form-group col-md-2">
-            <label asp-for="MinDays" class="control-label"></label>
+            <label asp-for="MinDays" class="control-label"></label> 
             <input asp-for="MinDays" class="form-control" onchange="$('#btnSubmit').trigger( 'click' );" />
             <span asp-validation-for="MinDays" class="text-danger"></span>
         </div>
@@ -67,12 +67,12 @@
     <div class="row">
         <div class="form-group col-md-2">
             <label asp-for="From" class="control-label"></label>
-            <select size="10" asp-for="From" class="form-control" asp-items="Model.Routes" onchange="fixOptions(this);$('#btnSubmit').trigger( 'click' );"></select>
+            <select size="10" asp-for="From" class="form-control airportSelect" asp-items="Model.Routes" ></select>
             <span asp-validation-for="Routes" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2">
             <label asp-for="To" class="control-label"></label>
-            <select size="10" asp-for="To" class="form-control" asp-items="Model.ReturnRoutes" onchange="fixOptions(this);$('#btnSubmit').trigger( 'click' );"></select>
+            <select size="10" asp-for="To" class="form-control airportSelect" asp-items="Model.ReturnRoutes"></select>
             <span asp-validation-for="To" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2">
@@ -140,11 +140,23 @@
             $('#sortField').val(field);
             $('#btnSubmit').trigger('click');
         }
-
-        function fixOptions(select) {
-            if (select.selectedIndex == -1)
+                
+        $(".airportSelect option").on("click", function (e) {                        
+            var all = "All";
+            var option = $(this).val();
+            var select = $(this).parent();            
+            var values = $(select).val();
+            if (values.length == 0)
                 select.selectedIndex = 0;
-        }
+            else
+                if (values.length > 1 && jQuery.inArray(all, values) >= 0) {
+                    values = jQuery.grep(values, function (value) {
+                        return option == all && value == all || option != all && value != all;
+                    });
+                    $(select).val(values);
+                }        
+            $('#btnSubmit').trigger('click');
+        });
 
         function toggleDetails() {
             var val = $('#toggleDetails').is(":checked");
