@@ -140,20 +140,24 @@
             $('#sortField').val(field);
             $('#btnSubmit').trigger('click');
         }
-                
-        $(".airportSelect option").on("click", function (e) {                        
+
+        var selectState = {};
+        $(".airportSelect").on("change", function (e) {                        
             var all = "All";
-            var option = $(this).val();
-            var select = $(this).parent();            
-            var values = $(select).val();
-            if (values.length == 0)
-                select.selectedIndex = 0;
+            var last = selectState[this];
+            if (typeof last === "undefined")
+                last = [all];
+            var values = $(this).val();
+            var allSelectedNow = jQuery.inArray(all, values) >= 0 && jQuery.inArray(all, last) < 0;
+            selectState[this] = values;
+            if (values.length == 0 || allSelectedNow)
+                this.selectedIndex = 0;
             else
                 if (values.length > 1 && jQuery.inArray(all, values) >= 0) {
                     values = jQuery.grep(values, function (value) {
-                        return option == all && value == all || option != all && value != all;
+                        return value != all;
                     });
-                    $(select).val(values);
+                    $(this).val(values);
                 }        
             $('#btnSubmit').trigger('click');
         });
