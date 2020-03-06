@@ -34,7 +34,6 @@ namespace AwardWeb.Controllers
         {
             return RedirectToActionPermanent(nameof(HomeController.List));
         }
-        
 
         public IActionResult Console()
         {

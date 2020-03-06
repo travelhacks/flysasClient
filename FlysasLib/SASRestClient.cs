@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -12,46 +11,47 @@ namespace FlysasLib
         private AuthResponse _auth = null;
         private readonly HttpClient _client;
 
-        string apiDomain = "https://api.flysas.com";
+        const string apiDomain = "https://api.flysas.com";
+
         public SASRestClient(HttpClient client)
         {
-            _client = client;           
+            _client = client;
         }
 
-        public bool Login(string userName, string pwd)
+        public async Task<bool> Login(string userName, string pwd)
         {
-            var request = createRequest(apiDomain + "/authorize/oauth/token", HttpMethod.Post);
+            var request = CreateRequest(apiDomain + "/authorize/oauth/token", HttpMethod.Post);
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "U0FTLVVJOg==");
             var formValues = new Dictionary<string, string> { { "username", userName }, { "password", pwd }, { "grant_type", "password" } };
             request.Content = new FormUrlEncodedContent(formValues);
 
-            var res = downLoad(request);
+            var res = await DownloadAsync(request);
             var response = Deserialize<AuthResponse>(res);
             _auth = response.error.IsNullOrEmpty() ? response : null;
-            return _auth != null;         
+            return _auth != null;
         }
 
         public bool LoggedIn => _auth != null;
 
-        public void Logout()
+        public async Task Logout()
         {
             if (LoggedIn)
             {
-                var request = createRequest(apiDomain + "/customer/signout", HttpMethod.Post, _auth);
+                var request = CreateRequest(apiDomain + "/customer/signout", HttpMethod.Post, _auth);
                 string cont = JsonConvert.SerializeObject(new { customerSessionId = _auth.customerSessionId });
                 request.Content = new StringContent(cont, System.Text.Encoding.UTF8, "application/json");
-                var res = downLoad(request);
+                await DownloadAsync(request);
                 _auth = null;
             }
         }
 
-        public ReservationsResult.Reservations MyReservations()
+        public async Task<ReservationsResult.Reservations> MyReservations()
         {
             var url = apiDomain + $"/reservation/reservations?customerID={_auth.customerSessionId}";
-            var request = createRequest(url, HttpMethod.Get, _auth);
-            ReservationsResult.Reservations reservations = new ReservationsResult.Reservations();
+            var request = CreateRequest(url, HttpMethod.Get, _auth);
+            ReservationsResult.Reservations reservations;
             //var res = GetResult<ReservationsResult.Reservations>(request);
-            var res = downLoad(request);
+            var res = await DownloadAsync(request);
 
             if (res.Success)
             {
@@ -65,31 +65,24 @@ namespace FlysasLib
                 System.Diagnostics.Debug.WriteLine(res.ToString());
             }
 
-
             return reservations;
-        }
-
-        public SearchResult Search(SASQuery query)
-        {
-            var req = createRequest(query.GetUrl(), HttpMethod.Get);
-            return GetResult<SearchResult>(req);
         }
 
         public Task<SearchResult> SearchAsync(SASQuery query)
         {
-            var req = createRequest(query.GetUrl(), HttpMethod.Get);
+            var req = CreateRequest(query.GetUrl(), HttpMethod.Get);
             return GetResultAsync<SearchResult>(req);
         }
 
-        public TransactionRoot History(int page)
+        public async Task<TransactionRoot> History(int page)
         {
             var url = apiDomain + $"/customer/euroBonus/getAccountInfo?pageNumber={page}&customerSessionId={_auth.customerSessionId}";
-            var request = createRequest(url, HttpMethod.Get, _auth);
-            var res = GetResult<TransactionRoot>(request);
+            var request = CreateRequest(url, HttpMethod.Get, _auth);
+            var res = await GetResultAsync<TransactionRoot>(request);
             return res;
         }
 
-        HttpRequestMessage createRequest(string url, HttpMethod method, AuthResponse authentication = null)
+        private HttpRequestMessage CreateRequest(string url, HttpMethod method, AuthResponse authentication = null)
         {
             var request = new HttpRequestMessage
             {
@@ -101,22 +94,7 @@ namespace FlysasLib
             return request;
         }
 
-        DownloadResult downLoad(HttpRequestMessage request)
-        {
-            var res = new DownloadResult();
-            var task = _client.SendAsync(request);
-            task.Wait();
-            task.Result.Content.ReadAsStringAsync().ContinueWith(t =>
-            {
-                res.Content = t.Result;
-            }
-            ).Wait();
-            task.Result.Content.Dispose();
-            res.Success = task.Result.IsSuccessStatusCode;
-            return res;
-        }
-
-        async Task<DownloadResult> downLoadAsync(HttpRequestMessage request)
+        private async Task<DownloadResult> DownloadAsync(HttpRequestMessage request)
         {
             var res = new DownloadResult();
             var task = await _client.SendAsync(request);
@@ -126,7 +104,7 @@ namespace FlysasLib
             return res;
         }
 
-        T Deserialize<T>(DownloadResult res) where T : FlysasLib.RootBaseClass
+        private T Deserialize<T>(DownloadResult res) where T : RootBaseClass
         {
             var o = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(res.Content);
             o.json = res.Content;
@@ -134,18 +112,13 @@ namespace FlysasLib
             return o;
         }
 
-        T GetResult<T>(HttpRequestMessage req) where T : FlysasLib.RootBaseClass
+        private async Task<T> GetResultAsync<T>(HttpRequestMessage req) where T : RootBaseClass
         {
-            return Deserialize<T>(downLoad(req));
-        }
-
-        async Task<T> GetResultAsync<T>(HttpRequestMessage req) where T : FlysasLib.RootBaseClass
-        {
-            var res = await downLoadAsync(req);
+            var res = await DownloadAsync(req);
             return Deserialize<T>(res);
         }
 
-        class DownloadResult
+        public class DownloadResult
         {
             public string Content;
             public bool Success;

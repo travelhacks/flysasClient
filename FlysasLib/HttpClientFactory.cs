@@ -19,6 +19,7 @@ namespace FlysasLib
             client.DefaultRequestHeaders.Host = "api.flysas.com";
             client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible)");
         }
+
         public static HttpClient CreateClient()
         {
             var client =  new HttpClient(CreateHandler());

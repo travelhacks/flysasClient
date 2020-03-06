@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace FlysasClient
 {
@@ -45,12 +46,12 @@ namespace FlysasClient
             }
         }
 
-        public async System.Threading.Tasks.Task Run(string input)
+        public async Task Run(string input)
         {
             var parser = new Parser();
             foreach (string query in input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                if (!Command(query))
+                if (!await Command(query))
                 {
                     SASQuery req = null;
                     try
@@ -75,7 +76,7 @@ namespace FlysasClient
                             req.OutDate = outDateStart.AddDays(i);
                             if (inDateStart.HasValue)
                                 req.InDate = inDateStart.Value.AddDays(i);
-                            
+
                             SearchResult result = null;
                             try
                             {
@@ -108,7 +109,7 @@ namespace FlysasClient
             }
         }
 
-        bool Command(string input)
+        async Task<bool> Command(string input)
         {
             var names = Enum.GetNames(typeof(Commands));
             var stack = new CommandStack(input);
@@ -131,19 +132,19 @@ namespace FlysasClient
                                 txtOut.WriteLine("Error: Unknown settings");
                             break;
                         case Commands.Info:
-                            info(stack);
+                            Info(stack);
                             break;
                         case Commands.Login:
-                            login(stack);
+                            await Login(stack);
                             break;
                         case Commands.Export:
-                            history(stack, true);
+                            await History(stack, true);
                             break;
                         case Commands.History:
-                            history(stack, false);
+                            await History(stack, false);
                             break;
                         case Commands.Points:
-                            points();
+                            await Points();
                             break;
                         case Commands.Options:
                             txtOut.Write(options.Help() + Environment.NewLine);
@@ -154,14 +155,14 @@ namespace FlysasClient
                                 txtOut.WriteLine("\t" + s);
                             break;
                         case Commands.Logout:
-                            client.Logout();
+                            await client.Logout();
                             break;
                         case Commands.Quit:
-                            client.Logout();
+                            await client.Logout();
                             Environment.Exit(0);
                             break;
                         case Commands.Calendar:
-                            Calendar();
+                            await Calendar();
                             break;
                     }
                     return true;
@@ -170,9 +171,9 @@ namespace FlysasClient
             return false;
         }
 
-        private void Calendar()
+        private async Task Calendar()
         {
-            ReservationsResult.Reservations reservations = client.MyReservations();
+            ReservationsResult.Reservations reservations = await client.MyReservations();
             if (reservations.ReservationsReservations.Any())
             {
                 foreach (ReservationsResult.Reservation reservation in reservations.ReservationsReservations)
@@ -183,7 +184,7 @@ namespace FlysasClient
                     txtOut.WriteLine($" Was written to your export folder as {reservation.AirlineBookingReference}.ICS");
                     txtOut.WriteLine("Just drag it into your calender app.");
 
-                    FlysasLib.CalendarPrinter cp = new CalendarPrinter();
+                    CalendarPrinter cp = new CalendarPrinter();
                     cp.WriteICal(reservation);
 
                 }
@@ -193,11 +194,11 @@ namespace FlysasClient
                 txtOut.WriteLine("Sorry: No bookings found!");
         }
 
-        private void points()
+        private async Task Points()
         {
             try
             {
-                var res = client.History(1);
+                var res = await client.History(1);
                 txtOut.WriteLine("Status: " + res.eurobonus.currentTierName);
                 txtOut.WriteLine(res.eurobonus.totalPointsForUse + " points for use");
                 txtOut.WriteLine(res.eurobonus.pointsAvailable + " basic points earned this period");
@@ -209,7 +210,7 @@ namespace FlysasClient
             }
         }
 
-        private void info(CommandStack stack)
+        private void Info(CommandStack stack)
         {
             if (stack.Any())
             {
@@ -266,7 +267,7 @@ namespace FlysasClient
             }
         }
 
-        private void history(CommandStack stack, bool export)
+        private async Task History(CommandStack stack, bool export)
         {
             int page = 1;
             int pages = 1;
@@ -290,7 +291,7 @@ namespace FlysasClient
                 txtOut.Write($"\rFetching page { page}{(pages > 1 ? " of " + pages : "")}");
                 try
                 {
-                    res = client.History(page);
+                    res = await client.History(page);
                 }
                 catch (Exception ex)
                 {
@@ -347,7 +348,7 @@ namespace FlysasClient
             }
         }
 
-        private void login(CommandStack stack)
+        private async Task Login(CommandStack stack)
         {
             var userName = options.UserName;
             var passWord = options.Password;
@@ -366,11 +367,11 @@ namespace FlysasClient
                 else
                 {
                     txtOut.WriteLine("Enter password: ");
-                    passWord = getPassword();
+                    passWord = GetPassword();
                 }
             try
             {
-                var result = client.Login(userName, passWord);
+                var result = await client.Login(userName, passWord);
                 txtOut.WriteLine($"Login for {userName}  {(result ? " success" : "failed")}");
             }
             catch (Exception)
@@ -379,7 +380,7 @@ namespace FlysasClient
             }
         }
 
-        private string getPassword()
+        private string GetPassword()
         {
             string str = "";
             ConsoleKeyInfo key;
