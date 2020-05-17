@@ -170,55 +170,54 @@ namespace AwardWeb.Controllers
         }
 
 
-        //public async Task<IActionResult> StarResult(StarSearch search)
-        //{
+        public async Task<IActionResult> StarResult(StarSearch search)
+        {
 
-        //    int threads = 4;
-        //    if (ModelState.IsValid)
-        //    {
-        //        search.SearchDays = Math.Min(search.SearchDays, 14);
-        //        search.Destination = search.Destination.MyTrim();
-        //        search.Origin = search.Origin.MyTrim();
-        //        if (search.Origin.MyLength() == 3 && search.Destination.MyLength() == 3)
-        //        {
-        //            var dates = System.Linq.Enumerable.Range(0, search.SearchDays).Select(i => search.OutDate.AddDays(i)).ToList();
-        //            dates.Shuffle();
-        //            var res = new System.Collections.Concurrent.ConcurrentDictionary<DateTime, FlysasLib.SearchResult>();
+            int threads = 4;
+            if (ModelState.IsValid)
+            {
+                search.SearchDays = Math.Min(search.SearchDays, 14);
+                search.Destination = search.Destination.MyTrim();
+                search.Origin = search.Origin.MyTrim();
+                if (search.Origin.MyLength() == 3 && search.Destination.MyLength() == 3)
+                {
+                    var dates = System.Linq.Enumerable.Range(0, search.SearchDays).Select(i => search.OutDate.AddDays(i)).ToList();
+                    dates.Shuffle();
+                    var res = new System.Collections.Concurrent.ConcurrentDictionary<DateTime, FlysasLib.SearchResult>();
+                    await Dasync.Collections.ParallelForEachExtensions.ParallelForEachAsync<DateTime>(dates,
+                        async date =>
+                        {
+                            if (!res.ContainsKey(date))//this looks smart, but doesn't realy save a lot of calls...
+                            {
+                                var q = new SASQuery
+                                {
+                                    OutDate = date,
+                                    From = search.Origin,
+                                    To = search.Destination,
+                                    Adults = search.Pax,
+                                    Mode = search.SASMode ? SASQuery.SearhMode.POINTS : SASQuery.SearhMode.STAR
+                                };
+                                FlysasLib.SearchResult searchResult = await _client.SearchAsync(q);
 
-        //            await Dasync.Collections.ParallelForEachExtensions.ParallelForEachAsync<DateTime>(dates,
-        //                async date =>
-        //                {
-        //                    if (!res.ContainsKey(date))//this looks smart, but doesn't realy save a lot of calls...
-        //                    {
-        //                        var q = new SASQuery
-        //                        {
-        //                            OutDate = date,
-        //                            From = search.Origin,
-        //                            To = search.Destination,
-        //                            Adults = search.Pax,
-        //                            Mode = SASQuery.SearhMode.STAR
-        //                        };
-        //                        FlysasLib.SearchResult searchResult = await _client.SearchAsync(q);
+                                if (searchResult.tabsInfo != null && searchResult.tabsInfo.outboundInfo != null)
+                                    foreach (var dayWithNoSeats in searchResult.tabsInfo.outboundInfo.Where(tab => tab.points == 0))
+                                        res.TryAdd(dayWithNoSeats.date, null);
 
-        //                        if (searchResult.tabsInfo?.outboundInfo != null)
-        //                            foreach (var dayWithNoSeats in searchResult.tabsInfo.outboundInfo.Where(tab => tab.points == 0))
-        //                                res.TryAdd(dayWithNoSeats.date, null);
-
-        //                        res.TryAdd(date, searchResult);
-        //                    }
-        //                },
-        //                threads,
-        //                false
-        //                );
-        //            search.Results = res.Where(r => r.Value?.outboundFlights != null).SelectMany(r => r.Value.outboundFlights).ToList();
-        //            if (search.MaxLegs > 0)
-        //                search.Results = search.Results.Where(r => r.segments.Count() <= search.MaxLegs).ToList();
-        //        }
-        //        else
-        //            search.Results = new List<FlysasLib.FlightBaseClass>();
-        //    }
-        //    return View(nameof(Star), search);
-        //}
+                                res.TryAdd(date, searchResult);
+                            }
+                        },
+                        threads,
+                        false
+                        );
+                    search.Results = res.Where(r => r.Value?.outboundFlights != null).SelectMany(r => r.Value.outboundFlights).ToList();
+                    if (search.MaxLegs > 0)
+                        search.Results = search.Results.Where(r => r.segments.Count() <= search.MaxLegs).ToList();
+                }
+                else
+                    search.Results = new List<FlysasLib.FlightBaseClass>();
+            }
+            return View(nameof(Star), search);
+        }
 
         public IActionResult RedirectToFaq()
         {

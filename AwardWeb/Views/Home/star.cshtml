@@ -9,59 +9,62 @@
         <div class="row">
             @Html.AntiForgeryToken()
 
-             
-                <div class="form-group col-md-2">
-                    <label asp-for="Origin" class="control-label"></label>
-                    <input asp-for="Origin" type="text" class="form-control" placeholder="IATA Code" />
-                    <span asp-validation-for="Origin" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-2">
-                    <label asp-for="Destination" class="control-label"></label>
-                    <input asp-for="Destination" type="text" class="form-control" placeholder="IATA Code" />
-                    <span asp-validation-for="Destination" class="text-danger"></span>
-                </div>
 
+            <div class="form-group col-md-2">
+                <label asp-for="Origin" class="control-label"></label>
+                <input asp-for="Origin" type="text" class="form-control" placeholder="IATA Code" />
+                <span asp-validation-for="Origin" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Destination" class="control-label"></label>
+                <input asp-for="Destination" type="text" class="form-control" placeholder="IATA Code" />
+                <span asp-validation-for="Destination" class="text-danger"></span>
+            </div>
 
-                <div class="form-group col-md-2">
-                    <label asp-for="OutDate" class="control-label"></label>
-                    <input asp-for="OutDate" type="text" class="form-control myDate" asp-format="{0:yyyy-MM-dd}" />
-                    <span asp-validation-for="OutDate" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-2">
-                    <label asp-for="SearchDays" class="control-label"></label>
-                    <select asp-for="SearchDays" class="form-control">
-                        <option value="7">7 days</option>
-                        <option value="14">14 days (slower)</option>
-                        <option value="1">1 day</option>
-                    </select>
-                    <span asp-validation-for="SearchDays" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-2">
-                    <label asp-for="MaxLegs" class="control-label"></label>
-                    <select asp-for="MaxLegs" class="form-control">
-                        <option value="0">Any</option>
-                        <option value="3">3</option>
-                        <option value="2">2</option>
-                        <option value="1">1</option>
-                    </select>
-                    <span asp-validation-for="MaxLegs" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-1">
-                    <label asp-for="Pax" class="control-label"></label>
-                    <select asp-for="Pax" class="form-control">
-                        @for (int i = 1; i <= 9; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
+            <div class="form-group col-md-2">
+                <label asp-for="OutDate" class="control-label"></label>
+                <input asp-for="OutDate" type="text" class="form-control myDate" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="OutDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="SearchDays" class="control-label"></label>
+                <select asp-for="SearchDays" class="form-control">
+                    <option value="7">7 days</option>
+                    <option value="14">14 days (slower)</option>
+                    <option value="1">1 day</option>
+                </select>
+                <span asp-validation-for="SearchDays" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="SASMode" class="control-label"></label>
+                <input asp-for="SASMode" type="checkbox" class="form-control" />
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="MaxLegs" class="control-label"></label>
+                <select asp-for="MaxLegs" class="form-control">
+                    <option value="0">Any</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+                <span asp-validation-for="MaxLegs" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-1">
+                <label asp-for="Pax" class="control-label"></label>
+                <select asp-for="Pax" class="form-control">
+                    @for (int i = 1; i <= 9; i++)
+                    {
+        <option value="@i">@i</option>
+}
 
-                    </select>
-                </div>
-                <div class="form-group col-md-1">
-                    <label class="control-label">&nbsp;</label>
-                    <input type="submit" class="btn btn-primary form-control" value="Go!" />
-                </div>
-            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@           
-            </div>        
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label class="control-label">&nbsp;</label>
+                <input type="submit" class="btn btn-primary form-control" value="Go!" />
+            </div>
+            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
+        </div>        
     </form>
         
 
@@ -71,7 +74,7 @@
             <div class="row">
                 <div>
                     <h4>What is this?</h4>
-                    <p>This tool will search the SAS star alliance API 7 or 14 days at the time. This will take a minute or so and the results are grouped by cabin class. </p>
+                    <p>This tool will search the SAS star alliance API 7 or 14 days at the time. This will take a minute or so and the results are grouped by cabin class. In SK only mode you search SAS awards. This can be usefull when looking for trips with connections.</p>
                 </div>
             </div>
             }
