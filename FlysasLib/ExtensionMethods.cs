@@ -34,6 +34,15 @@ namespace FlysasLib
             return string.Join(separator, simplify(list));
         }
 
+        public static String PostPendIfNotEmpty(this string s, string post)
+        {
+            if (s.IsNullOrEmpty())
+                return s;
+            return s + post;
+        }
+
+        
+
         public static int MyDayOfWeek(this DateTime dt)
         {
             if (dt.DayOfWeek == DayOfWeek.Sunday)
