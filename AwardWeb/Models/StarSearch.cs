@@ -19,5 +19,7 @@ namespace AwardWeb.Models
         public int SearchDays { get; set; }
         [Display(Name = "Max legs")]
         public int MaxLegs { get; set; }
+        [Display(Name = "SK only")]
+        public bool SASMode { get; set; }
     }
 }
